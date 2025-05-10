@@ -6,7 +6,7 @@ type TasksProps = {
 
 export const Column = ({ label, tasks }: { label: string } & TasksProps) => {
   return (
-    <div className="p-2 flex flex-col ">
+    <div className="p-2 flex flex-col">
       <h1 className="text-white  font-bold inline-flex text-center justify-center">
         {label}
       </h1>
