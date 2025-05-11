@@ -6,3 +6,6 @@ database
 
 - drizzle-orm
 - vercel postgres
+
+storage
+Cloudflare R2
