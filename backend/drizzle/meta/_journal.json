@@ -8,6 +8,13 @@
       "when": 1746863577009,
       "tag": "0000_long_mordo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747153981617,
+      "tag": "0001_curved_norman_osborn",
+      "breakpoints": true
     }
   ]
 }
