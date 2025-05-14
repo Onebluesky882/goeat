@@ -1,8 +1,5 @@
 import "./App.css";
 import { Button } from "./components/ui/button";
-// import { DndContext } from "@dnd-kit/core";
-// import { Draggable } from "./components/Draggable";
-// import { Droppable } from "./components/Droppable";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { QrCode, Utensils, LayoutDashboard } from "lucide-react";

@@ -4,14 +4,14 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
-import BillSummary from "./pages/BillSummary.tsx";
-import DashBoard from "./pages/DashBoard.tsx";
-import MenuManagements from "./pages/MenuManagements.tsx";
-import OrderStatus from "./pages/OrderStatus.tsx";
-import StaffManagement from "./pages/StaffManagement.tsx";
-import TableSetup from "./pages/TableSetup.tsx";
+import BillSummary from "./pages/prepage/BillSummary.tsx";
+import DashBoard from "./pages/prepage/DashBoard.tsx";
+import MenuManagements from "./pages/prepage/MenuManagements.tsx";
+import OrderStatus from "./pages/prepage/OrderStatus.tsx";
+import StaffManagement from "./pages/prepage/StaffManagement.tsx";
+import TableSetup from "./pages/prepage/TableSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import CCTVLive from "./pages/Cctv.tsx";
+import CCTVLive from "./pages/prepage/Cctv.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

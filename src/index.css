@@ -12,11 +12,3 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-button {
-  height: 10px;
-  width: 10px;
-  background-color: #b12c2c;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
