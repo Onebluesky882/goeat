@@ -2,7 +2,8 @@ import { defineConfig } from 'drizzle-kit';
 import * as dotenv from 'dotenv';
 import { parse } from 'pg-connection-string';
 
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
+console.log(process.env.DATABASE_URL, 'config');
 const config = parse(process.env.DATABASE_URL!);
 export default defineConfig({
   schema: './src/**/schema.ts',

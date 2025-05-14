@@ -27,7 +27,7 @@ function App() {
               <Link to="/dashboard">Restaurant Dashboard</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link to="/demo">See How It Works</Link>
+              <Link to="/auth/login">Try now</Link>
             </Button>
           </div>
         </div>

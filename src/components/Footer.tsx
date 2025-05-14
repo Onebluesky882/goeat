@@ -54,7 +54,7 @@ const Footer = () => {
   return (
     <>
       <footer className="shadow sticky bottom-0 z-10 border-t left-0 bg-amber-300">
-        <nav className="hidden md:flex max-w-6xl mx-auto px-4 py-3 items-center justify-between">
+        <nav className="hidden md:flex max-w-6xl mx-auto px-4 py-3 items-center justify-between ">
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6">
             {menus.map((menu, index) => (
@@ -64,7 +64,7 @@ const Footer = () => {
                 style={{ top: menu.potion, right: "0" }}
               >
                 <span
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-medium text-blue-900 ${
                     location.pathname === `/${menu.path}`
                       ? "text-blue-600 border-b-2 border-blue-600"
                       : "text-gray-600 hover:text-blue-500"
@@ -80,7 +80,7 @@ const Footer = () => {
           <div className="hidden md:flex gap-2 items-center">
             <button
               onClick={() => setLang("th")}
-              className={`px-2 py-1 text-sm font-medium rounded ${
+              className={`px-2 py-1 text-sm font-medium rounded  ${
                 lang === "th" ? "bg-blue-600 text-white" : "text-gray-600"
               }`}
             >

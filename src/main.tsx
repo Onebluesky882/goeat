@@ -12,6 +12,8 @@ import StaffManagement from "./pages/prepage/StaffManagement.tsx";
 import TableSetup from "./pages/prepage/TableSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CCTVLive from "./pages/prepage/Cctv.tsx";
+import LoginAuthGoogle from "./pages/LoginAuthGoogle.tsx";
+import Profile from "./pages/Profile.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<App />} />
+          <Route path="login" element={<LoginAuthGoogle />} />
           <Route path="BillSummary" element={<BillSummary />} />
           <Route path="DashBoard" element={<DashBoard />} />
           <Route path="MenuManagements" element={<MenuManagements />} />
@@ -26,7 +29,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="StaffManagement" element={<StaffManagement />} />
           <Route path="TableSetup" element={<TableSetup />} />
           <Route path="cctv" element={<CCTVLive />} />
-
+          <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
