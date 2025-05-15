@@ -32,9 +32,4 @@ export class AuthController {
   getMe(@Req() req) {
     return req.user;
   }
-
-  @Get('test')
-  testLog() {
-    return { success: true };
-  }
 }
