@@ -24,16 +24,23 @@ export class AuthService {
         name: user.name,
       });
     }
+    const profile = await this.db.query.users.findFirst({
+      where: eq(users.email, user.email),
+    });
 
     try {
-      const payload = { email: user.email, sub: user.id };
+      const payload = {
+        id: profile?.id,
+        email: profile?.email,
+        name: profile?.name,
+        create_at: profile?.create_at,
+      };
       const token = this.jwtService.sign(payload);
 
       return {
         access_token: token,
       };
     } catch (error) {
-      console.error('❌ JWT sign error:', error);
       throw new Error('Failed to generate access token');
     }
   }

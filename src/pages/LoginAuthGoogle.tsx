@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { GoogleLogin } from "@react-oauth/google";
 
 const LoginAuthGoogle = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/login";
+    window.location.assign("http://localhost:3000/auth/google");
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

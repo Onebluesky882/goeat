@@ -15,11 +15,26 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     const token = await this.authService.validateOrCreate(req.user);
+
     res.cookie('access_token', token.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
-    return res.redirect('http://localhost:3001/dashboard');
+
+    return res.redirect(
+      process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:789',
+    );
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  getMe(@Req() req) {
+    return req.user;
+  }
+
+  @Get('test')
+  testLog() {
+    return { success: true };
   }
 }
