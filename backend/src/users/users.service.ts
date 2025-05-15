@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { schema } from 'src/database/schema';
 import { users } from './schema';
 import { CreateUserDto } from './user.dto';
 import { randomUUID } from 'crypto';
+import { schema } from 'src/database/schema';
 
 @Injectable()
 export class UsersService {

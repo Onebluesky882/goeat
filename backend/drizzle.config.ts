@@ -3,11 +3,12 @@ import * as dotenv from 'dotenv';
 import { parse } from 'pg-connection-string';
 
 dotenv.config({ path: '.env' });
-console.log(process.env.DATABASE_URL, 'config');
+
 const config = parse(process.env.DATABASE_URL!);
+
 export default defineConfig({
-  schema: './src/**/schema.ts',
-  out: './drizzle',
+  schema: './src/**/schema.ts', // Path to your schema files
+  out: './drizzle', // Path for generated migration files
   dialect: 'postgresql',
   dbCredentials: {
     host: config.host!,
@@ -15,6 +16,6 @@ export default defineConfig({
     user: config.user!,
     password: config.password!,
     database: config.database!,
-    ssl: true,
+    ssl: true, // Set to false if not using SSL
   },
 });

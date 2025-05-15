@@ -5,6 +5,8 @@ import { TodoModule } from './todos/todo.module';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtConfigModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     TodoModule,
     UsersModule,
+    AuthModule,
+    JwtConfigModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
