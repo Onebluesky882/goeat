@@ -3,8 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { schema } from 'src/database/schema';
-import { users } from '../users/schema';
+import { schema, users } from 'src/database';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +23,7 @@ export class AuthService {
         name: user.name,
       });
     }
+
     const profile = await this.db.query.users.findFirst({
       where: eq(users.email, user.email),
     });
@@ -33,8 +33,8 @@ export class AuthService {
         id: profile?.id,
         email: profile?.email,
         name: profile?.name,
-        create_at: profile?.create_at,
       };
+
       const token = this.jwtService.sign(payload);
 
       return {
