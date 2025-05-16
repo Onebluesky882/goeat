@@ -8,6 +8,13 @@
       "when": 1747399409068,
       "tag": "0000_flowery_blue_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747407919818,
+      "tag": "0001_heavy_marvel_boy",
+      "breakpoints": true
     }
   ]
 }
