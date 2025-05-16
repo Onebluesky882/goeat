@@ -1,4 +1,12 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
@@ -26,7 +34,10 @@ export class AuthController {
       process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:789',
     );
   }
-
+  @Post('login')
+  async login(@Body() loginDto: { username: string; password: string }) {
+    return this.authService.login(loginDto);
+  }
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
   getMe(@Req() req) {

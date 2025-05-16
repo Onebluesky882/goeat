@@ -7,15 +7,15 @@ import { MenuInsertDto } from './menus.dto';
 export class MenusController {
   constructor(private readonly menusService: MenusService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  //   @UseGuards(AuthGuard('jwt'))
   @Post('add-menu')
   insert(@Body() newMenu: MenuInsertDto) {
     return this.menusService.insertData(newMenu);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('menu')
+  //   @UseGuards(AuthGuard('jwt'))
+  @Get()
   getMenu() {
-    return this.getMenu();
+    return this.menusService.getMenuMatchShopId();
   }
 }

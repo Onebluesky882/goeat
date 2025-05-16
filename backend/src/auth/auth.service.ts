@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { schema, users } from 'src/database';
+import { json } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -43,5 +44,17 @@ export class AuthService {
     } catch (error) {
       throw new Error('Failed to generate access token');
     }
+  }
+  async login({ username, password }: { username: string; password: string }) {
+    // Replace this with your real user validation logic
+    if (username !== 'test' || password !== '1234') {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = { username };
+    const token = this.jwtService.sign(payload);
+    return {
+      access_token: token,
+    };
   }
 }
