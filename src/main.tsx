@@ -19,6 +19,7 @@ import { Toaster } from "sonner";
 import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
 import ShopInfo from "./pages/shop/ShopInfo.tsx";
+import Mapping from "./pages/shop/Mapping.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="profile" element={<UserProfile />} />
           <Route path="shop" element={<ShopInfo />}>
             <Route path="summary" element={<BillSummary />} />
+            <Route path="mapping" element={<Mapping />} />
             <Route path="OrderStatus" element={<OrderStatus />} />
             <Route path="StaffManagement" element={<StaffManagement />} />
             <Route path="TableSetup" element={<TableSetup />} />
