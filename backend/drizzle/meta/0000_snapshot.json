@@ -1,5 +1,5 @@
 {
-  "id": "7f7d844e-b575-46d1-a4a7-f0704aba3535",
+  "id": "dce1e6fa-1200-4eff-af28-c67651044a17",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -171,6 +171,64 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.order_table": {
+      "name": "order_table",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "table_number": {
+          "name": "table_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_price": {
+          "name": "total_price",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.orders": {
       "name": "orders",
       "schema": "",
@@ -188,12 +246,23 @@
           "primaryKey": false,
           "notNull": false
         },
-        "order_items": {
-          "name": "order_items",
-          "type": "text[]",
+        "order_table.id": {
+          "name": "order_table.id",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
-          "default": "ARRAY[]::text[]"
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "menu_id": {
+          "name": "menu_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "customer_id": {
           "name": "customer_id",
@@ -223,7 +292,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "orders_order_table.id_order_table_id_fk": {
+          "name": "orders_order_table.id_order_table_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "order_table",
+          "columnsFrom": [
+            "order_table.id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

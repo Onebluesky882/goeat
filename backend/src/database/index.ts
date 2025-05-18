@@ -5,6 +5,7 @@ import { shops } from './schema/shops';
 import { tables } from './schema/tables';
 import { users } from './schema/users';
 import { menuPhotos } from './schema/menuPhoto';
+import { orderTable } from './schema/orderTable';
 
 export * from './schema/orders';
 export * from './schema/menus';
@@ -13,6 +14,7 @@ export * from './schema/users';
 export * from './schema/customers';
 export * from './schema/tables';
 export * from './schema/menuPhoto';
+export * from './schema/orderTable';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -27,4 +29,5 @@ export const schema = {
   customers,
   tables,
   menuPhotos,
+  orderTable,
 };

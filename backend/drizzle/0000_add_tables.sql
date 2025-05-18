@@ -27,10 +27,22 @@ CREATE TABLE "menus" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "order_table" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"shop_id" uuid,
+	"table_number" text,
+	"customer_id" uuid,
+	"total_price" numeric(10, 2),
+	"status" text DEFAULT 'pending',
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"shop_id" uuid,
-	"order_items" text[] DEFAULT ARRAY[]::text[] NOT NULL,
+	"order_table.id" uuid NOT NULL,
+	"quantity" numeric(10, 2),
+	"menu_id" uuid,
 	"customer_id" uuid,
 	"price_each" numeric(10, 2),
 	"status" text DEFAULT 'pending',
@@ -66,3 +78,5 @@ CREATE TABLE "users" (
 	"role_id" uuid,
 	"image_url" text
 );
+--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_order_table.id_order_table_id_fk" FOREIGN KEY ("order_table.id") REFERENCES "public"."order_table"("id") ON DELETE no action ON UPDATE no action;
