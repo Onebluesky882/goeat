@@ -9,6 +9,7 @@ const Footer = () => {
   const [lang, setLang] = useState<"en" | "th">("th");
   // todo change menuOpen to global state
   const [menuOpen, setMenuOpen] = useState(false);
+
   const profile = useUserStore((state) => state.user);
   const toggleMenuMobile = () => {
     setMenuOpen((prev) => !prev);

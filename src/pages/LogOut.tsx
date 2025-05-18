@@ -1,28 +1,31 @@
 // src/pages/SignoutPage.tsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/useStore";
 import { Button } from "@/components/ui/button"; // ใช้ของ shadcn หรือเปลี่ยนเป็นปุ่มทั่วไป
-
+import { FadeLoader } from "react-spinners";
 const LogOut = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
+  console.log(loading);
   const handleSignOut = () => {
-    // ล้างข้อมูลผู้ใช้ใน Store
-    setUser(null);
+    setLoading(true);
+    setTimeout(() => {
+      setUser(null);
 
-    // ล้าง token ที่อาจเก็บใน localStorage (แล้วแต่ระบบ)
-    localStorage.removeItem("auth_token");
+      // ล้าง token ที่อาจเก็บใน localStorage (แล้วแต่ระบบ)
+      localStorage.removeItem("auth_token");
 
-    // เปลี่ยนหน้าไปหน้า login
-    navigate("/login");
+      navigate("/");
+    }, 3000);
   };
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -33,9 +36,18 @@ const LogOut = () => {
         <p className="text-gray-600 mb-6">Are you sure you want to sign out?</p>
         <Button
           onClick={handleSignOut}
-          className="w-full bg-red-500 hover:bg-red-600 text-white"
+          disabled={loading}
+          className={`w-full cursor-pointer  text-white  bg-red-500 ${
+            loading ? `bg:-white/100` : ``
+          }`}
         >
-          Sign Out
+          {loading ? (
+            <div className="flex justify-center items-center h-5">
+              <FadeLoader color="#292C34" height={8} width={5} />
+            </div>
+          ) : (
+            "Sign Out"
+          )}
         </Button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Redirect,
   Req,
   Res,
   UseGuards,
@@ -34,7 +35,7 @@ export class AuthController {
     });
 
     return res.redirect(
-      process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:789',
+      process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:5173/controller',
     );
   }
 }

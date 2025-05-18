@@ -1,14 +1,10 @@
 import { useUserStore } from "@/store/useStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
-import { StatsWidgets } from "@/components/StatsWidgetsProps";
 import React from "react";
-import { Navigate } from "react-router-dom";
 const Controller = () => {
   const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
 
-  if (profile === null) return <Navigate to={"/login"} />;
-  console.log("profile :", profile);
   const summaryData = [
     { name: "Restaurant 1", earning: 12890, orders: 320, customers: 180 },
     { name: "Restaurant 2", earning: 8450, orders: 210, customers: 132 },

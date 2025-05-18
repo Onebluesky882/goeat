@@ -1,5 +1,5 @@
 import React from "react";
-import { BUILDING_TYPES } from "../../../backend/utils/contants";
+import { BUILDING_TYPES } from "../../utils/contants";
 import SidebarItem from "./SidebarItem";
 
 const Sidebar: React.FC = () => {

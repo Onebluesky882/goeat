@@ -1,7 +1,7 @@
 import { useUserStore } from "@/store/useStore";
 
 import { useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { fetchProfile } = useUserStore();
@@ -9,8 +9,6 @@ const Header = () => {
   useEffect(() => {
     fetchProfile();
   }, []);
-  const profile = useUserStore((state) => state.user);
-  // todo here
 
   return (
     <header className="flex justify-around  items-center px-6   py-6 bg-white shadow-md rounded-xl mx-4 my-4">

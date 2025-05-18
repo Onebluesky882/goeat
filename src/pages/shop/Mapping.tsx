@@ -5,7 +5,7 @@ import GameInfo from "@/components/MapTables/GameInfo";
 import Sidebar from "@/components/MapTables/Sidebar";
 import Grid from "@/components/MapTables/Grid";
 import BuildingIcon from "@/components/MapTables/BuildingIcon";
-import { GRID_SIZE } from "backend/utils/contants";
+import { GRID_SIZE } from "@/utils/contants";
 
 const CityGame: React.FC = () => {
   const [grid, setGrid] = useState(

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
 import BuildingIcon from "./BuildingIcon";
-import { BUILDING_TYPES } from "backend/utils/contants";
+import { BUILDING_TYPES } from "@/utils/contants";
 import type { GridCellProps } from "types/buildMapping";
 
 const GridCell: React.FC<GridCellProps> = ({
