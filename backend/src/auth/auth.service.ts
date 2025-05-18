@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { schema, users } from 'src/database';
-import { json } from 'express';
+import { json, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateOrCreate(user: any) {
+  async validateOrCreate(user: any, res: Response) {
     const existing = await this.db.query.users.findFirst({
       where: eq(users.email, user.email),
     });
@@ -38,12 +38,18 @@ export class AuthService {
 
       const token = this.jwtService.sign(payload);
 
-      return {
-        access_token: token,
-      };
+      res.cookie('access_token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 วัน
+      });
+      return { access_token: token };
     } catch (error) {
       throw new Error('Failed to generate access token');
     }
+
+    // how to check backend user.id on user table === profile.id  to front end
   }
   async login({ username, password }: { username: string; password: string }) {
     // Replace this with your real user validation logic

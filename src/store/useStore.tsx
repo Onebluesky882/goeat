@@ -3,12 +3,13 @@ import { create } from "zustand";
 type User = {
   id: string;
   name: string;
+  email: string;
 };
 
 type UserStore = {
   user: User | null;
   setUser: (user: User | null) => void;
-  fetchMe: () => Promise<void>;
+  fetchProfile: () => Promise<void>;
 };
 
 export const useUserStore = create<UserStore>((set, get) => {
@@ -34,11 +35,14 @@ export const useUserStore = create<UserStore>((set, get) => {
         channel.postMessage({ type: "SET_USER", user });
       }
     },
-    fetchMe: async () => {
+    fetchProfile: async () => {
       try {
-        const res = await api.get("/auth/me");
-        const user = res.data;
+        const res = await api.get("/users/profile", {
+          withCredentials: true,
+        });
 
+        const user = res.data;
+        console.log(res.data);
         const current = get().user;
         if (current?.id !== user?.id) {
           set({ user });

@@ -12,7 +12,7 @@ const Footer = () => {
   const toggleMenuMobile = () => {
     setMenuOpen((prev) => !prev);
   };
-  console.log(" check:", menuOpen);
+
   const menus = [
     {
       path: "BillSummary",

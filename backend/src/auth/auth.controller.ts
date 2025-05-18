@@ -22,9 +22,12 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
-    const token = await this.authService.validateOrCreate(req.user);
+    const { access_token } = await this.authService.validateOrCreate(
+      req.user,
+      res,
+    );
 
-    res.cookie('access_token', token.access_token, {
+    res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -34,13 +37,13 @@ export class AuthController {
       process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:789',
     );
   }
-  @Post('login')
-  async login(@Body() loginDto: { username: string; password: string }) {
+  @Post('login-test')
+  async loginTest(@Body() loginDto: { username: string; password: string }) {
     return this.authService.login(loginDto);
   }
-  @Get('me')
-  @UseGuards(AuthGuard('jwt'))
-  getMe(@Req() req) {
-    return req.user;
+
+  @Post('login')
+  async login(@Body() user: any, res: Response) {
+    return this.authService.validateOrCreate(user, res);
   }
 }

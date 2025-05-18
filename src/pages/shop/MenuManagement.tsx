@@ -1,3 +1,6 @@
+import { Navigate } from "react-router-dom";
+import type { MenuInsertDto } from "../../../backend/dist/src/menus/menus.dto";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +11,7 @@ import { Edit, Plus, Trash } from "lucide-react";
 import { toast } from "sonner";
 
 // Sample menu data
-const initialMenuItems = [
+const MenuItems = [
   {
     id: "1",
     name: "Tom Yum Goong",
@@ -73,7 +76,7 @@ const initialPromotions = [
 ];
 
 const MenuManagement = () => {
-  const [menuItems, setMenuItems] = useState(initialMenuItems);
+  const [menuItems, setMenuItems] = useState(MenuItems);
   const [promotions, setPromotions] = useState(initialPromotions);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [editingPromoId, setEditingPromoId] = useState<string | null>(null);
