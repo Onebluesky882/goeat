@@ -48,19 +48,5 @@ export class AuthService {
     } catch (error) {
       throw new Error('Failed to generate access token');
     }
-
-    // how to check backend user.id on user table === profile.id  to front end
-  }
-  async login({ username, password }: { username: string; password: string }) {
-    // Replace this with your real user validation logic
-    if (username !== 'test' || password !== '1234') {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const payload = { username };
-    const token = this.jwtService.sign(payload);
-    return {
-      access_token: token,
-    };
   }
 }

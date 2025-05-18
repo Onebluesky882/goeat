@@ -16,16 +16,26 @@ import { OrdersService } from './orders/orders.service';
 import { CustomersService } from './customers/customers.service';
 import { DatabaseModule } from './database/database.module';
 import { MenusController } from './menus/menus.controller';
+import { ShopsModule } from './shops/shops.module';
+import { TablesService } from './tables/tables.service';
+import { TablesModule } from './tables/tables.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     DatabaseModule,
-    UsersModule,
     AuthModule,
+    UsersModule,
+    ShopsModule,
+    TablesModule,
   ],
-  controllers: [UsersController, AppController, ShopsController, MenusController],
-  providers: [UsersService, MenusService, OrdersService, CustomersService],
+  controllers: [
+    UsersController,
+    AppController,
+    ShopsController,
+    MenusController,
+  ],
+  providers: [UsersService, MenusService, OrdersService, CustomersService, TablesService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

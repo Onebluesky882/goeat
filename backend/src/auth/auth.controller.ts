@@ -37,13 +37,4 @@ export class AuthController {
       process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:789',
     );
   }
-  @Post('login-test')
-  async loginTest(@Body() loginDto: { username: string; password: string }) {
-    return this.authService.login(loginDto);
-  }
-
-  @Post('login')
-  async login(@Body() user: any, res: Response) {
-    return this.authService.validateOrCreate(user, res);
-  }
 }

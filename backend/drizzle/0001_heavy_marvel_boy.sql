@@ -1,1 +1,0 @@
-ALTER TABLE "menus" ADD COLUMN "images" text[] DEFAULT ARRAY[]::text[] NOT NULL;

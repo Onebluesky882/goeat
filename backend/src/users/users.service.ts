@@ -14,15 +14,15 @@ export class UsersService {
   ) {}
 
   async getProfile(user: { id: string }) {
-    return this.db
+    const rows = await this.db
       .select({
         id: users.id,
         email: users.email,
         name: users.name,
       })
       .from(users)
-      .where(eq(users.id, user.id))
-      .then((rows) => rows[0]);
+      .where(eq(users.id, user.id));
+    return rows[0];
   }
 
   async insertUser(email: string, name: string) {
@@ -30,6 +30,6 @@ export class UsersService {
       email,
       name,
     };
-    return this.db.insert(users).values(newUser).returning();
+    return await this.db.insert(users).values(newUser).returning();
   }
 }

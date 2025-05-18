@@ -7,16 +7,27 @@ CREATE TABLE "customers" (
 	"active" boolean DEFAULT false
 );
 --> statement-breakpoint
+CREATE TABLE "tables" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text,
+	"position" text,
+	"url" text NOT NULL,
+	"shop_id" uuid NOT NULL,
+	"status" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "menus" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"shop_id" uuid NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
+	"photo_id" uuid NOT NULL,
 	"category" text,
 	"price" numeric(10, 2) NOT NULL,
 	"available" boolean DEFAULT true,
 	"created_at" timestamp DEFAULT now() NOT NULL
-); 
+);
 --> statement-breakpoint
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,

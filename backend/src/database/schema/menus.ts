@@ -15,10 +15,7 @@ export const menus = pgTable('menus', {
   shopId: uuid('shop_id').notNull(), // FK to shops.id
   name: text('name').notNull(),
   description: text('description'),
-  images: text('images')
-    .array()
-    .notNull()
-    .default(sql`ARRAY[]::text[]`),
+  images: uuid('photo_id').notNull(),
   category: text('category'),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   available: boolean('available').default(true),

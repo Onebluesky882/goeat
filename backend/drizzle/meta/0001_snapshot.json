@@ -1,6 +1,6 @@
 {
-  "id": "45e4a8cd-0deb-4784-b5d9-4c37d5d121d2",
-  "prevId": "53ea12b8-2b24-4f32-ab13-963c953a6251",
+  "id": "76ddf85a-c7cb-43be-9ec8-0f93492e51e0",
+  "prevId": "7e616951-36db-4d9e-94b3-4109673974a3",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -56,6 +56,51 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.menu_photos": {
+      "name": "menu_photos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.menus": {
       "name": "menus",
       "schema": "",
@@ -85,12 +130,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "images": {
-          "name": "images",
-          "type": "text[]",
+        "photo_id": {
+          "name": "photo_id",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
-          "default": "ARRAY[]::text[]"
+          "notNull": true
         },
         "category": {
           "name": "category",
@@ -234,6 +278,63 @@
           "primaryKey": false,
           "notNull": false,
           "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tables": {
+      "name": "tables",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},

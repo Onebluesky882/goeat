@@ -1,38 +1,29 @@
-import { api } from "@/Api/nestJsApi3000";
 import { useUserStore } from "@/store/useStore";
 
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
 
 const Header = () => {
-  const fetchMe = useUserStore((state) => state.fetchMe);
-  const me = useUserStore((state) => state.user); // <-- Get the logged-in user
-
-  const [users, setUsers] = useState<any[]>([]); // <-- Define the users state
-  const getProfiles = async () => {
-    const res = await api.get("/users");
-    setUsers(res.data);
-  };
+  const { fetchProfile } = useUserStore();
+  const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
 
   useEffect(() => {
-    fetchMe(); // <-- Fetch current user on mount
-
-    getProfiles(); // <-- Fetch all users
+    fetchProfile();
   }, []);
-  console.log("me :", me);
-  console.log("users :", users);
-  const profile = users.find((user) => user.id === me?.id);
-  console.log(profile);
+
+  // todo here
+  if (!profile) {
+    // return <Navigate to={"/login"} />;
+  }
   return (
     <header className="flex justify-around  items-center px-6   py-6 bg-white shadow-md rounded-xl mx-4 my-4">
       <div className="text-2xl font-semibold text-gray-800  text-center max-sm:mr-10     ">
         <span className="text-3xl">🍽️</span>
         <span className="text-indigo-600 text-3xl mx-2">
           <Link to={"/"}>GoEat</Link>{" "}
+          {profile && <h2>Welcome, {profile.name}</h2>}
         </span>
       </div>
-
-      {profile && <h1>{profile.name}</h1>}
 
       <div className="flex gap-2   items-baseline  sm:gap-10">
         <div className="flex  text-center  flex-col max-sm:gap-y-5 ">
