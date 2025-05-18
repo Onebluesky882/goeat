@@ -42,7 +42,7 @@ export const useUserStore = create<UserStore>((set, get) => {
         });
 
         const user = res.data;
-        console.log(res.data);
+
         const current = get().user;
         if (current?.id !== user?.id) {
           set({ user });

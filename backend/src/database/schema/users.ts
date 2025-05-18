@@ -8,5 +8,6 @@ export const users = pgTable('users', {
   name: text('name'),
   createAt: timestamp('create_at').notNull().defaultNow(),
   active: boolean('active').default(false),
-  role: text('role'),
+  roleId: uuid('role_id'),
+  imageUrl: text('image_url'),
 });

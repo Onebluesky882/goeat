@@ -2,18 +2,40 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
+import { useUserStore } from "@/store/useStore";
 
 const Footer = () => {
   const location = useLocation();
   const [lang, setLang] = useState<"en" | "th">("th");
   // todo change menuOpen to global state
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const profile = useUserStore((state) => state.user);
   const toggleMenuMobile = () => {
     setMenuOpen((prev) => !prev);
   };
 
-  const menus = [
+  const mainMenu = [
+    {
+      path: `${profile ? "logout" : "login"}`,
+      label: {
+        en: `${profile ? "logout" : "login"}`,
+        th: `${profile ? "ลงชื่อออก" : "ลงชื่อเข้า"}`,
+      },
+      potion: "top-10",
+    },
+
+    {
+      path: "controller",
+      label: { en: "controller", th: "ศูนย์กลาง" },
+      potion: "top-10",
+    },
+    {
+      path: "profile",
+      label: { en: "profile", th: "ผู้ใช้" },
+      potion: "top-10",
+    },
+  ];
+  const shopMenu = [
     {
       path: "BillSummary",
       label: { en: "Bill Summary", th: "สรุปบิล" },
@@ -53,27 +75,51 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="shadow sticky bottom-0 z-10 border-t left-0 bg-amber-300">
+      <footer
+        className={` shadow sticky bottom-0 z-10 border-t left-0  text-white ${
+          location.pathname.startsWith("/shop") ? `bg-blue-500` : `bg-amber-300`
+        } `}
+      >
         <nav className="hidden md:flex max-w-6xl mx-auto px-4 py-3 items-center justify-between ">
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6">
-            {menus.map((menu, index) => (
-              <Link
-                key={index}
-                to={`/${menu.path}`}
-                style={{ top: menu.potion, right: "0" }}
-              >
-                <span
-                  className={`text-sm font-medium text-blue-900 ${
-                    location.pathname === `/${menu.path}`
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-600 hover:text-blue-500"
-                  }`}
-                >
-                  {menu.label[lang]}
-                </span>
-              </Link>
-            ))}
+            {location.pathname.startsWith("/shop") ? (
+              <div>
+                {shopMenu.map((menu, index) => (
+                  <Link
+                    key={index}
+                    to={`/${menu.path}`}
+                    style={{ top: menu.potion, right: "0" }}
+                  >
+                    <span
+                      className={`text-sm font-medium text-blue-900  ${
+                        location.pathname === `/${menu.path}`
+                          ? "text-blue-600 border-b-2 border-blue-600"
+                          : "text-gray-400 hover:text-blue-500"
+                      }`}
+                    >
+                      {menu.label[lang]}
+                    </span>
+                  </Link>
+                ))}{" "}
+              </div>
+            ) : (
+              <div>
+                {mainMenu.map((menu, index) => (
+                  <Link key={index} to={`/${menu.path}`}>
+                    <span
+                      className={`text-sm font-medium text-blue-900 mx-5 ${
+                        location.pathname === `/${menu.path}`
+                          ? "text-blue-600 border-b-2 border-blue-600"
+                          : "text-gray-600 hover:text-blue-500"
+                      }`}
+                    >
+                      {menu.label[lang]}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Language Toggle */}
@@ -112,7 +158,7 @@ const Footer = () => {
           <MobileMenu
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
-            menus={menus}
+            menus={shopMenu}
             lang={lang}
             setLang={setLang}
             toggleMenuMobile={toggleMenuMobile}

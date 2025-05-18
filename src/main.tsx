@@ -13,8 +13,10 @@ import NotFound from "./pages/NotFound.tsx";
 import CCTVLive from "./pages/shop/Cctv.tsx";
 import LoginAuthGoogle from "./pages/LoginAuthGoogle.tsx";
 import Profile from "./pages/Profile.tsx";
-import Dashboard from "./pages/shop/DashBoard.tsx";
+import Dashboard from "./pages/Controller.tsx";
 import MenuManagement from "./pages/shop/MenuManagement.tsx";
+import Controller from "./pages/Controller.tsx";
+import LogOut from "./pages/LogOut.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,6 +25,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<Layout />}>
           <Route index element={<App />} />
           <Route path="login" element={<LoginAuthGoogle />} />
+          <Route path="logout" element={<LogOut />} />
           <Route path="BillSummary" element={<BillSummary />} />
           <Route path="DashBoard" element={<DashBoard />} />
           <Route path="OrderStatus" element={<OrderStatus />} />
@@ -32,6 +35,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="profile" element={<Profile />} />
           <Route path="shop/menus" element={<MenuManagement />} />
           <Route path="shop/dashboard" element={<Dashboard />} />
+          <Route path="controller" element={<Controller />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

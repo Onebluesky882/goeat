@@ -19,6 +19,7 @@ import { MenusController } from './menus/menus.controller';
 import { ShopsModule } from './shops/shops.module';
 import { TablesService } from './tables/tables.service';
 import { TablesModule } from './tables/tables.module';
+import { MenuPhotosModule } from './menu-photos/menu-photos.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TablesModule } from './tables/tables.module';
     UsersModule,
     ShopsModule,
     TablesModule,
+    MenuPhotosModule,
   ],
   controllers: [
     UsersController,

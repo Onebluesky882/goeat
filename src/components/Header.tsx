@@ -5,23 +5,19 @@ import { Link, Navigate } from "react-router-dom";
 
 const Header = () => {
   const { fetchProfile } = useUserStore();
-  const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
 
   useEffect(() => {
     fetchProfile();
   }, []);
-
+  const profile = useUserStore((state) => state.user);
   // todo here
-  if (!profile) {
-    // return <Navigate to={"/login"} />;
-  }
+
   return (
     <header className="flex justify-around  items-center px-6   py-6 bg-white shadow-md rounded-xl mx-4 my-4">
       <div className="text-2xl font-semibold text-gray-800  text-center max-sm:mr-10     ">
         <span className="text-3xl">🍽️</span>
         <span className="text-indigo-600 text-3xl mx-2">
           <Link to={"/"}>GoEat</Link>{" "}
-          {profile && <h2>Welcome, {profile.name}</h2>}
         </span>
       </div>
 
