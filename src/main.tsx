@@ -5,18 +5,20 @@ import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
 import BillSummary from "./pages/shop/BillSummary.tsx";
-import DashBoard from "./pages/shop/DashBoard.tsx";
 import OrderStatus from "./pages/shop/OrderStatus.tsx";
 import StaffManagement from "./pages/shop/StaffManagement.tsx";
 import TableSetup from "./pages/shop/TableSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CCTVLive from "./pages/shop/Cctv.tsx";
 import LoginAuthGoogle from "./pages/LoginAuthGoogle.tsx";
-import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Controller.tsx";
 import MenuManagement from "./pages/shop/MenuManagement.tsx";
 import Controller from "./pages/Controller.tsx";
 import LogOut from "./pages/LogOut.tsx";
+import { Toaster } from "sonner";
+import UserProfile from "./pages/UserProfile.tsx";
+import FeedbackForm from "./pages/FeedbackForm.tsx";
+import ShopInfo from "./pages/shop/ShopInfo.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -26,19 +28,23 @@ createRoot(document.getElementById("root")!).render(
           <Route index element={<App />} />
           <Route path="login" element={<LoginAuthGoogle />} />
           <Route path="logout" element={<LogOut />} />
-          <Route path="BillSummary" element={<BillSummary />} />
-          <Route path="DashBoard" element={<DashBoard />} />
-          <Route path="OrderStatus" element={<OrderStatus />} />
-          <Route path="StaffManagement" element={<StaffManagement />} />
-          <Route path="TableSetup" element={<TableSetup />} />
-          <Route path="cctv" element={<CCTVLive />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="shop/menus" element={<MenuManagement />} />
-          <Route path="shop/dashboard" element={<Dashboard />} />
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="shop" element={<ShopInfo />}>
+            <Route path="summary" element={<BillSummary />} />
+            <Route path="OrderStatus" element={<OrderStatus />} />
+            <Route path="StaffManagement" element={<StaffManagement />} />
+            <Route path="TableSetup" element={<TableSetup />} />
+            <Route path="cctv" element={<CCTVLive />} />
+            <Route path="menus" element={<MenuManagement />} />
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+
           <Route path="controller" element={<Controller />} />
+          <Route path="feedback" element={<FeedbackForm />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      <Toaster />
     </BrowserRouter>
   </StrictMode>
 );

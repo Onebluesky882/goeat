@@ -1,7 +1,8 @@
 import { useUserStore } from "@/store/useStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Controller = () => {
   const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
 
@@ -30,6 +31,14 @@ const Controller = () => {
 
   const [selectedBranch, setSelectedBranch] = React.useState(branches[0]);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (profile === null) return navigate("/");
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [profile]);
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-purple-50">
       <div className="w-full py-4 flex flex-col items-center animate-fade-in">

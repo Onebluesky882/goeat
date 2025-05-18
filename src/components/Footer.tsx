@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { useUserStore } from "@/store/useStore";
@@ -10,17 +10,16 @@ const Footer = () => {
   // todo change menuOpen to global state
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const profile = useUserStore((state) => state.user);
   const toggleMenuMobile = () => {
     setMenuOpen((prev) => !prev);
   };
 
   const mainMenu = [
     {
-      path: `${profile ? "logout" : "login"}`,
+      path: "login",
       label: {
-        en: `${profile ? "logout" : "login"}`,
-        th: `${profile ? "ลงชื่อออก" : "ลงชื่อเข้า"}`,
+        en: "login",
+        th: "ลงชื่อเข้า",
       },
       potion: "top-10",
     },
@@ -33,6 +32,16 @@ const Footer = () => {
     {
       path: "profile",
       label: { en: "profile", th: "ผู้ใช้" },
+      potion: "top-10",
+    },
+    {
+      path: "feedback",
+      label: { en: "feedback", th: "แนะนำติชม" },
+      potion: "top-10",
+    },
+    {
+      path: "logout",
+      label: { en: "logout", th: "ลงชื่อออก" },
       potion: "top-10",
     },
   ];
