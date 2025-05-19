@@ -8,6 +8,13 @@
       "when": 1747585758783,
       "tag": "0000_add_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747587044301,
+      "tag": "0001_add_fk_orders",
+      "breakpoints": true
     }
   ]
 }

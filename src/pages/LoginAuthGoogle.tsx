@@ -6,14 +6,12 @@ const LoginAuthGoogle = () => {
   };
 
   return (
-    <div className="">
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-sm text-center space-y-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            เข้าสู่ระบบด้วย Google
-          </h1>
-          <Button onClick={handleLogin}>Login with Google</Button>
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 -bt-10">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-sm text-center space-y-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          เข้าสู่ระบบด้วย Google
+        </h1>
+        <Button onClick={handleLogin}>Login with Google</Button>
       </div>
     </div>
   );

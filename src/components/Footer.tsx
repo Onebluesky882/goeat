@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
-import { useUserStore } from "@/store/useStore";
 
 const Footer = () => {
   const location = useLocation();
-  const [lang, setLang] = useState<"en" | "th">("th");
+  const [lang, setLang] = useState<"en" | "th">("en");
   // todo change menuOpen to global state
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -30,6 +29,11 @@ const Footer = () => {
       potion: "top-10",
     },
     {
+      path: "shop/dashboard",
+      label: { en: "shops", th: "ร้านอาหารของคุณ" },
+      potion: "top-10",
+    },
+    {
       path: "profile",
       label: { en: "profile", th: "ผู้ใช้" },
       potion: "top-10",
@@ -47,27 +51,32 @@ const Footer = () => {
   ];
   const shopMenu = [
     {
-      path: "BillSummary",
-      label: { en: "Bill Summary", th: "สรุปบิล" },
+      path: "controller",
+      label: { en: "Main", th: "mapping" },
       potion: "top-10",
     },
     {
-      path: "DashBoard",
+      path: "shop/mapping",
+      label: { en: "mapping", th: "mapping" },
+      potion: "top-10",
+    },
+    {
+      path: "shop/dashboard",
       label: { en: "Dashboard", th: "แดชบอร์ด" },
       potion: "top-20",
     },
     {
-      path: "MenuManagements",
+      path: "shop/menumanagements",
       label: { en: "Menu", th: "จัดการเมนู" },
       potion: "top-30",
     },
     {
-      path: "OrderStatus",
+      path: "shop/table-order",
       label: { en: "Order Status", th: "สถานะออเดอร์" },
       potion: "top-40",
     },
     {
-      path: "StaffManagement",
+      path: "shop/staffmanagement",
       label: { en: "Staff", th: "พนักงาน" },
       potion: "top-50",
     },
@@ -77,7 +86,7 @@ const Footer = () => {
       potion: "top-60",
     },
     {
-      path: "cctv",
+      path: "shop/cctv",
       label: { en: "CCTV", th: "กล้องวงจรปิด" },
       potion: "top-70",
     },
@@ -102,7 +111,7 @@ const Footer = () => {
                     style={{ top: menu.potion, right: "0" }}
                   >
                     <span
-                      className={`text-sm font-medium text-blue-900  ${
+                      className={`text-sm  mx-2 text-blue-900  ${
                         location.pathname === `/${menu.path}`
                           ? "text-blue-600 border-b-2 border-blue-600"
                           : "text-gray-400 hover:text-blue-500"
@@ -118,10 +127,10 @@ const Footer = () => {
                 {mainMenu.map((menu, index) => (
                   <Link key={index} to={`/${menu.path}`}>
                     <span
-                      className={`text-sm font-medium text-blue-900 mx-5 ${
+                      className={`text-sm font-medium mx-5 ${
                         location.pathname === `/${menu.path}`
                           ? "text-blue-600 border-b-2 border-blue-600"
-                          : "text-gray-600 hover:text-blue-500"
+                          : "text-gray-500 hover:text-blue-500"
                       }`}
                     >
                       {menu.label[lang]}
@@ -137,7 +146,7 @@ const Footer = () => {
             <button
               onClick={() => setLang("th")}
               className={`px-2 py-1 text-sm font-medium rounded  ${
-                lang === "th" ? "bg-blue-600 text-white" : "text-gray-600"
+                lang === "th" ? "bg-blue-600 text-white" : "text-gray-400"
               }`}
             >
               ไทย
@@ -145,7 +154,7 @@ const Footer = () => {
             <button
               onClick={() => setLang("en")}
               className={`px-2 py-1 text-sm font-medium rounded ${
-                lang === "en" ? "bg-blue-600 text-white" : "text-gray-600"
+                lang === "en" ? "bg-blue-600 text-white" : "text-gray-400"
               }`}
             >
               ENG
@@ -179,13 +188,7 @@ const Footer = () => {
   );
 };
 
-const MobileMenu = ({
-  menuOpen,
-  lang,
-  setLang,
-  menus,
-  toggleMenuMobile,
-}: any) => {
+const MobileMenu = ({ menuOpen, lang, menus, toggleMenuMobile }: any) => {
   const handleMenuClick = (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent the click event from bubbling up and closing the menu
   };

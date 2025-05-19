@@ -1,4 +1,4 @@
-import { relations, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import {
   foreignKey,
   numeric,
@@ -7,7 +7,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { orderTable } from '..';
+import { orderTable } from './orderTable';
 
 export const orders = pgTable(
   'orders',
