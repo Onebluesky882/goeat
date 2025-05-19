@@ -19,7 +19,8 @@ import { Toaster } from "sonner";
 import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
 import ShopInfo from "./pages/shop/ShopInfo.tsx";
-import Mapping from "./pages/shop/Mapping.tsx";
+import Feature from "./Feature/idea.tsx";
+import TableLayoutManager from "./pages/shop/TableLayoutManager.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -32,7 +33,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="profile" element={<UserProfile />} />
           <Route path="shop" element={<ShopInfo />}>
             <Route path="summary" element={<BillSummary />} />
-            <Route path="mapping" element={<Mapping />} />
+            <Route path="table-layout" element={<TableLayoutManager />} />
             <Route path="OrderStatus" element={<OrderStatus />} />
             <Route path="StaffManagement" element={<StaffManagement />} />
             <Route path="TableSetup" element={<TableSetup />} />
@@ -43,6 +44,7 @@ createRoot(document.getElementById("root")!).render(
 
           <Route path="controller" element={<Controller />} />
           <Route path="feedback" element={<FeedbackForm />} />
+          <Route path="feature" element={<Feature />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -56,8 +56,8 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shop/mapping",
-      label: { en: "mapping", th: "mapping" },
+      path: "shop/table-layout",
+      label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },
     {
@@ -81,7 +81,7 @@ const Footer = () => {
       potion: "top-50",
     },
     {
-      path: "TableSetup",
+      path: "shop/tableSetup",
       label: { en: "Tables", th: "ตั้งค่าโต๊ะ" },
       potion: "top-60",
     },
@@ -93,13 +93,14 @@ const Footer = () => {
   ];
 
   return (
-    <>
-      <footer
-        className={` shadow sticky bottom-0 z-10 border-t left-0  text-white ${
+    <footer className={` shadow-2xl sticky bottom-0 z-10  pt-1    `}>
+      <div
+        className={` left-0 rounded-t-2xl shadow-2xl ${
           location.pathname.startsWith("/shop") ? `bg-blue-500` : `bg-amber-300`
+        } 
         } `}
       >
-        <nav className="hidden md:flex max-w-6xl mx-auto px-4 py-3 items-center justify-between ">
+        <nav className="hidden sm:flex max-w-6xl mx-auto px-4 py-3 items-center justify-between ">
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6">
             {location.pathname.startsWith("/shop") ? (
@@ -111,10 +112,10 @@ const Footer = () => {
                     style={{ top: menu.potion, right: "0" }}
                   >
                     <span
-                      className={`text-sm  mx-2 text-blue-900  ${
+                      className={`text-md font-medium mx-2 text-blue-900  ${
                         location.pathname === `/${menu.path}`
                           ? "text-blue-600 border-b-2 border-blue-600"
-                          : "text-gray-400 hover:text-blue-500"
+                          : "text-white hover:text-blue-500"
                       }`}
                     >
                       {menu.label[lang]}
@@ -130,7 +131,7 @@ const Footer = () => {
                       className={`text-sm font-medium mx-5 ${
                         location.pathname === `/${menu.path}`
                           ? "text-blue-600 border-b-2 border-blue-600"
-                          : "text-gray-500 hover:text-blue-500"
+                          : "text-gray-400 hover:text-blue-500"
                       }`}
                     >
                       {menu.label[lang]}
@@ -163,7 +164,7 @@ const Footer = () => {
         </nav>
 
         {/* Mobile Menu */}
-      </footer>
+      </div>
       <div className="sm:hidden fixed  bottom-0 right-0  rounded-full px-3">
         {/* Mobile Hamburger */}
 
@@ -184,7 +185,7 @@ const Footer = () => {
           />
         )}
       </div>
-    </>
+    </footer>
   );
 };
 

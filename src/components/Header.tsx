@@ -11,8 +11,8 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="py-3 bg-gray-100">
-      <div className="flex justify-around  items-center px-6  py-6 bg-white shadow-md rounded-xl mx-4 outline-1 outline-gray-100 ">
+    <header className="py-3 ">
+      <div className="flex justify-around  items-center px-6  py-6 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
         <div className="text-2xl font-semibold text-gray-800  text-center max-sm:mr-10     ">
           <span className="text-3xl">🍽️</span>
           <span className="text-indigo-600 text-3xl mx-2">

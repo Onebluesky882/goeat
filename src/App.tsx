@@ -6,7 +6,7 @@ import { QrCode, Utensils, LayoutDashboard } from "lucide-react";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-orange-50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-orange-50 to-white rounded-2xl shadow-2xl">
       {/* Hero section */}
       <header className="relative py-12 sm:py-16 md:py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
