@@ -1,26 +1,48 @@
 import { useState } from "react";
 import TableIcon from "../../assets/table-restaurant.svg?react";
-type Color = "blue" | "red" | "pink" | "green";
+import {
+  DndContext,
+  PointerSensor,
+  useDraggable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 
 const TableLayoutManager = () => {
   const [indexTable, setIndexTable] = useState<number[]>([]);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
   const handleGetIndexValue = (index: number) => {
     setIndexTable((prev) => [...prev, index]);
-    console.log("Clicked index:", index);
+  };
+
+  const handleDragEnd = (e: any) => {
+    console.log("✅ Drag Ended:", e);
   };
   return (
-    <div className="p-4 grid grid-cols-8 ">
-      <div className="outline-1 outline-gray-50  px-2 text-center pt-2 flex flex-col col-span-1 rounded-sm mx-2 bg-white shadow-2xl items-center">
-        <SideBar />
-      </div>
-      <div className="outline-1 bg-white outline-gray-50 rounded-sm flex flex-col justify-between col-span-7 items-center overflow-auto">
-        <h2>Map </h2>
-        <div className=" flex flex-col justify-between ">
-          <BuildingGrids rows={30} columns={30} onClick={handleGetIndexValue} />
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <div className="p-4 grid grid-cols-8 ">
+        <div className="outline-1 outline-gray-50  px-2 text-center pt-2 flex flex-col col-span-1 rounded-sm mx-2 bg-white shadow-2xl items-center">
+          <SideBar />
+        </div>
+        <div className="outline-1 bg-white outline-gray-50 rounded-sm flex flex-col justify-between col-span-7 items-center overflow-auto">
+          <h2>Map </h2>
+          <div className=" flex flex-col justify-between ">
+            <BuildingGrids
+              rows={30}
+              columns={30}
+              onClick={handleGetIndexValue}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </DndContext>
   );
 };
 
@@ -60,25 +82,39 @@ const BuildingGrids = ({
   return <div>{grids}</div>;
 };
 
+// left sidebar
+
 const SideBar = () => {
-  const menuSidebars = [
-    {
-      svg: <TableIcon className={` w-10 h-10  text-blue-500  fill-current`} />,
-    },
-  ];
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: "table-id",
+    });
+
+  const style: React.CSSProperties = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 9999,
+        position: "absolute",
+      }
+    : {};
+
   return (
-    <div className="">
-      <h2>Objects Lists</h2>
-      <div>
-        {menuSidebars.map((item) => (
-          <div className="flex justify-center py-5   ">
-            <div className="  p-2 shadow-2xl bg-white border-1 border-gray-200 rounded-2xl">
-              {item?.svg}
-            </div>
-          </div>
-        ))}
+    <div>
+      <h2>Objects List</h2>
+      <div className="relative h-40">
+        {" "}
+        <div
+          ref={setNodeRef}
+          {...listeners}
+          {...attributes}
+          style={style}
+          className="p-2 cursor-move shadow-2xl bg-white border border-gray-200 rounded-2xl inline-block"
+        >
+          <TableIcon className="w-10 h-10 text-blue-500 fill-current" />
+        </div>
       </div>
     </div>
   );
 };
+
 export default TableLayoutManager;
