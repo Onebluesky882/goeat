@@ -1,120 +1,76 @@
-import { useState } from "react";
-import TableIcon from "../../assets/table-restaurant.svg?react";
-import {
-  DndContext,
-  PointerSensor,
-  useDraggable,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
+import React, { useState, useRef } from "react";
+import TableLayoutManager from "@/components/TableLayout/TableLayoutManager";
 
-const TableLayoutManager = () => {
-  const [indexTable, setIndexTable] = useState<number[]>([]);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
+const TableLayoutPage = () => {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [droppedTables, setDroppedTables] = useState<{ [key: number]: string }>(
+    {}
   );
-  const handleGetIndexValue = (index: number) => {
-    setIndexTable((prev) => [...prev, index]);
+
+  const dragRef = useRef<HTMLDivElement | null>(null);
+
+  // Prepare dragListeners and dragAttributes for the draggable object in SideBar
+  const dragListeners = {
+    draggable: true,
+    onDragStart: (e: React.DragEvent) => {
+      e.dataTransfer.setData("text/plain", "table-id"); // or the id you want to drag
+      onDragStart("table-id");
+    },
   };
 
-  const handleDragEnd = (e: any) => {
-    console.log("✅ Drag Ended:", e);
+  const dragAttributes = {
+    // Can add attributes like aria-grabbed or others if needed
   };
-  return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="p-4 grid grid-cols-8 ">
-        <div className="outline-1 outline-gray-50  px-2 text-center pt-2 flex flex-col col-span-1 rounded-sm mx-2 bg-white shadow-2xl items-center">
-          <SideBar />
-        </div>
-        <div className="outline-1 bg-white outline-gray-50 rounded-sm flex flex-col justify-between col-span-7 items-center overflow-auto">
-          <h2>Map </h2>
-          <div className=" flex flex-col justify-between ">
-            <BuildingGrids
-              rows={30}
-              columns={30}
-              onClick={handleGetIndexValue}
-            />
-          </div>
-        </div>
-      </div>
-    </DndContext>
-  );
-};
 
-const BuildingGrids = ({
-  columns,
-  rows,
-  onClick,
-}: {
-  rows: number;
-  columns: number;
-  onClick: (index: number) => void;
-}) => {
-  let grids = [];
+  const onDragStart = (id: string) => {
+    setActiveId(id);
+  };
 
-  for (let row = 0; row < rows; row++) {
-    const rowItems = [];
-    for (let col = 0; col < columns; col++) {
-      const index = row * columns + col;
+  const onDragOver = (overId: string | null) => {
+    setDragOverId(overId);
+  };
 
-      rowItems.push(
-        <div
-          key={index}
-          onClick={() => onClick(index)}
-          className="border bg-gray-50 p-1 w-5 text-center text-gray-500 text-[5px] rounded"
-        >
-          {index}
-        </div>
-      );
+  const onDragEnd = (overId: string | null, activeId: string | null) => {
+    if (overId && activeId) {
+      setDroppedTables((prev) => ({
+        ...prev,
+        [Number(overId)]: activeId,
+      }));
     }
+    setActiveId(null);
+    setDragOverId(null);
+  };
 
-    grids.push(
-      <div className="flex gap-1 m-2" key={`row-${row}`}>
-        {rowItems}
-      </div>
-    );
-  }
-  return <div>{grids}</div>;
-};
+  const onClickCell = (index: number) => {
+    console.log("Clicked cell:", index);
+  };
 
-// left sidebar
-
-const SideBar = () => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: "table-id",
-    });
-
-  const style: React.CSSProperties = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        zIndex: 9999,
-        position: "absolute",
-      }
-    : {};
+  const dragOverlayStyle: React.CSSProperties = {
+    position: "fixed",
+    pointerEvents: "none",
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+  };
 
   return (
     <div>
-      <h2>Objects List</h2>
-      <div className="relative h-40">
-        {" "}
-        <div
-          ref={setNodeRef}
-          {...listeners}
-          {...attributes}
-          style={style}
-          className="p-2 cursor-move shadow-2xl bg-white border border-gray-200 rounded-2xl inline-block"
-        >
-          <TableIcon className="w-10 h-10 text-blue-500 fill-current" />
-        </div>
-      </div>
+      <TableLayoutManager
+        activeId={activeId}
+        dragOverId={dragOverId}
+        droppedTables={droppedTables}
+        onClickCell={onClickCell}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+        onDragStart={onDragStart}
+        dragAttributes={dragAttributes}
+        dragListeners={dragListeners}
+        dragRef={dragRef}
+        dragOverlayStyle={dragOverlayStyle}
+      />
     </div>
   );
 };
 
-export default TableLayoutManager;
+export default TableLayoutPage;

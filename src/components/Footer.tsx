@@ -56,7 +56,7 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shop/table-layout",
+      path: "shop/temp",
       label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },

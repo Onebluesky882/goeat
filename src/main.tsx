@@ -21,6 +21,7 @@ import FeedbackForm from "./pages/FeedbackForm.tsx";
 import ShopInfo from "./pages/shop/ShopInfo.tsx";
 import Feature from "./Feature/idea.tsx";
 import TableLayoutManager from "./pages/shop/TableLayoutManager.tsx";
+import TemTableLayout from "./pages/shop/TemTableLayout.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -40,6 +41,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="cctv" element={<CCTVLive />} />
             <Route path="menus" element={<MenuManagement />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="temp" element={<TemTableLayout />} />
           </Route>
 
           <Route path="controller" element={<Controller />} />
