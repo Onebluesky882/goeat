@@ -56,7 +56,7 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shop/temp",
+      path: "shop/table-layout",
       label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },
@@ -131,7 +131,7 @@ const Footer = () => {
                       className={`text-sm font-medium mx-5 ${
                         location.pathname === `/${menu.path}`
                           ? "text-blue-600 border-b-2 border-blue-600"
-                          : "text-gray-400 hover:text-blue-500"
+                          : "text-gray-700 hover:text-blue-500"
                       }`}
                     >
                       {menu.label[lang]}
@@ -147,7 +147,7 @@ const Footer = () => {
             <button
               onClick={() => setLang("th")}
               className={`px-2 py-1 text-sm font-medium rounded  ${
-                lang === "th" ? "bg-blue-600 text-white" : "text-gray-400"
+                lang === "th" ? "bg-blue-600 text-white" : "text-gray-500"
               }`}
             >
               ไทย
@@ -155,7 +155,7 @@ const Footer = () => {
             <button
               onClick={() => setLang("en")}
               className={`px-2 py-1 text-sm font-medium rounded ${
-                lang === "en" ? "bg-blue-600 text-white" : "text-gray-400"
+                lang === "en" ? "bg-blue-600 text-white" : "text-gray-500"
               }`}
             >
               ENG

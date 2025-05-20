@@ -20,8 +20,8 @@ import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
 import ShopInfo from "./pages/shop/ShopInfo.tsx";
 import Feature from "./Feature/idea.tsx";
-import TableLayoutManager from "./pages/shop/TableLayoutManager.tsx";
-import TemTableLayout from "./pages/shop/TemTableLayout.tsx";
+import TableLayout from "./pages/shop/TableLayoutManager.tsx";
+import CreateShop from "./pages/shop/CreateShop.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,14 +34,14 @@ createRoot(document.getElementById("root")!).render(
           <Route path="profile" element={<UserProfile />} />
           <Route path="shop" element={<ShopInfo />}>
             <Route path="summary" element={<BillSummary />} />
-            <Route path="table-layout" element={<TableLayoutManager />} />
+            <Route path="table-layout" element={<TableLayout />} />
             <Route path="OrderStatus" element={<OrderStatus />} />
             <Route path="StaffManagement" element={<StaffManagement />} />
             <Route path="TableSetup" element={<TableSetup />} />
             <Route path="cctv" element={<CCTVLive />} />
             <Route path="menus" element={<MenuManagement />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="temp" element={<TemTableLayout />} />
+            <Route path="create" element={<CreateShop />} />
           </Route>
 
           <Route path="controller" element={<Controller />} />

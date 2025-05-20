@@ -20,6 +20,9 @@ import { ShopsModule } from './shops/shops.module';
 import { TablesService } from './tables/tables.service';
 import { TablesModule } from './tables/tables.module';
 import { MenuPhotosModule } from './menu-photos/menu-photos.module';
+import { ImagesService } from './images/images.service';
+import { ImagesController } from './images/images.controller';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -30,14 +33,16 @@ import { MenuPhotosModule } from './menu-photos/menu-photos.module';
     ShopsModule,
     TablesModule,
     MenuPhotosModule,
+    ImagesModule,
   ],
   controllers: [
     UsersController,
     AppController,
     ShopsController,
     MenusController,
+    ImagesController,
   ],
-  providers: [UsersService, MenusService, OrdersService, CustomersService, TablesService],
+  providers: [UsersService, MenusService, OrdersService, CustomersService, TablesService, ImagesService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

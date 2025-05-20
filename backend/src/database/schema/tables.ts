@@ -12,9 +12,7 @@ export const tables = pgTable('tables', {
   rowsMap: text('rows_map'),
   columnsMap: text('columnsMap'),
   status: text('status').notNull(),
-  createdAt: timestamp('created_at', { mode: 'string' })
-    .notNull()
-    .default(sql`now()`),
+  createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
 });
 
 //const url = 'https://yourdomain.com/orderId to qr code';
