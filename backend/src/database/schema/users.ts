@@ -6,8 +6,9 @@ export const users = pgTable('users', {
     .default(sql`gen_random_uuid()`),
   email: text('email').notNull(), // Required
   name: text('name'),
-  createAt: timestamp('create_at').notNull().defaultNow(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
   active: boolean('active').default(false),
   roleId: uuid('role_id'),
   imageUrl: text('image_url'),
+  updatedAt: timestamp('updated_at'),
 });

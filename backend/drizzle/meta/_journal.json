@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1747585758783,
-      "tag": "0000_add_tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1747587044301,
-      "tag": "0001_add_fk_orders",
+      "when": 1747743575907,
+      "tag": "0000_create_tables",
       "breakpoints": true
     }
   ]

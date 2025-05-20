@@ -1,6 +1,5 @@
 import { sql } from 'drizzle-orm';
 import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { images } from './images';
 import { users } from './users';
 
 export const shops = pgTable('shops', {

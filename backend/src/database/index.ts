@@ -4,8 +4,11 @@ import { orders } from './schema/orders';
 import { shops } from './schema/shops';
 import { tables } from './schema/tables';
 import { users } from './schema/users';
-import { menuPhotos } from './schema/menuImages';
 import { orderTable } from './schema/orderTable';
+import { images } from './schema/images';
+import { menuImages } from './schema/menuImages';
+import { roles } from './schema/roles';
+import { employees } from './schema/employees';
 
 export * from './schema/orders';
 export * from './schema/menus';
@@ -15,6 +18,9 @@ export * from './schema/customers';
 export * from './schema/tables';
 export * from './schema/menuImages';
 export * from './schema/orderTable';
+export * from './schema/images';
+export * from './schema/roles';
+export * from './schema/employees';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -28,6 +34,9 @@ export const schema = {
   shops,
   customers,
   tables,
-  menuPhotos,
   orderTable,
+  employees,
+  images,
+  menuImages,
+  roles,
 };
