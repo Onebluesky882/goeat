@@ -6,9 +6,11 @@ export const tables = pgTable('tables', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   name: text('name'),
-  position: text('position'),
-  url: text('url').notNull(),
+  gridPosition: text('grid_position'),
+  tableLink: text('table_link').notNull(),
   shopId: uuid('shop_id').notNull(),
+  rowsMap: text('rows_map'),
+  columnsMap: text('columnsMap'),
   status: text('status').notNull(),
   createdAt: timestamp('created_at', { mode: 'string' })
     .notNull()
