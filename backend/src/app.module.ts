@@ -35,14 +35,7 @@ import { ImagesModule } from './images/images.module';
     MenuPhotosModule,
     ImagesModule,
   ],
-  controllers: [
-    UsersController,
-    AppController,
-    ShopsController,
-    MenusController,
-    ImagesController,
-  ],
-  providers: [UsersService, MenusService, OrdersService, CustomersService, TablesService, ImagesService],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

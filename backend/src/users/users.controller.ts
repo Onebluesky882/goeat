@@ -20,4 +20,16 @@ export class UsersController {
   getProfile(@Req() req: AuthRequest) {
     return this.usersService.getProfile(req.user);
   }
+
+  @Post('create-user')
+  createUser(@Body() body: { email; name; id }) {
+    const { email, name, id } = body;
+    try {
+      this.usersService.insertUser(email, name, id);
+    } catch (error) {
+      console.log('failed!');
+    }
+
+    return { message: 'Profile fetched successfully' };
+  }
 }

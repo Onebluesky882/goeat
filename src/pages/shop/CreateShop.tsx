@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import ImageUpload from "@/components/features/imageUploader";
 import RestaurantPreviewCard from "@/components/createNewRestaurant/PreviewCard";
 import { toast } from "sonner";
-import { schema } from "@/schema/createShop";
-import type { RestaurantData } from "../../../types/createShop";
+import { schema } from "@/schema/formNewShop";
 import { Button } from "@/components/ui/button";
+import type { NewShop } from "@/types/shop.types";
 
 export type FormFields = z.infer<typeof schema>;
 
@@ -25,7 +25,7 @@ const emptyValues: FormFields = {
 };
 
 const CreateShop: React.FC = () => {
-  const [submitted, setSubmitted] = useState<RestaurantData | null>(null);
+  const [submitted, setSubmitted] = useState<NewShop | null>(null);
   const [images, setImages] = useState<File[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
 
@@ -43,7 +43,7 @@ const CreateShop: React.FC = () => {
 
   const watchAll = watch();
 
-  const livePreview: RestaurantData & { images?: string[] } = {
+  const livePreview: NewShop = {
     name: watchAll.name ?? "",
     address: watchAll.address,
     phone: watchAll.phone,
@@ -58,28 +58,19 @@ const CreateShop: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    // Validate image count
-    if (images.length < 3 || images.length > 5) {
-      setImageError("Please upload between 3 and 5 images.");
-      return;
-    }
-    setImageError(null);
-
-    // Clean up empty socials
     const socials: { [k: string]: string } = {};
     Object.entries(data.socials).forEach(([key, value]) => {
       if (value && value.trim() !== "") socials[key] = value.trim();
     });
-    const preview: RestaurantData & { images?: string[] } = {
+    const preview: NewShop = {
       ...data,
       name: data.name ?? "",
       socials,
-      images: images.map((img) => img.name),
     };
     setSubmitted(preview);
 
-    toast(
-      <div>title: "Submitted!", description: "Restaurant details captured.</div>
+    toast.success(
+      <div> "Submitted!", description: "Restaurant details captured.</div>
     );
   };
 

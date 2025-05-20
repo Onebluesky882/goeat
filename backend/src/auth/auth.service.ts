@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { schema, users } from 'src/database';
-import { json, Response } from 'express';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -48,5 +48,20 @@ export class AuthService {
     } catch (error) {
       throw new Error('Failed to generate access token');
     }
+  }
+
+  async login(email: string, password: string) {
+    if (email !== 'wansing@gmail.com' || password !== 'admin') return;
+    const profile = await this.db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+    const payload = {
+      id: profile?.id,
+      email: profile?.email,
+      name: profile?.name,
+    };
+    const token = this.jwtService.sign(payload);
+
+    return { access_token: token };
   }
 }

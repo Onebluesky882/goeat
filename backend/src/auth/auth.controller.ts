@@ -38,4 +38,11 @@ export class AuthController {
       process.env.FRONTEND_REDIRECT_URL ?? 'http://localhost:5173/controller',
     );
   }
+
+  // test account
+  @Post('login')
+  login(@Body() body: { email: string; password: string }) {
+    const { email, password } = body;
+    return this.authService.login(email, password);
+  }
 }

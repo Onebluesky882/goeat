@@ -25,10 +25,11 @@ export class UsersService {
     return rows[0];
   }
 
-  async insertUser(email: string, name: string) {
+  async insertUser(email: string, name: string, id: string) {
     const newUser = {
       email,
       name,
+      id,
     };
     return await this.db.insert(users).values(newUser).returning();
   }

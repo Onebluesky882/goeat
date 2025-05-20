@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { DndContext, type DragEndEvent, DragOverlay } from "@dnd-kit/core";
-import type { Building, BuildingType } from "../../../types/buildMapping";
+import type { Building, BuildingType } from "../../types/buildMapping";
 import GameInfo from "@/components/MapTables/GameInfo";
 import Sidebar from "@/components/MapTables/Sidebar";
 import Grid from "@/components/MapTables/Grid";
