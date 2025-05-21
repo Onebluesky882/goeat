@@ -1,16 +1,4 @@
-import React, { useState } from "react";
-
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import ImageUpload from "@/components/features/imageUploader";
-import RestaurantPreviewCard from "@/components/createNewRestaurant/PreviewCard";
-import { toast } from "sonner";
-import { schema } from "@/schema/formNewShop";
-import { Button } from "@/components/ui/button";
+import type { schema } from "@/schema/formNewShop";
 import type { NewShop } from "@/types/shop.types";
 
 export type FormFields = z.infer<typeof schema>;

@@ -1,4 +1,4 @@
-import { api } from "@/Api/nestJsApi3000";
+import { api } from "@/Api";
 import { create } from "zustand";
 type User = {
   id: string;
