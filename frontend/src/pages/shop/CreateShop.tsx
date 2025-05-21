@@ -1,11 +1,10 @@
-import { api } from "@/Api";
 import { ShopAPI } from "@/Api/shop.api";
 import RestaurantPreviewCard from "@/components/createNewRestaurant/PreviewCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { schema } from "@/schema/formNewShop";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,7 +21,7 @@ const emptyValues: FormFields = {
   socials: { facebook: "", instagram: "" },
 };
 
-const CreateShop: React.FC = () => {
+const CreateShop = () => {
   const [submitted, setSubmitted] = useState<FormFields | null>(null);
 
   const {

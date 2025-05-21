@@ -4,24 +4,23 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
-import BillSummary from "./pages/shop/BillSummary.tsx";
-import OrderStatus from "./pages/shop/OrderStatus.tsx";
-import StaffManagement from "./pages/shop/StaffManagement.tsx";
-import TableSetup from "./pages/shop/TableSetup.tsx";
+import BillSummary from "./pages/shop/[shopId]/dashboard/BillSummary.tsx";
+import OrderStatus from "./pages/shop/[shopId]/orders/OrderStatus.tsx";
+import StaffManagement from "./pages/shop/[shopId]/staff/StaffManagement.tsx";
+import TableSetup from "./pages/shop/[shopId]/orders/TableOrder.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import CCTVLive from "./pages/shop/Cctv.tsx";
 import LoginAuthGoogle from "./pages/LoginAuthGoogle.tsx";
-import Dashboard from "./pages/Controller.tsx";
-import MenuManagement from "./pages/shop/MenuManagement.tsx";
 import Controller from "./pages/Controller.tsx";
 import LogOut from "./pages/LogOut.tsx";
 import { Toaster } from "sonner";
 import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
-import ShopInfo from "./pages/shop/ShopInfo.tsx";
 import Feature from "./Feature/idea.tsx";
-import TableLayout from "./pages/shop/TableLayoutManager.tsx";
 import CreateShop from "./pages/shop/CreateShop.tsx";
+import Cctv from "./pages/shop/[shopId]/cctv/Cctv.tsx";
+import StaffProfile from "./pages/shop/[shopId]/staff/[id].tsx";
+import MenuManagement from "./pages/shop/[shopId]/menu/MenuManagement.tsx";
+import DashBoard from "./pages/shop/[shopId]/dashboard/DashBoard.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -32,18 +31,25 @@ createRoot(document.getElementById("root")!).render(
           <Route path="login" element={<LoginAuthGoogle />} />
           <Route path="logout" element={<LogOut />} />
           <Route path="profile" element={<UserProfile />} />
-          <Route path="shop" element={<ShopInfo />}>
-            <Route path="summary" element={<BillSummary />} />
-            <Route path="table-layout" element={<TableLayout />} />
-            <Route path="OrderStatus" element={<OrderStatus />} />
-            <Route path="StaffManagement" element={<StaffManagement />} />
-            <Route path="TableSetup" element={<TableSetup />} />
-            <Route path="cctv" element={<CCTVLive />} />
-            <Route path="menus" element={<MenuManagement />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="create" element={<CreateShop />} />
-          </Route>
 
+          {/* /shops */}
+          <Route path="shops">
+            <Route path="create" element={<CreateShop />} />
+
+            {/* /shops/:shopId */}
+            <Route path=":shopId" element={<Controller />}>
+              <Route path="dashboard" element={<DashBoard />} />
+              <Route path="dashboard/:orderId" element={<OrderStatus />} />
+              <Route path="menu" element={<MenuManagement />} />
+              <Route path="orders" element={<OrderStatus />} />
+              <Route path="orders/:orderId" element={<BillSummary />} />
+              <Route path="staff" element={<StaffManagement />} />
+              <Route path="staff/:empId" element={<StaffProfile />} />
+              <Route path="table-setup" element={<TableSetup />} />
+              <Route path="cctv" element={<Cctv />} />
+              {/* …other nested routes… */}
+            </Route>
+          </Route>
           <Route path="controller" element={<Controller />} />
           <Route path="feedback" element={<FeedbackForm />} />
           <Route path="feature" element={<Feature />} />

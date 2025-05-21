@@ -1,7 +1,7 @@
 // src/pages/ShopInfo.tsx
 import { Outlet } from "react-router-dom";
 
-const ShopInfo = () => {
+const ShopOutlet = () => {
   return (
     <div>
       <Outlet /> {/* This is required for nested routes to render */}
@@ -9,4 +9,4 @@ const ShopInfo = () => {
   );
 };
 
-export default ShopInfo;
+export default ShopOutlet;
