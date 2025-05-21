@@ -10,6 +10,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { schema, shops, users } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { ShopInsert } from './shops.dto';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class ShopsService {
@@ -18,6 +19,7 @@ export class ShopsService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
+  // create new shop
   async insertNewShop(@Body() newShop: ShopInsert, req: any) {
     try {
       await this.db.insert(shops).values(newShop).returning();
@@ -32,5 +34,27 @@ export class ShopsService {
       },
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
+  }
+
+  // get my shop
+  async getMyShop(req: any) {
+    try {
+      const shopsData = await this.db
+        .select({ name: shops.name })
+        .from(shops)
+        .where(eq(users.id, shops.ownerId));
+      return {
+        success: true,
+        data: shopsData,
+      };
+    } catch (error) {
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Failed to get name shop',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

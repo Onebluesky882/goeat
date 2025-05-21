@@ -1,5 +1,15 @@
+import { api } from "@/Api";
+import { ShopAPI } from "@/Api/shop.api";
+import RestaurantPreviewCard from "@/components/createNewRestaurant/PreviewCard";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import type { schema } from "@/schema/formNewShop";
-import type { NewShop } from "@/types/shop.types";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
+import type z from "zod";
 
 export type FormFields = z.infer<typeof schema>;
 
@@ -13,9 +23,7 @@ const emptyValues: FormFields = {
 };
 
 const CreateShop: React.FC = () => {
-  const [submitted, setSubmitted] = useState<NewShop | null>(null);
-  const [images, setImages] = useState<File[]>([]);
-  const [imageError, setImageError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState<FormFields | null>(null);
 
   const {
     register,
@@ -24,14 +32,13 @@ const CreateShop: React.FC = () => {
     formState: { errors, isValid, isSubmitting },
     watch,
   } = useForm<FormFields>({
-    resolver: zodResolver(schema),
     defaultValues: emptyValues,
     mode: "onChange",
   });
 
   const watchAll = watch();
 
-  const livePreview: NewShop = {
+  const livePreview: FormFields = {
     name: watchAll.name ?? "",
     address: watchAll.address,
     phone: watchAll.phone,
@@ -42,24 +49,36 @@ const CreateShop: React.FC = () => {
         ([, value]) => value && value.trim() !== ""
       )
     ),
-    images: images.map((img) => URL.createObjectURL(img)),
   };
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const socials: { [k: string]: string } = {};
     Object.entries(data.socials).forEach(([key, value]) => {
       if (value && value.trim() !== "") socials[key] = value.trim();
     });
-    const preview: NewShop = {
+    const preview: FormFields = {
       ...data,
       name: data.name ?? "",
       socials,
     };
     setSubmitted(preview);
 
-    toast.success(
-      <div> "Submitted!", description: "Restaurant details captured.</div>
-    );
+    try {
+      const response = await ShopAPI.create(preview);
+      if (response.data) {
+        toast.success("✅ Shop created successfully!");
+        reset(emptyValues);
+
+        // redirect to shops/name/
+      }
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      const errorMessage =
+        error.response?.data?.message ?? "An unknown error occurred.";
+      console.error("Error creating shop:", errorMessage);
+
+      toast.error(`❌ Failed to create shop: ${errorMessage}`);
+    }
   };
 
   // When resetting the form, clear images too
@@ -67,8 +86,6 @@ const CreateShop: React.FC = () => {
     console.log("click");
     reset(emptyValues);
     setSubmitted(null);
-    setImages([]);
-    setImageError(null);
   };
 
   console.log("Submitted :", submitted);
@@ -115,11 +132,6 @@ const CreateShop: React.FC = () => {
               </p>
             )}
           </div>
-          <ImageUpload
-            images={images}
-            setImages={setImages}
-            error={imageError ?? undefined}
-          />
         </div>
         <h2 className="text-xl font-bold text-gray-900 mt-6 mb-2">
           Contact & Links

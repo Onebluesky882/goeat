@@ -1,3 +1,4 @@
-import type { ShopInsert } from "../../backend/src/shops/shops.dto";
+import type { ShopSelect } from "../../../backend/dist/src/shops/shops.dto";
+import type { ShopInsert } from "../../../backend/dist/src/shops/shops.dto";
 
-export type NewShop = ShopInsert;
+// todo problem type
