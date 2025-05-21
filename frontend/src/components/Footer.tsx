@@ -29,7 +29,7 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shop/dashboard",
+      path: "shops ",
       label: { en: "shops", th: "ร้านอาหารของคุณ" },
       potion: "top-10",
     },
@@ -49,6 +49,29 @@ const Footer = () => {
       potion: "top-10",
     },
   ];
+
+  {
+    /*
+  <Route path="shops">
+    <Route path="create" element={<CreateNewShop />} />
+
+    <!-- /shops/:shopId -->
+    <Route path=":shopId" element={<Controller />}>
+      <Route path="dashboard" element={<DashBoard />} />
+      <Route path="dashboard/:orderId" element={<OrderStatus />} />
+      <Route path="menu" element={<MenuManagement />} />
+      <Route path="orders" element={<OrderStatus />} />
+      <Route path="orders/:orderId" element={<BillSummary />} />
+      <Route path="staff" element={<StaffManagement />} />
+      <Route path="staff/:empId" element={<StaffProfile />} />
+      <Route path="table-setup" element={<TableSetup />} />
+      <Route path="cctv" element={<Cctv />} />
+      <!-- …other nested routes… -->
+    </Route>
+  </Route>
+*/
+  }
+
   const shopMenu = [
     {
       path: "controller",
@@ -56,39 +79,29 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shop/table-layout",
+      path: "shops/create",
+      label: { en: "Add Shop", th: "สร้างร้านค้า" },
+      potion: "top-10",
+    },
+    {
+      path: "table-layout",
       label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },
     {
-      path: "shop/dashboard",
+      path: "dashboard",
       label: { en: "Dashboard", th: "แดชบอร์ด" },
       potion: "top-20",
     },
     {
-      path: "shop/menumanagements",
+      path: "menumanagements",
       label: { en: "Menu", th: "จัดการเมนู" },
       potion: "top-30",
     },
     {
-      path: "shop/table-order",
+      path: "OrderStatus",
       label: { en: "Order Status", th: "สถานะออเดอร์" },
       potion: "top-40",
-    },
-    {
-      path: "shop/staffmanagement",
-      label: { en: "Staff", th: "พนักงาน" },
-      potion: "top-50",
-    },
-    {
-      path: "shop/tableSetup",
-      label: { en: "Tables", th: "ตั้งค่าโต๊ะ" },
-      potion: "top-60",
-    },
-    {
-      path: "shop/cctv",
-      label: { en: "CCTV", th: "กล้องวงจรปิด" },
-      potion: "top-70",
     },
   ];
 

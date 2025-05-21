@@ -7,7 +7,6 @@ import Layout from "./components/Layout.tsx";
 import BillSummary from "./pages/shop/[shopId]/dashboard/BillSummary.tsx";
 import OrderStatus from "./pages/shop/[shopId]/orders/OrderStatus.tsx";
 import StaffManagement from "./pages/shop/[shopId]/staff/StaffManagement.tsx";
-import TableSetup from "./pages/shop/[shopId]/orders/TableOrder.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import LoginAuthGoogle from "./pages/LoginAuthGoogle.tsx";
 import Controller from "./pages/Controller.tsx";
@@ -16,11 +15,12 @@ import { Toaster } from "sonner";
 import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
 import Feature from "./Feature/idea.tsx";
-import CreateShop from "./pages/shop/CreateShop.tsx";
 import Cctv from "./pages/shop/[shopId]/cctv/Cctv.tsx";
 import StaffProfile from "./pages/shop/[shopId]/staff/[id].tsx";
 import MenuManagement from "./pages/shop/[shopId]/menu/MenuManagement.tsx";
 import DashBoard from "./pages/shop/[shopId]/dashboard/DashBoard.tsx";
+import CreateNewShop from "./pages/shop/CreateShop.tsx";
+import TableLayout from "./pages/shop/[shopId]/tableLayout/tableLayout";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,7 +34,7 @@ createRoot(document.getElementById("root")!).render(
 
           {/* /shops */}
           <Route path="shops">
-            <Route path="create" element={<CreateShop />} />
+            <Route path="create" element={<CreateNewShop />} />
 
             {/* /shops/:shopId */}
             <Route path=":shopId" element={<Controller />}>
@@ -45,7 +45,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="orders/:orderId" element={<BillSummary />} />
               <Route path="staff" element={<StaffManagement />} />
               <Route path="staff/:empId" element={<StaffProfile />} />
-              <Route path="table-setup" element={<TableSetup />} />
+              <Route path="table-layout" element={<TableLayout />} />
               <Route path="cctv" element={<Cctv />} />
               {/* …other nested routes… */}
             </Route>

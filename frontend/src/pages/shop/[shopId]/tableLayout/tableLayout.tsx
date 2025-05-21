@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TableIcon from "../../assets/table-restaurant.svg?react";
 import { v4 as uuidv4 } from "uuid";
 import {
   DndContext,
@@ -10,6 +9,7 @@ import {
 } from "@dnd-kit/core";
 import SideBar from "@/components/TableLayout/SideBar";
 import BuildingGrids from "@/components/TableLayout/BuildingGrid";
+import TableIcon from "../../../../assets/table-restaurant.svg?react";
 
 // Main layout
 const TableLayout = () => {

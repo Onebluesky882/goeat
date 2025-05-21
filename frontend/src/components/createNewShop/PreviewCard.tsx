@@ -1,6 +1,5 @@
 import React from "react";
 import { MapPin, Phone, Link, Facebook, Instagram } from "lucide-react";
-import type { RestaurantData } from "types/createShop";
 
 const getSocialIcon = (key: string) => {
   switch (key) {
@@ -13,9 +12,7 @@ const getSocialIcon = (key: string) => {
   }
 };
 
-const RestaurantPreviewCard: React.FC<{ data: RestaurantData }> = ({
-  data,
-}) => {
+const RestaurantPreviewCard: React.FC<{ data: any }> = ({ data }) => {
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto mt-8 border border-gray-100">
       <h2 className="font-bold text-xl mb-3 text-gray-900">{data.name}</h2>
@@ -57,27 +54,28 @@ const RestaurantPreviewCard: React.FC<{ data: RestaurantData }> = ({
           </a>
         </div>
       )}
-      {Object.values(data.socials).some(Boolean) && (
+      {Object.values(data.socials).some((link) => Boolean(link)) && (
         <div className="mb-2">
           <div className="font-semibold text-sm mb-1 text-gray-700">
             Socials
           </div>
           <div className="flex gap-4">
-            {Object.entries(data.socials).map(
-              ([key, link]) =>
-                link && (
-                  <a
-                    key={key}
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-gray-700 hover:text-primary"
-                  >
-                    {getSocialIcon(key)}
-                    <span className="underline text-xs break-all">{link}</span>
-                  </a>
-                )
-            )}
+            {Object.entries(data.socials)
+              .filter(([, link]) => Boolean(link))
+              .map(([key, link]) => (
+                <a
+                  key={key}
+                  href={link as string}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-gray-700 hover:text-primary"
+                >
+                  {getSocialIcon(key)}
+                  <span className="underline text-xs break-all">
+                    {link as string}
+                  </span>
+                </a>
+              ))}
           </div>
         </div>
       )}
