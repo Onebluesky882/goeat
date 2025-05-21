@@ -20,7 +20,7 @@ import StaffProfile from "./pages/shop/[shopId]/staff/[id].tsx";
 import MenuManagement from "./pages/shop/[shopId]/menu/MenuManagement.tsx";
 import DashBoard from "./pages/shop/[shopId]/dashboard/DashBoard.tsx";
 import CreateNewShop from "./pages/shop/CreateShop.tsx";
-import TableLayout from "./pages/shop/[shopId]/tableLayout/tableLayout";
+import TableLayout from "./pages/shop/[shopId]/tableLayout/tableLayout.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -45,8 +45,8 @@ createRoot(document.getElementById("root")!).render(
               <Route path="orders/:orderId" element={<BillSummary />} />
               <Route path="staff" element={<StaffManagement />} />
               <Route path="staff/:empId" element={<StaffProfile />} />
-              <Route path="table-layout" element={<TableLayout />} />
               <Route path="cctv" element={<Cctv />} />
+              <Route path="layout" element={<Cctv />} />
               {/* …other nested routes… */}
             </Route>
           </Route>

@@ -1,15 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
-
-interface AuthRequest extends Request {
-  user: {
-    id: string;
-    email?: string;
-    name?: string;
-  };
-}
+import { AuthRequest } from 'src/types/auth';
 
 @Controller('users')
 export class UsersController {

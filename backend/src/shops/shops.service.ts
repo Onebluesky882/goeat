@@ -20,7 +20,7 @@ export class ShopsService {
   ) {}
 
   // create new shop
-  async insertNewShop(@Body() newShop: ShopInsert, req: any) {
+  async insertNewShop(@Body() newShop: ShopInsert) {
     try {
       await this.db.insert(shops).values(newShop).returning();
       return { message: 'already create new shop' };

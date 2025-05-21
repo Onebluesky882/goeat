@@ -19,10 +19,10 @@ export class ShopsController {
   @UseGuards(AuthGuard('jwt'))
   @Post('create')
   createNewShop(@Body() newShop: ShopInsert, @Req() req: AuthRequest) {
-    return this.shopsService.insertNewShop(
-      { ...newShop, ownerId: req?.user?.id },
-      req.user,
-    );
+    return this.shopsService.insertNewShop({
+      ...newShop,
+      ownerId: req?.user?.id,
+    });
   }
 
   @UseGuards(AuthGuard('jwt'))
