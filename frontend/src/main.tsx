@@ -24,6 +24,7 @@ import ShopsController from "./pages/shop/[shopId]/Controller.tsx";
 import ShopCenter from "./pages/shop/ShopCenter.tsx";
 import Controller from "./pages/Controller.tsx";
 import TableLayout from "./pages/shop/TableLayout.tsx";
+import Menu from "./pages/menu/menu";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -42,11 +43,13 @@ createRoot(document.getElementById("root")!).render(
           <Route path="shops" element={<ShopCenter />}>
             <Route path="create" element={<CreateNewShop />} />
             <Route path="shops/table-layout" element={<TableLayout />} />
+            // will move to /:shopId/menu
+            <Route path="menu" element={<Menu />} />
             {/* /shops/:shopId */}
             <Route path=":shopId" element={<ShopsController />}>
               <Route path="dashboard" element={<DashBoard />} />
               <Route path="dashboard/:orderId" element={<OrderStatus />} />
-              <Route path="menu" element={<MenuManagement />} />
+              {/*  <Route path="menu" element={<MenuManagement />} /> */}
               <Route path="orders" element={<OrderStatus />} />
               <Route path="orders/:orderId" element={<BillSummary />} />
               <Route path="staff" element={<StaffManagement />} />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -55,7 +55,7 @@ const Footer = ({ shopId }: { shopId: string }) => {
       potion: "top-10",
     },
   ];
-  // console.log("shopId :", shopId);
+
   const shopMenu = [
     {
       path: "dashboard",
@@ -66,6 +66,11 @@ const Footer = ({ shopId }: { shopId: string }) => {
     {
       path: shopId ? `shops/table-layout` : "#",
       label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
+      potion: "top-10",
+    },
+    {
+      path: `shops/menu`,
+      label: { en: "menu", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },
   ];
