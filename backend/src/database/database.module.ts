@@ -17,7 +17,6 @@ dotenv.config();
           connectionString: configService.getOrThrow('DATABASE_URL'),
         });
 
-        console.log('schema keys:', Object.keys(schema));
         return drizzle(pool, { schema });
       },
       inject: [ConfigService],

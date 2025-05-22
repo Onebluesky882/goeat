@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { ShopInsert } from './shops.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -26,8 +34,14 @@ export class ShopsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get(`:shopId`)
+  getShopId(@Param('shopId') shopId: string, @Req() req: AuthRequest) {
+    return this.shopsService.getShopId(shopId, req?.user);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   getMyShops(@Req() req: AuthRequest) {
-    return this.shopsService.getMyShop(req?.user?.id);
+    return this.shopsService.getMyShops(req.user);
   }
 }

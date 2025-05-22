@@ -63,7 +63,6 @@ const CreateNewShop = () => {
   };
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log("🔥 Submitting form", data);
     const socials: { [k: string]: string } = {};
     Object.entries(data.socials).forEach(([key, value]) => {
       if (value && value.trim() !== "") socials[key] = value.trim();

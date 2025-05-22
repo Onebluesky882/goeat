@@ -9,8 +9,9 @@ import {
 } from "@dnd-kit/core";
 import SideBar from "@/components/TableLayout/SideBar";
 import BuildingGrids from "@/components/TableLayout/BuildingGrid";
-import TableIcon from "../../../../assets/table-restaurant.svg?react";
+import TableIcon from "../../../src/assets/table-restaurant.svg?react";
 
+console.log("📦 TableLayout loaded!");
 // Main layout
 const TableLayout = () => {
   const [activeId, setActiveId] = useState<string | null>(null);

@@ -4,13 +4,12 @@ import {
   HttpStatus,
   Inject,
   Injectable,
-  Req,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { schema, shops, users } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { ShopInsert } from './shops.dto';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 @Injectable()
 export class ShopsService {
@@ -36,22 +35,48 @@ export class ShopsService {
     );
   }
 
-  // get my shop
-  async getMyShop(req: any) {
+  // get shop by id
+  async getShopId(shopId: string, user: any) {
     try {
       const shopsData = await this.db
         .select({ name: shops.name })
         .from(shops)
-        .where(eq(users.id, shops.ownerId));
+        .where(
+          and(
+            // ✅ check shopId matches
+            eq(shops.id, shopId),
+            // ✅ check user is the owner
+            eq(shops.ownerId, user.id),
+          ),
+        )
+        .limit(1);
       return {
         success: true,
-        data: shopsData,
+        data: shopsData[0],
       };
     } catch (error) {
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to get name shop',
+          message: 'Failed to get  shop by Id',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getMyShops(user: any) {
+    try {
+      const result = await this.db
+        .select()
+        .from(shops)
+        .where(eq(shops.ownerId, user.id));
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Failed to get your shops ',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

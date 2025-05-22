@@ -1,11 +1,11 @@
 import { useUserStore } from "@/store/useStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Controller = () => {
   const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
-
+  // url/shops/shopid
   const summaryData = [
     { name: "Restaurant 1", earning: 12890, orders: 320, customers: 180 },
     { name: "Restaurant 2", earning: 8450, orders: 210, customers: 132 },
@@ -33,12 +33,18 @@ const Controller = () => {
 
   const navigate = useNavigate();
 
+  // checkUser
+  // const timeOutUser = () => {
+  //   const timeout = setTimeout(() => {
+  //     if (profile === null) return navigate("/");
+  //   }, 1000);
+  //   return () => clearTimeout(timeout);
+  // };
+
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (profile === null) return navigate("/");
-    }, 1000);
-    return () => clearTimeout(timeout);
+    // timeOutUser();
   }, [profile]);
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-purple-50">
       <div className="w-full py-4 flex flex-col items-center animate-fade-in">
