@@ -89,7 +89,7 @@ const Footer = ({ shopId }: { shopId: string }) => {
     <footer className={`  z-10   fixed  w-full bottom-0   `}>
       <div className=" flex justify-center">
         <div
-          className={` py-2   w-[50%] justify-center rounded-t-md shadow-2xl ${
+          className={` py-2   w-[60%] justify-center rounded-t-md shadow-2xl ${
             location.pathname.startsWith("/shops")
               ? `bg-blue-500`
               : `bg-amber-300`
