@@ -1,0 +1,1 @@
+ALTER TABLE "menus" ADD COLUMN "page" text NOT NULL;

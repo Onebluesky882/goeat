@@ -1,13 +1,12 @@
 import { ShopAPI } from "@/Api/shop.api";
 import FromNewShop from "@/components/createNewShop/createShop";
-import RestaurantPreviewCard from "@/components/createNewShop/PreviewCard";
 import { schema } from "@/schema/formNewShop";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import type z from "zod";
+import type { z } from "zod";
 
 export type FormFields = z.infer<typeof schema>;
 
@@ -92,7 +91,6 @@ const CreateNewShop = () => {
 
   // When resetting the form
   const handleReset = () => {
-    console.log("🧼 Resetting form");
     reset(emptyValues);
   };
 

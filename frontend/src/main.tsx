@@ -17,14 +17,14 @@ import FeedbackForm from "./pages/FeedbackForm.tsx";
 import Feature from "./Feature/idea.tsx";
 import Cctv from "./pages/shop/[shopId]/cctv/Cctv.tsx";
 import StaffProfile from "./pages/shop/[shopId]/staff/[id].tsx";
-import MenuManagement from "./pages/shop/[shopId]/menu/MenuManagement.tsx";
 import DashBoard from "./pages/shop/[shopId]/dashboard/DashBoard.tsx";
 import CreateNewShop from "./pages/shop/CreateShop.tsx";
 import ShopsController from "./pages/shop/[shopId]/Controller.tsx";
 import ShopCenter from "./pages/shop/ShopCenter.tsx";
 import Controller from "./pages/Controller.tsx";
 import TableLayout from "./pages/shop/TableLayout.tsx";
-import Menu from "./pages/menu/BulkMenuCreator.tsx";
+
+import MenuCreator from "./pages/menu/AddMenu.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -38,13 +38,11 @@ createRoot(document.getElementById("root")!).render(
           <Route path="dashboard" element={<Controller />} />
           <Route path="feedback" element={<FeedbackForm />} />
           <Route path="feature" element={<Feature />} />
-
           {/* /shops */}
           <Route path="shops" element={<ShopCenter />}>
             <Route path="create" element={<CreateNewShop />} />
-            <Route path="shops/table-layout" element={<TableLayout />} />
-            // will move to /:shopId/menu
-            <Route path="menu" element={<Menu />} />
+            <Route path="table-layout" element={<TableLayout />} />
+            <Route path="add-menu" element={<MenuCreator />} />
             {/* /shops/:shopId */}
             <Route path=":shopId" element={<ShopsController />}>
               <Route path="dashboard" element={<DashBoard />} />
@@ -60,7 +58,7 @@ createRoot(document.getElementById("root")!).render(
               {/* …other nested routes… */}
             </Route>
           </Route>
-
+          // will move to /:shopId/menu
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -8,6 +8,13 @@
       "when": 1747923382789,
       "tag": "0000_create_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747989718634,
+      "tag": "0001_added_column_page_menu",
+      "breakpoints": true
     }
   ]
 }
