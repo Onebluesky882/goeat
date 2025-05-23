@@ -1,4 +1,4 @@
-import type { FieldErrors, useForm, UseFormRegister } from "react-hook-form";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -28,7 +28,7 @@ const FromNewShop = ({
   shouldShowPreview,
 }: CreateShopProps) => {
   return (
-    <div className="flex flex-col justify-center flex-col lg:flex-row gap-2 w-full max-w-3xl mx-auto">
+    <div className="flex justify-center flex-col lg:flex-row gap-2 w-full max-w-3xl mx-auto">
       {shouldShowPreview && (
         <div className="flex-1  min-w-[260px]  -translate-x-0 -translate-y-0  max-sm:-mt-8 ">
           <RestaurantPreviewCard data={livePreview} />

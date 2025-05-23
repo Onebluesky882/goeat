@@ -24,7 +24,7 @@ import ShopsController from "./pages/shop/[shopId]/Controller.tsx";
 import ShopCenter from "./pages/shop/ShopCenter.tsx";
 import Controller from "./pages/Controller.tsx";
 import TableLayout from "./pages/shop/TableLayout.tsx";
-import Menu from "./pages/menu/menu";
+import Menu from "./pages/menu/BulkMenuCreator.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
