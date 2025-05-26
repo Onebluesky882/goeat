@@ -1,11 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Body,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { users } from '../database/schema/users';
 import { schema } from 'src/database';
-import { Request } from 'express';
 import { eq } from 'drizzle-orm';
-
+import { CreateUserDto } from './user.dto';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
@@ -25,12 +31,27 @@ export class UsersService {
     return rows[0];
   }
 
-  async insertUser(email: string, name: string, id: string) {
-    const newUser = {
-      email,
-      name,
-      id,
-    };
-    return await this.db.insert(users).values(newUser).returning();
+  async createUser(data: CreateUserDto) {
+    const saltRounds = 12;
+    const hashed = await bcrypt.hash(data.password, saltRounds);
+
+    try {
+      const [inserted] = await this.db
+        .insert(users)
+        .values({
+          email: data.email,
+          name: data.name,
+          password: hashed,
+        })
+        .returning();
+
+      const { password, ...userWithoutPassword } = inserted;
+      return userWithoutPassword;
+    } catch (error) {
+      throw new HttpException(
+        'Could not create user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

@@ -7,7 +7,6 @@ import type { FormFields } from "@/pages/shop/CreateShop";
 
 type CreateShopProps = {
   onSubmit: (e?: React.BaseSyntheticEvent) => void;
-
   register: UseFormRegister<FormFields>;
   errors: FieldErrors<FormFields>;
   isValid: boolean;
@@ -16,7 +15,7 @@ type CreateShopProps = {
   livePreview: any;
   shouldShowPreview: any;
 };
-
+// will fixed sparate component
 const FromNewShop = ({
   onSubmit,
   register,

@@ -1,12 +1,11 @@
-import { useState } from "react";
-import LoginAuthGoogle from "./LoginAuthGoogle";
+import LoginAuthGoogle from "../components/LoginAuthGoogle";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [userLogin, setUserLogin] = useState<>();
   return (
     <div className="py-10 flex items-center justify-center bg-gradient-to-b from-white to-gray-100 rounded-sm">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100 p-8 animate-fade-in">
-        <LoginAuthGoogle />
+        <LoginAuthGoogle title="LogIn With" />
 
         <h2 className="text-2xl font-bold my-6 text-gray-900 text-center tracking-tight">
           Sign in to your account
@@ -51,13 +50,19 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className="mt-4">
-          <a
-            href="#"
+        <div className="mt-4 flex items-center gap-2">
+          <Link
+            to="/signup"
+            className="text-md text-gray-500 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
+          >
+            Signup
+          </Link>{" "}
+          <Link
+            to="#"
             className="text-sm text-gray-400 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
           >
             Forgot Password?
-          </a>
+          </Link>
         </div>
       </div>
     </div>

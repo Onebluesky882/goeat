@@ -1,5 +1,5 @@
 import z from "zod";
-export const schema = z.object({
+export const newShopSchema = z.object({
   name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
   phone: z.string().min(1, "Phone is required"),

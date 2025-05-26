@@ -5,12 +5,13 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { schema, users } from 'src/database';
 import { Response } from 'express';
-
+import { UsersService } from '../users/users.service';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(DATABASE_CONNECTION) private db: NodePgDatabase<typeof schema>,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateOrCreate(user: any, res: Response) {
@@ -25,15 +26,11 @@ export class AuthService {
       });
     }
 
-    const profile = await this.db.query.users.findFirst({
-      where: eq(users.email, user.email),
-    });
-
     try {
       const payload = {
-        id: profile?.id,
-        email: profile?.email,
-        name: profile?.name,
+        id: existing?.id,
+        email: existing?.email,
+        name: existing?.name,
       };
 
       const token = this.jwtService.sign(payload);
@@ -50,15 +47,34 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string) {
-    if (email !== 'wansing@gmail.com' || password !== 'admin') return;
-    const profile = await this.db.query.users.findFirst({
+  async validateUser(email: string, password: string) {
+    // 1. check user
+    const user = await this.db.query.users.findFirst({
       where: eq(users.email, email),
     });
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    // bcrypt.compare is async!
+    const matches = await bcrypt.compare(password, user.password as string);
+    if (!matches) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    //3. replace stack value
+    const { password: _p, ...safeUser } = user;
+    return safeUser;
+  }
+  signToken(payload: { id: string; email: string; name?: string }) {
+    return this.jwtService.sign(payload);
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
     const payload = {
-      id: profile?.id,
-      email: profile?.email,
-      name: profile?.name,
+      id: user?.id,
+      email: user?.email,
+      name: user?.name,
     };
     const token = this.jwtService.sign(payload);
 

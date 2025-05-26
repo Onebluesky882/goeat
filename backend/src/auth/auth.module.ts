@@ -6,6 +6,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { GoogleStrategy } from './google.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import * as dotenv from 'dotenv';
+import { UsersService } from 'src/users/users.service';
 
 if (!process.env.JWT_SECRET) {
   console.error('Missing ENV JWT_SECRET');
@@ -19,7 +20,7 @@ if (!process.env.JWT_SECRET) {
     }),
     DatabaseModule,
   ],
-  providers: [AuthService, GoogleStrategy, JwtStrategy],
+  providers: [AuthService, GoogleStrategy, JwtStrategy, UsersService],
   controllers: [AuthController],
 })
 export class AuthModule {}

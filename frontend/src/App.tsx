@@ -123,7 +123,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 py-12">
+      <div className="bg-gray-800 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-8 md:mb-0">
@@ -191,7 +191,7 @@ function App() {
             </p>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }

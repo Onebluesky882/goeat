@@ -1,6 +1,6 @@
 import { ShopAPI } from "@/Api/shop.api";
 import FromNewShop from "@/components/createNewShop/createShop";
-import { schema } from "@/schema/formNewShop";
+import { newShopSchema } from "@/schema/newShopForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 
-export type FormFields = z.infer<typeof schema>;
+export type FormFields = z.infer<typeof newShopSchema>;
 
 const emptyValues = {
   name: "",
@@ -32,7 +32,7 @@ const CreateNewShop = () => {
     formState: { errors, isValid, isSubmitting },
     watch,
   } = useForm<FormFields>({
-    resolver: zodResolver(schema), // ✅ plug in schema
+    resolver: zodResolver(newShopSchema), // ✅ plug in schema
     defaultValues: emptyValues,
     mode: "onChange",
   });

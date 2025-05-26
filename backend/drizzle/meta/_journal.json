@@ -22,6 +22,20 @@
       "when": 1748231083709,
       "tag": "0002_remove_table_image_menu",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1748232681184,
+      "tag": "0003_edit_users_password_notnull.sql",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1748232730120,
+      "tag": "0004_edit_users_password_null.sql",
+      "breakpoints": true
     }
   ]
 }

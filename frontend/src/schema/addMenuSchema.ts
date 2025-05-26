@@ -9,8 +9,6 @@ const itemMenu = z.object({
   available: z.boolean(),
 });
 
-export const schema = z.object({
+export const addMenuSchema = z.object({
   menuItems: z.array(itemMenu),
 });
-
-export type FormField = z.infer<typeof schema>;

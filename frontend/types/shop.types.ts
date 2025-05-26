@@ -1,5 +1,5 @@
-import type { ShopSelect } from "../../../backend/dist/src/shops/shops.dto";
-import type { ShopInsert } from "../../../backend/dist/src/shops/shops.dto";
+import type { ShopSelect } from "../../backend/dist/src/shops/shops.dto";
+import type { ShopInsert } from "../../backend/dist/src/shops/shops.dto";
 
 export type PartialCreateShop = Pick<
   ShopSelect,

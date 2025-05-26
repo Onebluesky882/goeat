@@ -74,17 +74,7 @@ const Footer = ({ shopId }: { shopId: string }) => {
       potion: "top-10",
     },
   ];
-  console.log("shopId :", shopId);
 
-  console.log("Current Path:", location.pathname);
-  console.log(
-    "Menu to render:",
-    location.pathname.startsWith("/shops") ? "shopMenu" : "mainMenu"
-  );
-  console.log(
-    "shopMenu Paths:",
-    shopMenu.map((m) => m.path)
-  );
   return (
     <footer className={`  z-10   fixed  w-full bottom-0   `}>
       <div className=" flex justify-center">
