@@ -11,20 +11,21 @@ const ShopLayout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [shops, setShops] = useState<ShopProp[]>([]);
-  const fetchShops = async () => {
-    try {
-      const res = await ShopAPI.getAll();
-      if (res) {
-        setShops(res.data);
-      }
-    } catch (error) {
-      setError("Failed to load shops");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const res = await ShopAPI.getAll();
+        if (res) {
+          setShops(res.data);
+        }
+      } catch (error) {
+        setError("Failed to load shops");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchShops();
   }, []);
   console.log("shops :", shops);

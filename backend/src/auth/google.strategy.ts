@@ -1,10 +1,25 @@
 import { Strategy } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-console.log(process.env.GOOGLE_CALLBACK_URL);
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+if (
+  !process.env.GOOGLE_CLIENT_ID &&
+  !process.env.GOOGLE_CLIENT_SECRET &&
+  !process.env.GOOGLE_CALLBACK_URL
+) {
+  console.error(
+    'GOOGLE_CLIENT_ID |  GOOGLE_CLIENT_SECRET  | GOOGLE_CALLBACK_URL',
+  );
+}
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
+    // if() {
+    // how to extra passport auto if client still login duration time 3 days
+    // }
     super({
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

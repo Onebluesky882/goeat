@@ -187,9 +187,11 @@ const BillSummary = () => {
 
             {/* Restaurant information */}
             <div className="text-center text-sm text-gray-500 pt-4 border-t">
-              <p className="font-medium">GoEat Thai Restaurant</p>
-              <p>123 Thai Food Street, Bangkok 10110</p>
-              <p>Tel: 02-123-4567</p>
+              <p className="font-medium">
+                🧑‍🍳 MenuX – Real-Time Restaurant Management Platform
+              </p>
+              <p>Bangkok 10110</p>
+              <p>Tel: 083-775-4288</p>
               <p className="mt-2">Thank you for your visit!</p>
             </div>
           </div>

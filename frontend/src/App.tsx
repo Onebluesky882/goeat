@@ -12,7 +12,7 @@ function App() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
             <span className="block">Welcome to</span>
-            <span className="block text-orange-600">GoEat</span>
+            <span className="block text-orange-600">MenuX</span>
           </h1>
           <p className="mt-6 max-w-lg mx-auto text-xl text-gray-500 sm:max-w-3xl">
             Modernize your restaurant with our innovative dining solution. QR
@@ -99,15 +99,16 @@ function App() {
               Trusted by Restaurant Owners
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500">
-              See how GoEat is transforming the dining experience.
+              See how menuX is transforming the dining experience.
             </p>
           </div>
           <div className="mt-12 max-w-lg mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="text-gray-600 italic">
-                "Since implementing GoEat, we've seen a 30% increase in order
-                efficiency and our customers love being able to order at their
-                own pace."
+                MenuX is a fullstack, real-time restaurant platform that helps
+                restaurant owners manage daily operations, orders, income, and
+                tables — all in one place. Customers can scan a QR code at their
+                table to order food and track its status live.
               </p>
               <div className="mt-4 flex items-center">
                 <span className="font-medium text-gray-900">Somchai P.</span>
@@ -126,9 +127,14 @@ function App() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-8 md:mb-0">
-              <h2 className="text-white text-2xl font-bold">GoEat</h2>
+              <h2 className="text-white text-2xl font-bold">MenuX</h2>
               <p className="mt-2 text-gray-400">
-                Modern restaurant management solution
+                💡 What It Does For Restaurant Owners: Monitor orders, table
+                usage, and income in real time Manage employees, menus, and
+                table layouts View detailed order and customer analytics For
+                Customers: Scan a QR code at the table to access the menu Place
+                orders directly from their smartphone Receive live updates on
+                food preparation and delivery status
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
@@ -181,7 +187,7 @@ function App() {
           </div>
           <div className="mt-8 border-t border-gray-700 pt-8 text-center">
             <p className="text-gray-400">
-              &copy; 2025 GoEat. All rights reserved.
+              &copy; 2025 MenuX. All rights reserved.
             </p>
           </div>
         </div>

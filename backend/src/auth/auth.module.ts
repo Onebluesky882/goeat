@@ -5,11 +5,17 @@ import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from 'src/database/database.module';
 import { GoogleStrategy } from './google.strategy';
 import { JwtStrategy } from './jwt.strategy';
+import * as dotenv from 'dotenv';
+
+if (!process.env.JWT_SECRET) {
+  console.error('Missing ENV JWT_SECRET');
+}
+
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'defaultSecretKey',
-      signOptions: { expiresIn: '1h' },
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '72h' }, // TODO: Extend the expired
     }),
     DatabaseModule,
   ],

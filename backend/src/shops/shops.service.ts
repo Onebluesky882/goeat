@@ -25,14 +25,14 @@ export class ShopsService {
       return { message: 'already create new shop' };
     } catch (error) {
       console.error('Insert failed:', error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Failed to insert new shop',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    throw new HttpException(
-      {
-        success: false,
-        message: 'Failed to insert new shop',
-      },
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 
   // get shop by id

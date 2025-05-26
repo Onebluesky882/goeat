@@ -41,10 +41,10 @@ createRoot(document.getElementById("root")!).render(
           {/* /shops */}
           <Route path="shops" element={<ShopCenter />}>
             <Route path="create" element={<CreateNewShop />} />
-            <Route path="table-layout" element={<TableLayout />} />
             <Route path="add-menu" element={<MenuCreator />} />
             {/* /shops/:shopId */}
             <Route path=":shopId" element={<ShopsController />}>
+              <Route path="table-layout" element={<TableLayout />} />
               <Route path="dashboard" element={<DashBoard />} />
               <Route path="dashboard/:orderId" element={<OrderStatus />} />
               {/*  <Route path="menu" element={<MenuManagement />} /> */}

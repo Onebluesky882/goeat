@@ -28,6 +28,7 @@ export class TablesService {
           HttpStatus.CONFLICT,
         );
       }
+      console.error(error);
       throw new HttpException(
         {
           success: false,

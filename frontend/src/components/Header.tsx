@@ -2,7 +2,6 @@ import { useUserStore } from "@/store/useStore";
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-
 const Header = () => {
   const { fetchProfile } = useUserStore();
 
@@ -16,7 +15,7 @@ const Header = () => {
         <div className="text-2xl font-semibold text-gray-800  text-center max-sm:mr-10     ">
           <span className="text-3xl">🍽️</span>
           <span className="text-indigo-600 text-3xl mx-2">
-            <Link to={"/"}>GoEat</Link>{" "}
+            <Link to={"/"}>MenuX</Link>{" "}
           </span>
         </div>
 

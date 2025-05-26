@@ -64,7 +64,7 @@ const Footer = ({ shopId }: { shopId: string }) => {
     },
 
     {
-      path: shopId ? `shops/table-layout` : "#",
+      path: shopId ? `shops/${shopId}/table-layout` : "#",
       label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },

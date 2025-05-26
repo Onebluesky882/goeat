@@ -14,7 +14,7 @@ export class UsersController {
   }
 
   @Post('create-user')
-  createUser(@Body() body: { email; name; id }) {
+  createUser(@Body() body: { email: string; name: string; id: string }) {
     const { email, name, id } = body;
     try {
       this.usersService.insertUser(email, name, id);

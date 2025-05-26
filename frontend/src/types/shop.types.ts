@@ -1,5 +1,14 @@
 import type { ShopSelect } from "../../../backend/dist/src/shops/shops.dto";
 import type { ShopInsert } from "../../../backend/dist/src/shops/shops.dto";
 
-// todo problem type
-export type SelectShop = ShopSelect;
+export type PartialCreateShop = Pick<
+  ShopSelect,
+  | "name"
+  | "ownerId"
+  | "active"
+  | "address"
+  | "googleMaps"
+  | "phone"
+  | "website"
+  | "updatedAt"
+>;

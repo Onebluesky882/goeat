@@ -1,6 +1,6 @@
 import { ShopAPI } from "@/Api/shop.api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 import type { ShopProp } from "../ShopCenter";
 
@@ -30,7 +30,7 @@ const ShopsController = () => {
       <div>
         {shopById ? (
           <div className="">
-            <h1>{shopById.name}</h1>{" "}
+            <h1>{shopById.name}</h1> <Outlet />
           </div>
         ) : (
           <PuffLoader color="#36d7b7" />

@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
-
+// will delete
 export const menuImages = pgTable('menu_images', {
   id: uuid('id')
     .primaryKey()
