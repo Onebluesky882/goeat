@@ -1,11 +1,10 @@
 import { relations } from 'drizzle-orm';
-import { tables } from '../schema/tables';
 import { shops } from '../schema/shops';
-import { menuImages } from '../schema/menuImages';
+import { images } from '../schema/images';
 
-export const tableRelationShop = relations(menuImages, ({ one }) => ({
+export const tableRelationShop = relations(images, ({ one }) => ({
   shop: one(shops, {
-    fields: [menuImages.shopId],
+    fields: [images.shopId],
     references: [shops.id],
   }),
 }));

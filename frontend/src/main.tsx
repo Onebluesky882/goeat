@@ -25,6 +25,7 @@ import Controller from "./pages/Controller.tsx";
 import TableLayout from "./pages/shop/TableLayout.tsx";
 
 import MenuCreator from "./pages/menu/AddMenu.tsx";
+import Login from "./pages/Login.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -32,7 +33,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<App />} />
-          <Route path="login" element={<LoginAuthGoogle />} />
+          <Route path="login" element={<Login />} />
           <Route path="logout" element={<LogOut />} />
           <Route path="profile" element={<UserProfile />} />
           <Route path="dashboard" element={<Controller />} />

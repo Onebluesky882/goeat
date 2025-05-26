@@ -9,6 +9,7 @@ export const images = pgTable('images', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   imageName: text('image_name'),
+  imageUrl: text('image_url'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
   userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
