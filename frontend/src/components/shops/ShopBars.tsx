@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { LuSquareMenu } from "react-icons/lu";
 import Clock from "../Clock";
-import { useShopStore } from "@/stores/shopStore";
 type ShopProps = {
   id: string;
   name: string;
