@@ -1,12 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { LuSquareMenu } from "react-icons/lu";
 import Clock from "../Clock";
+import { useShopStore } from "@/stores/shopStore";
 type ShopProps = {
   id: string;
   name: string;
+  setShop: (id: string, name: string) => void;
 };
 
-const ShopBars = ({ shops }: { shops: ShopProps[] }) => {
+const ShopBars = ({ id, name, setShop }: ShopProps) => {
   return (
     <div className="flex relative border-gray-200 border-1 rounded-sm py-2 justify-around items-center shadow-sm bg-blue-200 mb-3">
       <div className=" -ml-20  ">
@@ -14,19 +16,18 @@ const ShopBars = ({ shops }: { shops: ShopProps[] }) => {
         <Clock />
       </div>
       <div className="flex justify-center gap-2 overflow-auto">
-        {shops.map((shop) => (
-          <NavLink
-            key={shop.id}
-            to={shop.id}
-            className={({ isActive }) =>
-              `px-4 py-2 rounded ${
-                isActive ? "bg-amber-300 text-white" : "bg-gray-100"
-              }`
-            }
-          >
-            {shop.name}
-          </NavLink>
-        ))}
+        <NavLink
+          onClick={() => setShop(id, name)}
+          key={id}
+          to={id}
+          className={({ isActive }) =>
+            `px-4 py-2 rounded ${
+              isActive ? "bg-amber-300 text-white" : "bg-gray-100"
+            }`
+          }
+        >
+          {name}
+        </NavLink>
       </div>
       <div className="-mr-20">
         <LuSquareMenu />

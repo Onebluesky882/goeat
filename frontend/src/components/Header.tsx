@@ -1,4 +1,4 @@
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/stores/userStore";
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";

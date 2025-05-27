@@ -64,13 +64,18 @@ const Footer = ({ shopId }: { shopId: string }) => {
     },
 
     {
-      path: shopId ? `shops/${shopId}/table-layout` : "#",
-      label: { en: "Table Layout", th: "แผนผังโต๊ะ" },
+      path: shopId ? `shops/${shopId}/tables` : "#",
+      label: { en: "Tables", th: "แผนผังโต๊ะ" },
       potion: "top-10",
     },
     {
       path: `shops/menu`,
       label: { en: "menu", th: "แผนผังโต๊ะ" },
+      potion: "top-10",
+    },
+    {
+      path: shopId ? `shops/${shopId}/add-category` : "#",
+      label: { en: "category", th: "หมวดหมู่" },
       potion: "top-10",
     },
   ];

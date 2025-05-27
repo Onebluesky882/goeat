@@ -1,7 +1,7 @@
 // src/pages/SignoutPage.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/stores/userStore";
 import { Button } from "@/components/ui/button";
 import { FadeLoader } from "react-spinners";
 const LogOut = () => {

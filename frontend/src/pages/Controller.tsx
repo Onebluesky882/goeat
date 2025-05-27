@@ -1,4 +1,4 @@
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/stores/userStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
 import React, { useEffect, useState } from "react";
