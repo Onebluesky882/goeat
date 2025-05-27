@@ -7,6 +7,10 @@ import { DatabaseModule } from './database/database.module';
 import { ShopsModule } from './shops/shops.module';
 import { TablesModule } from './tables/tables.module';
 import { ImagesModule } from './images/images.module';
+import { CategoryModule } from './category/category.module';
+import { PagesModule } from './pages/pages.module';
+import { CategoriesController } from './categories/categories.controller';
+import { CategoriesService } from './categories/categories.service';
 
 @Module({
   imports: [
@@ -17,8 +21,11 @@ import { ImagesModule } from './images/images.module';
     ShopsModule,
     TablesModule,
     ImagesModule,
+    CategoryModule,
+    PagesModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, CategoriesController],
+  providers: [CategoriesService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}
