@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { LuSquareMenu } from "react-icons/lu";
 import Clock from "../Clock";
 type ShopProps = {

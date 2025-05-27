@@ -1,6 +1,3 @@
-import { Navigate } from "react-router-dom";
-import type { MenuInsertDto } from "../../../../backend/dist/src/menus/menus.dto";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

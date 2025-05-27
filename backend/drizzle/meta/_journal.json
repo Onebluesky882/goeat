@@ -36,6 +36,20 @@
       "when": 1748232730120,
       "tag": "0004_edit_users_password_null.sql",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1748324966754,
+      "tag": "0005_edit_menu_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1748325632550,
+      "tag": "0006_edit_menu_image_id",
+      "breakpoints": true
     }
   ]
 }
