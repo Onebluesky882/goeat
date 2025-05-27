@@ -12,7 +12,9 @@ const getSocialIcon = (key: string) => {
   }
 };
 
-const RestaurantPreviewCard: React.FC<{ data: any }> = ({ data }) => {
+const RestaurantPreviewCard = (data: any) => {
+  // todo live preview here
+
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto mt-8 border border-gray-100">
       <h2 className="font-bold text-xl mb-3 text-gray-900">{data.name}</h2>

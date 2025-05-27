@@ -1,9 +1,9 @@
 import z from "zod";
 
-export const signUpSchema = z
+export const schema = z
   .object({
-    email: z.string(),
-    name: z.string(),
+    email: z.string().transform((val) => val.trim()),
+    name: z.string().transform((val) => val.trim()),
     password: z
       .string()
       .min(8, "password must be at least 8 characters")
@@ -14,3 +14,5 @@ export const signUpSchema = z
     message: "Password do not match",
     path: ["confirmPassword"],
   });
+
+export type SignupField = z.infer<typeof schema>;

@@ -1,5 +1,5 @@
 // src/pages/ShopInfo.tsx
-import { ShopAPI } from "@/Api/shop.api";
+import { shopAPI } from "@/Api/shop.api";
 import ShopBars from "@/components/shops/ShopBars";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
@@ -15,7 +15,7 @@ const ShopLayout = () => {
   useEffect(() => {
     const fetchShops = async () => {
       try {
-        const res = await ShopAPI.getAll();
+        const res = await shopAPI.getAll();
         if (res) {
           setShops(res.data);
         }

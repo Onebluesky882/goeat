@@ -1,4 +1,4 @@
-import { ShopAPI } from "@/Api/shop.api";
+import { shopAPI } from "@/Api/shop.api";
 import FromNewShop from "@/components/createNewShop/createShop";
 import { newShopSchema } from "@/schema/newShopForm";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import type { z } from "zod";
+import { date, type z } from "zod";
 
 export type FormFields = z.infer<typeof newShopSchema>;
 
@@ -48,19 +48,6 @@ const CreateNewShop = () => {
     return false;
   });
 
-  const livePreview: FormFields = {
-    name: watchAll.name ?? "",
-    address: watchAll.address,
-    phone: watchAll.phone,
-    googleMaps: watchAll.googleMaps,
-    website: watchAll.website,
-    socials: Object.fromEntries(
-      Object.entries(watchAll.socials ?? {}).filter(
-        ([, value]) => value && value.trim() !== ""
-      )
-    ),
-  };
-
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const socials: { [k: string]: string } = {};
     Object.entries(data.socials).forEach(([key, value]) => {
@@ -74,7 +61,7 @@ const CreateNewShop = () => {
     setSubmitted(preview);
 
     try {
-      const response = await ShopAPI.create(preview);
+      const response = await shopAPI.create(preview);
       if (response.data) {
         toast.success("✅ Shop created successfully!");
         handleReset();
@@ -103,8 +90,8 @@ const CreateNewShop = () => {
         isValid={isValid}
         isSubmitting={isSubmitting}
         handleReset={handleReset}
-        livePreview={livePreview}
         shouldShowPreview={shouldShowPreview}
+        blank={undefined}
       />
     </div>
   );

@@ -3,10 +3,10 @@ import type { InsertMenu } from "../../backend/dist/src/menus/menu.dto";
 export type PartialCreateMenu = Pick<
   InsertMenu,
   | "name"
-  | "categories"
+  | "categoryId"
   | "createdBy"
   | "description"
-  | "pages"
+  | "pageId"
   | "price"
   | "shopId"
   | "available"

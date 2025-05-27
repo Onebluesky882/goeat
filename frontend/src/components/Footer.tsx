@@ -76,8 +76,8 @@ const Footer = ({ shopId }: { shopId: string }) => {
   ];
 
   return (
-    <footer className={`  z-10   fixed  w-full bottom-0   `}>
-      <div className=" flex justify-center">
+    <footer className={`  z-10   fixed  w-full bottom-0     `}>
+      <div className=" flex justify-center mt-20">
         <div
           className={` py-2   w-[60%] justify-center rounded-t-md shadow-2xl ${
             location.pathname.startsWith("/shops")

@@ -12,7 +12,7 @@ type CreateShopProps = {
   isValid: boolean;
   isSubmitting: boolean;
   handleReset: () => void;
-  livePreview: any;
+  blank: any;
   shouldShowPreview: any;
 };
 // will fixed sparate component
@@ -23,14 +23,15 @@ const FromNewShop = ({
   isValid,
   isSubmitting,
   handleReset,
-  livePreview,
+  blank,
+
   shouldShowPreview,
 }: CreateShopProps) => {
   return (
     <div className="flex justify-center flex-col lg:flex-row gap-2 w-full max-w-3xl mx-auto">
       {shouldShowPreview && (
         <div className="flex-1  min-w-[260px]  -translate-x-0 -translate-y-0  max-sm:-mt-8 ">
-          <RestaurantPreviewCard data={livePreview} />
+          <RestaurantPreviewCard data={blank} />
         </div>
       )}
       <div className="">

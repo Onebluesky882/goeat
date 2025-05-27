@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import LoginAuthGoogle from "../components/LoginAuthGoogle";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
-import { signUpSchema } from "@/schema/signUpSchema";
-import type z from "zod";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authApi } from "@/Api/auth.api";
+import { userApi } from "@/Api/user.api";
+import { schema, type SignupField } from "@/schema/signUpField";
 
-type SignupData = z.infer<typeof signUpSchema>;
 type SignupProps = {
   email: string;
   name: string;
@@ -22,12 +20,12 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<SignupData>({
-    resolver: zodResolver(signUpSchema),
+  } = useForm<SignupField>({
+    resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<SignupData> = async (data) => {
+  const onSubmit: SubmitHandler<SignupField> = async (data) => {
     setLoading(true);
     const { confirmPassword, ...userWithoutConfirm } = data;
     setUser(userWithoutConfirm);
@@ -37,7 +35,7 @@ const SignUp = () => {
     const insertNewUser = async () => {
       if (!user) return;
       try {
-        const newUser = await authApi.create(user);
+        const newUser = await userApi.create(user);
         return { success: true, data: newUser };
       } catch (error) {
         console.error("Registration failed:", error);

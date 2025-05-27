@@ -8,6 +8,8 @@ import { orderTable } from './schema/orderTable';
 import { images } from './schema/images';
 import { roles } from './schema/roles';
 import { employees } from './schema/employees';
+import { categories } from './schema/categories';
+import { pages } from './schema/pages';
 
 export * from './schema/orders';
 export * from './schema/menus';
@@ -19,6 +21,8 @@ export * from './schema/orderTable';
 export * from './schema/images';
 export * from './schema/roles';
 export * from './schema/employees';
+export * from './schema/pages';
+export * from './schema/categories';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -36,4 +40,6 @@ export const schema = {
   employees,
   images,
   roles,
+  pages,
+  categories,
 };

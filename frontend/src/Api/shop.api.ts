@@ -1,6 +1,6 @@
 import { api } from ".";
 
-export const ShopAPI = {
+export const shopAPI = {
   create: (data: any) => api.post("/shops/create", data),
   getAll: () => api.get("/shops"),
   getById: (id: string) => api.get(`/shops/${id}`),

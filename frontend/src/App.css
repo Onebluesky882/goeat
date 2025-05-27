@@ -111,10 +111,7 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-gray-100 text-foreground select-none;
+    @apply bg-gray-100 text-foreground select-none outline-gray-100/50;
   }
 }
