@@ -57,6 +57,6 @@ export class PagesController {
   @Delete(':id')
   delete(@Param('id') id: string, @Req() req: AuthRequest) {
     const userId = req.user.id;
-    return this.pagesService.delete({ id }, userId);
+    return this.pagesService.delete(id, userId);
   }
 }

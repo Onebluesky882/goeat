@@ -74,7 +74,7 @@ export class PagesService {
         .where(and(eq(pages.id, id), eq(pages.userId, userId)));
 
       if (data.length === 0) {
-        throw new HttpException('page not found', HttpStatus.NOT_FOUND);
+        throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
       }
       return {
         success: true,
@@ -123,26 +123,36 @@ export class PagesService {
     }
   }
 
-  async delete(body: { id: string }, userId: string) {
+  async delete(id: string, userId: string) {
     try {
       const deleted = await this.db
         .delete(pages)
-        .where(and(eq(pages.id, body.id), eq(pages.userId, userId)))
+        .where(and(eq(pages.id, id), eq(pages.userId, userId)))
         .returning();
 
       if (deleted.length === 0) {
-        throw new HttpException({}, HttpStatus.NOT_FOUND);
+        this.logger.warn(
+          `Page with ID "${id}" not found or unauthorized for user "${userId}"`,
+        );
+        throw new HttpException(
+          {
+            success: false,
+            message:
+              'Page not found or you do not have permission to delete it.',
+          },
+          HttpStatus.NOT_FOUND,
+        );
       }
       return {
         success: true,
-        message: 'deleted',
+        message: 'Page deleted successfully.',
       };
     } catch (error) {
-      this.logger.error('❌ Delete failed', error);
+      this.logger.error('❌ Delete failed', error.stack || error.message);
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to delete',
+          message: 'Failed to delete page due to a server error.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

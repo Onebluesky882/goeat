@@ -18,65 +18,162 @@ export class ShopsService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  // create new shop
-  async insertNewShop(@Body() newShop: ShopInsert) {
+  async create(newTable: InsertTable, userId: string) {
     try {
-      await this.db.insert(shops).values(newShop).returning();
-      return { message: 'already create new shop' };
-    } catch (error) {
-      console.error('Insert failed:', error);
-      throw new HttpException(
-        {
-          success: false,
-          message: 'Failed to insert new shop',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  // get shop by id
-  async getShopId(shopId: string, user: any) {
-    try {
-      const shopsData = await this.db
-        .select({ name: shops.name })
-        .from(shops)
-        .where(
-          and(
-            // ✅ check shopId matches
-            eq(shops.id, shopId),
-            // ✅ check user is the owner
-            eq(shops.ownerId, user.id),
-          ),
-        )
-        .limit(1);
+      const inserted = await this.db
+        .insert(tables)
+        .values({ ...newTable, createBy: userId })
+        .returning();
       return {
         success: true,
-        data: shopsData[0],
+        message: 'create table successfully',
+        data: inserted,
       };
     } catch (error) {
+      this.logger.error('Failed to create table', error.stack);
+      if (error.code === '23505') {
+        throw new HttpException(
+          { success: false, message: 'Table already exists.' },
+          HttpStatus.CONFLICT,
+        );
+      }
+
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to get  shop by Id',
+          message: 'An error occurred while creating the table.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getMyShops(user: any) {
+  async getAll(userId: string) {
     try {
       const result = await this.db
-        .select()
-        .from(shops)
-        .where(eq(shops.ownerId, user.id));
-      return result;
+        .select({
+          tableLink: tables.tableLink,
+          status: tables.status,
+          name: tables.name,
+        })
+        .from(tables)
+        .innerJoin(shops, eq(tables.shopId, shops.id))
+        .where(eq(shops.ownerId, userId));
+
+      return {
+        success: true,
+        message: 'Fetched all tables successfully',
+        data: result,
+      };
     } catch (error) {
+      this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to get your shops ',
+          message: 'failed fetch table',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getById(id: string, userId: string) {
+    try {
+      const shop = await this.db
+        .select({ shopId: tables.shopId })
+        .from(tables)
+        .innerJoin(shops, eq(tables.shopId, shops.id))
+        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
+
+      if (shop.length === 0) {
+        throw new HttpException(
+          'You do not have permission to access this table.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const result = await this.db
+        .select({ id: tables.id })
+        .from(tables)
+        .where(eq(tables.id, id));
+      return {
+        data: result[0],
+        success: true,
+        message: 'Fetched table by ID successfully',
+      };
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'unable to fetch by id',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async update(id: string, body: UpdateTable, userId: string) {
+    try {
+      const table = await this.db
+        .select({ id: tables.id })
+        .from(tables)
+        .innerJoin(shops, eq(tables.shopId, shops.id))
+        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
+      if (table.length === 0) {
+        throw new HttpException(
+          'You do not have permission to access this table.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const { status, tableLink, gridPosition, name } = body;
+      const updated = await this.db
+        .update(tables)
+        .set({ status, tableLink, gridPosition, name })
+        .where(eq(tables.id, id))
+        .returning();
+      return {
+        data: updated,
+        success: true,
+        message: ' updated table success ',
+      };
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          success: false,
+          message: ' fail to update table ',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  async delete(id: string, userId: string) {
+    try {
+      const table = await this.db
+        .select({ id: tables.id })
+        .from(tables)
+        .innerJoin(shops, eq(tables.shopId, shops.id))
+        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
+      if (table.length === 0) {
+        throw new HttpException(
+          'You do not have permission to access this table.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      await this.db.delete(tables).where(eq(tables.id, id));
+      return {
+        success: true,
+        message: 'Table deleted successfully',
+      };
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Fail delete Table',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

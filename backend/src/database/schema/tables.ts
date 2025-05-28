@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
+import { users } from './users';
 
 export const tables = pgTable('tables', {
   id: uuid('id')
@@ -12,10 +13,11 @@ export const tables = pgTable('tables', {
   shopId: uuid('shop_id')
     .notNull()
     .references(() => shops.id, { onDelete: 'cascade' }),
-  rowsMap: text('rows_map'),
-  columnsMap: text('columns_map'),
   status: text('status').notNull(),
   createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
+  createBy: uuid('create_by').references(() => users.id, {
+    onDelete: 'cascade',
+  }),
 });
 
 //const url = 'https://yourdomain.com/orderId to qr code';

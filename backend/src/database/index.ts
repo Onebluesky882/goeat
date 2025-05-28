@@ -10,6 +10,7 @@ import { roles } from './schema/roles';
 import { employees } from './schema/employees';
 import { categories } from './schema/categories';
 import { pages } from './schema/pages';
+import { tableGridLayout } from './schema/tableGridsLayout';
 
 export * from './schema/orders';
 export * from './schema/menus';
@@ -23,6 +24,7 @@ export * from './schema/roles';
 export * from './schema/employees';
 export * from './schema/pages';
 export * from './schema/categories';
+export * from './schema/tableGridsLayout';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -42,4 +44,5 @@ export const schema = {
   roles,
   pages,
   categories,
+  tableGridLayout,
 };

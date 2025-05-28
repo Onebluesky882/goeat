@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { categories, schema, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
@@ -10,6 +16,7 @@ export class CategoriesService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
+    private readonly logger = new Logger(CategoriesService.name),
   ) {}
 
   async create(body: CreateCategoryDto, userId: string) {
@@ -18,9 +25,13 @@ export class CategoriesService {
         .insert(categories)
         .values({ ...body, userId })
         .returning();
-      return { message: 'Category created successfully', data: data };
+      return {
+        success: true,
+        message: 'Category created successfully',
+        data: data,
+      };
     } catch (error) {
-      console.error('Insert failed ', error);
+      this.logger.error('Insert failed ', error);
       throw new HttpException(
         {
           success: false,
@@ -41,9 +52,9 @@ export class CategoriesService {
         .from(categories)
         .innerJoin(shops, eq(categories.shopId, shops.id))
         .where(eq(categories.userId, userId));
-      return { success: true, data: data };
+      return { success: true, message: 'get all success', data: data };
     } catch (error) {
-      console.error('all categories failed ', error);
+      this.logger.error('all categories failed ', error);
       throw new HttpException(
         { success: false, message: 'Failed to fetch categories' },
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -55,9 +66,7 @@ export class CategoriesService {
     try {
       const data = await this.db
         .select({
-          id: categories.id,
           name: categories.name,
-          shopId: categories.shopId,
         })
         .from(categories)
         .where(and(eq(categories.id, id), eq(categories.userId, userId)));
@@ -67,10 +76,11 @@ export class CategoriesService {
       }
       return {
         success: true,
+        message: 'get by id success',
         data: data[0],
       };
     } catch (error) {
-      console.error('Fetch failed', error);
+      this.logger.error('Fetch failed', error);
       throw new HttpException(
         {
           success: false,
@@ -89,13 +99,17 @@ export class CategoriesService {
         .set({ name })
         .where(and(eq(categories.id, id), eq(categories.userId, userId)))
         .returning();
+
+      if (updated.length === 0) {
+        throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
+      }
       return {
         success: true,
         message: 'Category updated successfully',
         data: updated,
       };
     } catch (error) {
-      console.error('updated failed ', error);
+      this.logger.error('updated failed ', error);
       throw new HttpException(
         {
           success: false,
@@ -121,7 +135,7 @@ export class CategoriesService {
         message: 'deleted',
       };
     } catch (error) {
-      console.error('❌ Delete failed', error);
+      this.logger.error('❌ Delete failed', error);
       throw new HttpException(
         {
           success: false,

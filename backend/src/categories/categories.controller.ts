@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -19,14 +19,28 @@ export class CategoriesController {
   constructor(private readonly categories: CategoriesService) {}
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('create')
+  @Post()
   create(@Body() body: CreateCategoryDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.categories.create(body, userId);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
+  @Get()
+  getAll(@Req() req: AuthRequest) {
+    const userId = req.user.id;
+    return this.categories.allCategories(userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  getById(@Param('id') id: string, @Req() req: AuthRequest) {
+    const userId = req.user.id;
+    return this.categories.getCategoryById(id, userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() body: UpdateCategoryDto,
@@ -41,18 +55,5 @@ export class CategoriesController {
   delete(@Param('id') id: string, @Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.categories.delete({ id }, userId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get()
-  getAll(@Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.allCategories(userId);
-  }
-  @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.getCategoryById(id, userId);
   }
 }

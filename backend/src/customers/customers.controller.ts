@@ -1,23 +1,22 @@
 import {
-  Body,
   Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
   Req,
   UseGuards,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
 } from '@nestjs/common';
-import { MenusService } from './menus.service';
-import { AuthGuard } from '@nestjs/passport';
-import { MenuInsertDto } from './menus.dto';
-import { AuthRequest } from '../types/auth';
-import { InsertMenu, UpdateMenuDto } from './menu.dto';
-import { Put } from '@nestjs/common';
 
-@Controller('menus')
-export class MenusController {
-  constructor(private readonly menusService: MenusService) {}
+import { AuthGuard } from '@nestjs/passport';
+
+import { AuthRequest } from 'src/types/auth';
+
+@Controller('customers')
+export class CustomersController {
+  constructor(private readonly ordersService: OrdersService) {}
 
   @UseGuards(AuthGuard('jwt'))
   //create

@@ -3,12 +3,11 @@ import { categories } from '../database';
 
 export type InsertCategories = InferInsertModel<typeof categories>;
 
-export class CreateCategoryDto {
+export type CreateCategoryDto = {
   name: string;
   shopId: string;
-}
+};
 
-// update-category.dto.ts
-export class UpdateCategoryDto {
+export type UpdateCategoryDto = {
   name: string;
-}
+};

@@ -11,6 +11,16 @@ import { CategoriesController } from './categories/categories.controller';
 import { CategoriesService } from './categories/categories.service';
 import { PagesModule } from './pages/pages.module';
 import { CategoriesModule } from './categories/categories.module';
+import { OrdersModule } from './orders/orders.module';
+import { CustomersController } from './customers/customers.controller';
+import { CustomersModule } from './customers/customers.module';
+import { OrderTableModule } from './order-table/order-table.module';
+import { RolesService } from './roles/roles.service';
+import { RolesController } from './roles/roles.controller';
+import { RolesModule } from './roles/roles.module';
+import { EmployeesModule } from './employees/employees.module';
+import { TableGridLayoutService } from './table-grid-layout/table-grid-layout.service';
+import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
 
 @Module({
   imports: [
@@ -23,9 +33,15 @@ import { CategoriesModule } from './categories/categories.module';
     ImagesModule,
     PagesModule,
     CategoriesModule,
+    OrdersModule,
+    CustomersModule,
+    OrderTableModule,
+    RolesModule,
+    EmployeesModule,
+    TableGridLayoutModule,
   ],
-  controllers: [AppController, CategoriesController],
-  providers: [CategoriesService],
+  controllers: [AppController, CategoriesController, CustomersController, RolesController],
+  providers: [CategoriesService, RolesService, TableGridLayoutService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}
