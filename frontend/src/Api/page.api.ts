@@ -11,9 +11,9 @@ import {
 // Get :id
 
 export const pages = {
-  create: (data: CreatePageDto) => api.post("/pages/create", data),
+  create: (data: CreatePageDto) => api.post("/pages", data),
   getAll: () => api.get("/pages"),
   getById: (id: string) => api.get(`/pages/${id}`),
-  update: (id: string, data: UpdatePageDto) => api.put(`/pages/${id}`, data),
+  update: (id: string, data: UpdatePageDto) => api.patch(`/pages/${id}`, data),
   delete: (id: string) => api.delete(`/pages/${id}`),
 };

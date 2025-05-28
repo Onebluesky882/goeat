@@ -7,10 +7,10 @@ import { DatabaseModule } from './database/database.module';
 import { ShopsModule } from './shops/shops.module';
 import { TablesModule } from './tables/tables.module';
 import { ImagesModule } from './images/images.module';
-import { CategoryModule } from './category/category.module';
-import { PagesModule } from './pages/pages.module';
 import { CategoriesController } from './categories/categories.controller';
 import { CategoriesService } from './categories/categories.service';
+import { PagesModule } from './pages/pages.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -21,8 +21,8 @@ import { CategoriesService } from './categories/categories.service';
     ShopsModule,
     TablesModule,
     ImagesModule,
-    CategoryModule,
     PagesModule,
+    CategoriesModule,
   ],
   controllers: [AppController, CategoriesController],
   providers: [CategoriesService],
