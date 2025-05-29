@@ -1,5 +1,10 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { images } from '../database';
 
-export type InsertMenu = InferInsertModel<typeof images>;
-export type SelectMenu = InferSelectModel<typeof images>;
+export type InsertImage = InferInsertModel<typeof images>;
+export type SelectImage = InferSelectModel<typeof images>;
+
+export type UpdateImage = Pick<
+  InsertImage,
+  'imageName' | 'imageUrl' | 'type' | 'menuId'
+>;

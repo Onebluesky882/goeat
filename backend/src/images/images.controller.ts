@@ -1,5 +1,3 @@
-import { Controller } from '@nestjs/common';
-
 import {
   Controller,
   Req,
@@ -15,10 +13,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
+import { ImagesService } from './images.service';
 
 @Controller('images')
 export class ImagesController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly imagesService: ImagesService) {}
 
   @UseGuards(AuthGuard('jwt'))
   //create
