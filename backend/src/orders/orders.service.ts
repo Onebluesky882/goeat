@@ -8,53 +8,26 @@ import {
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { employees, roles, shops, orders } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { eq, and, inArray } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { InsertOrders, UpdateOrder } from './orders.dto';
+import { ShopAccessService } from 'src/shop-access/shop-access.service';
 
 @Injectable()
 export class OrdersService {
+  private readonly logger = new Logger(OrdersService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly logger = new Logger(OrdersService.name),
+    private readonly shopAccess: ShopAccessService,
   ) {}
-
-  // ✅ Helper to check ownership
-  async validateShop(
-    shopId: string,
-    userId: string,
-    allowRoles: string[] = ['owner', 'manager', 'staff'],
-  ) {
-    const employeeResult = await this.db
-      .select({
-        employeeId: employees.id,
-        roleName: roles.name,
-      })
-      .from(employees)
-      .innerJoin(roles, eq(employees.roleId, roles.id))
-      .where(
-        and(
-          eq(employees.shopId, shopId),
-          eq(employees.employerId, userId),
-          inArray(roles.name, allowRoles),
-        ),
-      );
-
-    const ownerResult = await this.db
-      .select()
-      .from(shops)
-      .where(and(eq(shops.id, shopId), eq(shops.ownerId, userId)));
-
-    if (employeeResult.length || ownerResult.length) return;
-    throw new HttpException(
-      'You do not have permission to access this shop.',
-      HttpStatus.FORBIDDEN,
-    );
-  }
 
   async create(newOrder: InsertOrders, shopId: string, userId: string) {
     try {
-      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.shopAccess.validateShop(shopId, userId, [
+        'manager',
+        'staff',
+        'owner',
+      ]);
       const inserted = await this.db
         .insert(orders)
         .values({ ...newOrder, shopId: shopId })
@@ -85,7 +58,11 @@ export class OrdersService {
 
   async getAll(shopId: string, userId: string) {
     try {
-      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.shopAccess.validateShop(shopId, userId, [
+        'manager',
+        'staff',
+        'owner',
+      ]);
       const result = await this.db
         .select({
           status: orders.status,
@@ -121,7 +98,11 @@ export class OrdersService {
 
   async getById(id: string, shopId: string, userId: string) {
     try {
-      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.shopAccess.validateShop(shopId, userId, [
+        'manager',
+        'staff',
+        'owner',
+      ]);
       const order = await this.db
         .select({
           status: orders.status,
@@ -169,7 +150,11 @@ export class OrdersService {
 
   async update(id: string, body: UpdateOrder, shopId: string, userId: string) {
     try {
-      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.shopAccess.validateShop(shopId, userId, [
+        'manager',
+        'staff',
+        'owner',
+      ]);
       const order = await this.db
         .select({ id: orders.id })
         .from(orders)
@@ -206,7 +191,11 @@ export class OrdersService {
   }
   async delete(id: string, shopId: string, userId: string) {
     try {
-      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.shopAccess.validateShop(shopId, userId, [
+        'manager',
+        'staff',
+        'owner',
+      ]);
       await this.db.delete(orders).where(eq(orders.id, id));
       return {
         success: true,

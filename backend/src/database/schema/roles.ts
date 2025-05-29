@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { shops } from './shops';
 
 export const roles = pgTable('roles', {
   id: uuid('id')
@@ -7,4 +8,5 @@ export const roles = pgTable('roles', {
     .default(sql`gen_random_uuid()`),
   name: text('position').notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
 });

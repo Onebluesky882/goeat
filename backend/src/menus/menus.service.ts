@@ -13,10 +13,11 @@ import { InsertMenu, UpdateMenuDto } from './menu.dto';
 
 @Injectable()
 export class MenusService {
+    private readonly logger = new Logger(MenusService.name),
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
-    private readonly logger = new Logger(MenusService.name),
+  
   ) {}
 
   async create(newTable: InsertTable, userId: string) {

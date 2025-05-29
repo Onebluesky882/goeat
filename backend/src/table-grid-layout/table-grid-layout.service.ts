@@ -13,10 +13,11 @@ import { InsertTableGridLayout } from './table-grid-layout.dto';
 
 @Injectable()
 export class TableGridLayoutService {
+   private readonly logger = new Logger(TableGridLayoutService.name),
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly logger = new Logger(TableGridLayoutService.name),
+   
   ) {}
 
   async create(newTable: InsertTableGridLayout, userId: string) {

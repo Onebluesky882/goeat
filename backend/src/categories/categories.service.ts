@@ -13,10 +13,10 @@ import { CreateCategoryDto } from './categories.dto';
 
 @Injectable()
 export class CategoriesService {
+  private readonly logger = new Logger(CategoriesService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
-    private readonly logger = new Logger(CategoriesService.name),
   ) {}
 
   async create(body: CreateCategoryDto, userId: string) {

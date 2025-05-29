@@ -21,6 +21,10 @@ import { RolesModule } from './roles/roles.module';
 import { EmployeesModule } from './employees/employees.module';
 import { TableGridLayoutService } from './table-grid-layout/table-grid-layout.service';
 import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
+import { ShopAccessService } from './shop-access/shop-access.service';
+import { ShopAccessModule } from './shop-access/shop-access.module';
+import { UserPermissionsModule } from './user-permissions/user-permissions.module';
+import { RbacModule } from './rbac/rbac.module';
 
 @Module({
   imports: [
@@ -39,9 +43,12 @@ import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.mod
     RolesModule,
     EmployeesModule,
     TableGridLayoutModule,
+    ShopAccessModule,
+    UserPermissionsModule,
+    RbacModule,
   ],
   controllers: [AppController, CategoriesController, CustomersController, RolesController],
-  providers: [CategoriesService, RolesService, TableGridLayoutService],
+  providers: [CategoriesService, RolesService, TableGridLayoutService, ShopAccessService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

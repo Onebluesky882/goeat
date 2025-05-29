@@ -13,10 +13,11 @@ import { CreatePageDto } from './pages.dto';
 
 @Injectable()
 export class PagesService {
+   private readonly logger = new Logger(PagesService.name),
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
-    private readonly logger = new Logger(PagesService.name),
+   
   ) {}
 
   async create(body: CreatePageDto, userId: string) {

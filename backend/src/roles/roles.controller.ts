@@ -1,5 +1,3 @@
-import { Controller } from '@nestjs/common';
-
 import {
   Controller,
   Req,
@@ -10,36 +8,53 @@ import {
   Param,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
+import { RolesService } from './roles.service';
+import { Roles } from './roles.dto';
+import { ShopAccessService } from '../shop-access/shop-access.service';
 
 @Controller('roles')
 export class RolesController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly rolesService: RolesService,
+    private readonly shopAccess: ShopAccessService,
+  ) {}
 
   @UseGuards(AuthGuard('jwt'))
   //create
   @Post()
-  create(@Body() body: InsertTable, @Req() req: AuthRequest) {
+  create(
+    @Body() body: Roles,
+    @Req() req: AuthRequest,
+    @Query('shopId') shopId: string,
+  ) {
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
-    return this.ordersService.create(body, userId);
+    return this.rolesService.create(body, userId, shopId);
   }
   //getAll
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getAll(@Req() req: AuthRequest) {
+  getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
     const userId = req.user.id;
-    return this.ordersService.getAll(userId);
+    return this.rolesService.getAll(userId, shopId);
   }
   // get by id
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
+  getById(
+    @Param('id') id: string,
+    @Req() req: AuthRequest,
+    @Query('shopId') shopId: string,
+  ) {
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
-    return this.ordersService.getById(id, userId);
+    return this.rolesService.getById(id, userId, shopId);
   }
 
   // update
@@ -47,18 +62,25 @@ export class RolesController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() body: UpdateTable,
+    @Body() body: Roles,
     @Req() req: AuthRequest,
+    @Query('shopId') shopId: string,
   ) {
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
-    return this.ordersService.update(id, body, userId);
+    return this.rolesService.update(id, body, userId, shopId);
   }
 
   // delete
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  delete(@Param('id') id: string, @Req() req: AuthRequest) {
+  delete(
+    @Param('id') id: string,
+    @Req() req: AuthRequest,
+    @Query('shopId') shopId: string,
+  ) {
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
-    return this.ordersService.delete(id, userId);
+    return this.rolesService.delete(id, userId, shopId);
   }
 }

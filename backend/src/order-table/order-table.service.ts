@@ -14,10 +14,11 @@ import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class OrderTableService {
+  private readonly logger = new Logger(OrderTableService.name),
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly logger = new Logger(OrderTableService.name),
+    
   ) {}
 
   async create(newTable: InsertTable, userId: string) {

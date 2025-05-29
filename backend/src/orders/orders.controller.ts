@@ -9,23 +9,21 @@ import {
   Patch,
   Delete,
   Query,
-  BadRequestException,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
 import { OrdersService } from './orders.service';
-import { CreateOrder, InsertOrders, UpdateOrder } from './orders.dto';
+import { CreateOrder, UpdateOrder } from './orders.dto';
+import { ShopAccessService } from 'src/shop-access/shop-access.service';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
-  private validateShopId(shopId: string) {
-    if (!shopId) {
-      throw new BadRequestException('shopId is required');
-    }
-  }
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly shopAccess: ShopAccessService,
+  ) {}
 
   @UseGuards(AuthGuard('jwt'))
   //create
@@ -33,14 +31,14 @@ export class OrdersController {
   create(@Body() body: CreateOrder, @Req() req: AuthRequest) {
     const userId = req.user.id;
     const { shopId } = body;
-    this.validateShopId(shopId as string);
+    this.shopAccess.validateShopId(shopId as string);
     return this.ordersService.create(body, userId, shopId as string);
   }
   //getAll
   @UseGuards(AuthGuard('jwt'))
   @Get()
   getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
-    this.validateShopId(shopId);
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.ordersService.getAll(shopId, userId);
   }
@@ -52,7 +50,7 @@ export class OrdersController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.validateShopId(shopId);
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.ordersService.getById(id, userId, shopId);
   }
@@ -66,7 +64,7 @@ export class OrdersController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.validateShopId(shopId);
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.ordersService.update(id, body, userId, shopId);
   }
@@ -79,7 +77,7 @@ export class OrdersController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.validateShopId(shopId);
+    this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.ordersService.delete(id, userId, shopId);
   }
