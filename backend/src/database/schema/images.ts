@@ -12,10 +12,8 @@ export const images = pgTable('images', {
   imageName: text('image_name'),
   imageUrl: text('image_url'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  type: text('type').notNull(), // e.g., 'menu' | 'shop' | 'profile'
   shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
   menuId: uuid('menu_id').references(() => menus.id, { onDelete: 'cascade' }),
   userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
-  employeesId: uuid('employees_id').references(() => employees.id, {
-    onDelete: 'cascade',
-  }),
 });

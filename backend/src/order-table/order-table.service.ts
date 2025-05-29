@@ -7,10 +7,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { shops, tables } from 'src/database';
+import { orderTable, shops, tables } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { OrdersService } from 'src/orders/orders.service';
+import { CreateOrderTableDto } from './order-table.dto';
+import { nanoid } from 'nanoid';  
 
 @Injectable()
 export class OrderTableService {
@@ -20,6 +21,21 @@ export class OrderTableService {
     private readonly db: NodePgDatabase,
     
   ) {}
+  async createTabSession(dto :CreateOrderTableDto, userId : string){
+    const token = nanoid(32)
+
+    const [created] = await this.db.insert(orderTable).values({
+      ...dto,
+       shopId: dto.shopId,
+      shareToken: token,
+      customerId: userId,
+    }).returning()
+    return {
+      ...created,
+      // todo will be back 
+      shareUrl : `https://yourapp.com/orders/view?token=${token}`
+    }
+  }
 
   async create(newTable: InsertTable, userId: string) {
     try {

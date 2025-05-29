@@ -1,13 +1,13 @@
 import { sql } from 'drizzle-orm';
 import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { users } from './users';
 
 export const customers = pgTable('customers', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),
-  name: text('name').notNull(),
-  email: text('email').notNull(),
-  phone: text('phone'),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
   active: boolean('active').default(false),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id),
 });

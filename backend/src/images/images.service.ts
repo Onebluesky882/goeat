@@ -15,11 +15,10 @@ import { eq, and } from 'drizzle-orm';
 
 @Injectable()
 export class ImagesService {
-      private readonly logger = new Logger(OrdersService.name),
+  private readonly logger = new Logger(ImagesService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-
   ) {}
 
   async create(newTable: InsertTable, userId: string) {

@@ -1,12 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, date, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 
 export const categories = pgTable('categories', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),
-  name: text('name').notNull().unique(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
+  active: boolean('active').default(false),
+  startDate: date('start_date').notNull(),
+  endDate: date('end_date'),
   shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
+  userId: uuid('user_id').notNull(),
 });

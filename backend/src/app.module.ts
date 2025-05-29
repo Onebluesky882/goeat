@@ -27,6 +27,7 @@ import { UserPermissionsModule } from './user-permissions/user-permissions.modul
 import { RbacModule } from './rbac/rbac.module';
 import { PaginationService } from '../utils/pagination/pagination.service';
 import { PaginationModule } from '../utils/pagination/pagination.module';
+import { EmployersService } from './employers/employers.service';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { PaginationModule } from '../utils/pagination/pagination.module';
     TableGridLayoutService,
     ShopAccessService,
     PaginationService,
+    EmployersService,
   ],
 })
 export class AppModule implements NestModule {

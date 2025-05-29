@@ -50,8 +50,8 @@ export class CategoriesService {
           shopId: categories.shopId,
         })
         .from(categories)
-        .innerJoin(shops, eq(categories.shopId, shops.id))
-        .where(eq(categories.userId, userId));
+        .innerJoin(shops, eq(categories.shopId, shops.id));
+
       return { success: true, message: 'get all success', data: data };
     } catch (error) {
       this.logger.error('all categories failed ', error);

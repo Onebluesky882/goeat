@@ -9,5 +9,4 @@ export const pages = pgTable('pages', {
   name: text('name').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
-  userId: uuid('user_id').notNull(),
 });
