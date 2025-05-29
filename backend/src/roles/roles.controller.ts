@@ -28,31 +28,32 @@ export class RolesController {
   @UseGuards(AuthGuard('jwt'))
   //create
   @Post()
-  create(
+  async create(
     @Body() body: Roles,
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.shopAccess.validateShopId(shopId);
+    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.create(body, userId, shopId);
   }
   //getAll
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
+  async getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
+    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.getAll(userId, shopId);
   }
   // get by id
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  getById(
+  async getById(
     @Param('id') id: string,
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.shopAccess.validateShopId(shopId);
+    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.getById(id, userId, shopId);
   }
@@ -60,13 +61,13 @@ export class RolesController {
   // update
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() body: Roles,
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.shopAccess.validateShopId(shopId);
+    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.update(id, body, userId, shopId);
   }
@@ -74,12 +75,12 @@ export class RolesController {
   // delete
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  delete(
+  async delete(
     @Param('id') id: string,
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.shopAccess.validateShopId(shopId);
+    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.delete(id, userId, shopId);
   }

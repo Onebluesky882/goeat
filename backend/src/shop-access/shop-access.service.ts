@@ -24,11 +24,18 @@ export class ShopAccessService {
   }
 
   async validateShop(
-    shopId: string,
     userId: string,
+    shopId: string,
     allowRoles: string[] = ['owner', 'manager', 'staff'],
   ) {
-    const employeeResult = await this.db
+    const isOwner = await this.db
+      .select()
+      .from(shops)
+      .where(and(eq(shops.id, shopId), eq(shops.ownerId, userId)));
+
+    if (isOwner.length > 0) return;
+
+    const isEmployee = await this.db
       .select({
         employeeId: employees.id,
         roleName: roles.name,
@@ -42,13 +49,8 @@ export class ShopAccessService {
           inArray(roles.name, allowRoles),
         ),
       );
+    if (isEmployee.length > 0) return;
 
-    const ownerResult = await this.db
-      .select()
-      .from(shops)
-      .where(and(eq(shops.id, shopId), eq(shops.ownerId, userId)));
-
-    if (employeeResult.length || ownerResult.length) return;
     throw new HttpException(
       'You do not have permission to access',
       HttpStatus.FORBIDDEN,

@@ -6,36 +6,49 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { shops, tables } from 'src/database';
+import { tableGridLayout } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
 import { InsertTableGridLayout } from './table-grid-layout.dto';
+import { ShopAccessService } from '../shop-access/shop-access.service';
+import { PaginationService } from 'utils/pagination/pagination.service';
 
 @Injectable()
 export class TableGridLayoutService {
-   private readonly logger = new Logger(TableGridLayoutService.name),
+  private readonly logger = new Logger(TableGridLayoutService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-   
+    private readonly shopAccess: ShopAccessService,
+    private readonly pagination: PaginationService,
   ) {}
 
-  async create(newTable: InsertTableGridLayout, userId: string) {
+  async create(
+    newTableLayout: InsertTableGridLayout,
+    userId: string,
+    shopId: string,
+  ) {
     try {
+      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
+
+      const queryBuilder = this.db
+        .from(tableGridLayout)
+        .where(eq(tableGridLayout.shopId, shopId));
+
       const inserted = await this.db
-        .insert(tables)
-        .values({ ...newTable, createBy: userId })
+        .insert(tableGridLayout)
+        .values({ ...newTableLayout, shopId: shopId })
         .returning();
       return {
         success: true,
-        message: 'create table successfully',
+        message: 'create Table GridLayout successfully',
         data: inserted,
       };
     } catch (error) {
       this.logger.error('Failed to create table', error.stack);
       if (error.code === '23505') {
         throw new HttpException(
-          { success: false, message: 'Table already exists.' },
+          { success: false, message: ' Table GridLayout already exists.' },
           HttpStatus.CONFLICT,
         );
       }
@@ -43,28 +56,27 @@ export class TableGridLayoutService {
       throw new HttpException(
         {
           success: false,
-          message: 'An error occurred while creating the table.',
+          message: 'An error occurred while creating the Table GridLayout.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getAll(userId: string) {
+  async getAll(userId: string, shopId: string) {
     try {
+      await this.shopAccess.validateShop(userId, shopId);
       const result = await this.db
         .select({
-          tableLink: tables.tableLink,
-          status: tables.status,
-          name: tables.name,
+          columns: tableGridLayout.columns,
+          rows: tableGridLayout.rows,
         })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(eq(shops.ownerId, userId));
+        .from(tableGridLayout)
+        .where(and(eq(tableGridLayout.shopId, shopId)));
 
       return {
         success: true,
-        message: 'Fetched all tables successfully',
+        message: 'Fetched all Table GridLayout successfully',
         data: result,
       };
     } catch (error) {
@@ -72,110 +84,87 @@ export class TableGridLayoutService {
       throw new HttpException(
         {
           success: false,
-          message: 'failed fetch table',
+          message: 'Failed to fetch table layout',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getById(id: string, userId: string) {
+  async getById(id: string, userId: string, shopId: string) {
     try {
-      const shop = await this.db
-        .select({ shopId: tables.shopId })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-
-      if (shop.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      await this.shopAccess.validateShop(userId, shopId);
 
       const result = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .where(eq(tables.id, id));
+        .select({
+          columns: tableGridLayout.columns,
+          rows: tableGridLayout.rows,
+        })
+        .from(tableGridLayout)
+        .where(
+          and(eq(tableGridLayout.id, id), eq(tableGridLayout.shopId, shopId)),
+        );
       return {
         data: result[0],
         success: true,
-        message: 'Fetched table by ID successfully',
+        message: 'Fetched Table GridLayout by ID successfully',
       };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('Failed to fetch table layout by ID', error.stack);
       throw new HttpException(
         {
           success: false,
-          message: 'unable to fetch by id',
+          message: 'Failed to fetch table layout by ID',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async update(id: string, body: UpdateTable, userId: string) {
+  async update(
+    id: string,
+    body: InsertTableGridLayout,
+    userId: string,
+    shopId: string,
+  ) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
 
-      const { status, tableLink, gridPosition, name } = body;
       const updated = await this.db
-        .update(tables)
-        .set({ status, tableLink, gridPosition, name })
-        .where(eq(tables.id, id))
+        .update(tableGridLayout)
+        .set({ columns: body.columns, rows: body.rows })
+        .where(eq(tableGridLayout.id, id))
         .returning();
       return {
         data: updated,
         success: true,
-        message: ' updated table success ',
+        message: ' updated Table GridLayout success ',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: ' fail to update table ',
+          message: ' fail to update Table GridLayout ',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-  async delete(id: string, userId: string) {
+  async delete(id: string, userId: string, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      await this.db.delete(tables).where(eq(tables.id, id));
+      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
+      await this.db.delete(tableGridLayout).where(eq(tableGridLayout.id, id));
       return {
         success: true,
-        message: 'Table deleted successfully',
+        message: 'Table GridLayout deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: 'Fail delete Table',
+          message: 'Fail delete Table GridLayout',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
