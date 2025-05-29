@@ -1,5 +1,4 @@
 import {
-  Body,
   HttpException,
   HttpStatus,
   Inject,
@@ -7,9 +6,10 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { shops, tables } from 'src/database';
+import { employees, roles, shops, orders } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, inArray } from 'drizzle-orm';
+import { InsertOrders, UpdateOrder } from './orders.dto';
 
 @Injectable()
 export class OrdersService {
@@ -19,22 +19,56 @@ export class OrdersService {
     private readonly logger = new Logger(OrdersService.name),
   ) {}
 
-  async create(newTable: InsertTable, userId: string) {
+  // ✅ Helper to check ownership
+  async validateShop(
+    shopId: string,
+    userId: string,
+    allowRoles: string[] = ['owner', 'manager', 'staff'],
+  ) {
+    const employeeResult = await this.db
+      .select({
+        employeeId: employees.id,
+        roleName: roles.name,
+      })
+      .from(employees)
+      .innerJoin(roles, eq(employees.roleId, roles.id))
+      .where(
+        and(
+          eq(employees.shopId, shopId),
+          eq(employees.employerId, userId),
+          inArray(roles.name, allowRoles),
+        ),
+      );
+
+    const ownerResult = await this.db
+      .select()
+      .from(shops)
+      .where(and(eq(shops.id, shopId), eq(shops.ownerId, userId)));
+
+    if (employeeResult.length || ownerResult.length) return;
+    throw new HttpException(
+      'You do not have permission to access this shop.',
+      HttpStatus.FORBIDDEN,
+    );
+  }
+
+  async create(newOrder: InsertOrders, shopId: string, userId: string) {
     try {
+      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
       const inserted = await this.db
-        .insert(tables)
-        .values({ ...newTable, createBy: userId })
+        .insert(orders)
+        .values({ ...newOrder, shopId: shopId })
         .returning();
       return {
         success: true,
-        message: 'create table successfully',
+        message: 'create order successfully',
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create table', error.stack);
+      this.logger.error('Failed to create ', error.stack);
       if (error.code === '23505') {
         throw new HttpException(
-          { success: false, message: 'Table already exists.' },
+          { success: false, message: 'order already exists.' },
           HttpStatus.CONFLICT,
         );
       }
@@ -42,28 +76,35 @@ export class OrdersService {
       throw new HttpException(
         {
           success: false,
-          message: 'An error occurred while creating the table.',
+          message: 'An error occurred while creating the order.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getAll(userId: string) {
+  async getAll(shopId: string, userId: string) {
     try {
+      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
       const result = await this.db
         .select({
-          tableLink: tables.tableLink,
-          status: tables.status,
-          name: tables.name,
+          status: orders.status,
+          name: orders.shopId,
+          orderTableId: orders.orderTableId,
+          createdAt: orders.createdAt,
+          updatedAt: orders.updatedAt,
+          shopId: orders.shopId,
+          menuId: orders.menuId,
+          customerId: orders.customerId,
+          quantity: orders.quantity,
+          priceEach: orders.priceEach,
         })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(eq(shops.ownerId, userId));
+        .from(orders)
+        .where(eq(orders.shopId, shopId));
 
       return {
         success: true,
-        message: 'Fetched all tables successfully',
+        message: 'Fetched all orders successfully',
         data: result,
       };
     } catch (error) {
@@ -71,36 +112,48 @@ export class OrdersService {
       throw new HttpException(
         {
           success: false,
-          message: 'failed fetch table',
+          message: 'failed fetch order',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getById(id: string, userId: string) {
+  async getById(id: string, shopId: string, userId: string) {
     try {
-      const shop = await this.db
-        .select({ shopId: tables.shopId })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
+      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      const order = await this.db
+        .select({
+          status: orders.status,
+          name: orders.shopId,
+          orderTableId: orders.orderTableId,
+          createdAt: orders.createdAt,
+          updatedAt: orders.updatedAt,
+          shopId: orders.shopId,
+          menuId: orders.menuId,
+          customerId: orders.customerId,
+          quantity: orders.quantity,
+          priceEach: orders.priceEach,
+        })
+        .from(orders)
+        .innerJoin(shops, eq(orders.shopId, shops.id))
+        .where(and(eq(orders.id, id), eq(shops.ownerId, shopId)));
 
-      if (shop.length === 0) {
+      if (order.length === 0) {
         throw new HttpException(
-          'You do not have permission to access this table.',
+          'You do not have permission to access this order.',
           HttpStatus.NOT_FOUND,
         );
       }
 
       const result = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .where(eq(tables.id, id));
+        .select({ id: orders.id })
+        .from(orders)
+        .where(eq(orders.id, id));
       return {
         data: result[0],
         success: true,
-        message: 'Fetched table by ID successfully',
+        message: 'Fetched order by ID successfully',
       };
     } catch (error) {
       this.logger.error(error);
@@ -114,67 +167,57 @@ export class OrdersService {
     }
   }
 
-  async update(id: string, body: UpdateTable, userId: string) {
+  async update(id: string, body: UpdateOrder, shopId: string, userId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
+      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      const order = await this.db
+        .select({ id: orders.id })
+        .from(orders)
+        .innerJoin(shops, eq(orders.shopId, shops.id))
+        .where(and(eq(orders.id, id), eq(shops.ownerId, shopId)));
+      if (order.length === 0) {
         throw new HttpException(
-          'You do not have permission to access this table.',
+          'You do not have permission to access this order.',
           HttpStatus.NOT_FOUND,
         );
       }
 
-      const { status, tableLink, gridPosition, name } = body;
+      const { menuId, quantity, updatedAt } = body;
       const updated = await this.db
-        .update(tables)
-        .set({ status, tableLink, gridPosition, name })
-        .where(eq(tables.id, id))
+        .update(orders)
+        .set({ menuId, quantity, updatedAt })
+        .where(eq(orders.id, id))
         .returning();
       return {
         data: updated,
         success: true,
-        message: ' updated table success ',
+        message: ' updated order success ',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: ' fail to update table ',
+          message: ' fail to update order ',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-  async delete(id: string, userId: string) {
+  async delete(id: string, shopId: string, userId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      await this.db.delete(tables).where(eq(tables.id, id));
+      await this.validateShop(shopId, userId, ['manager', 'staff', 'owner']);
+      await this.db.delete(orders).where(eq(orders.id, id));
       return {
         success: true,
-        message: 'Table deleted successfully',
+        message: 'order deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: 'Fail delete Table',
+          message: 'Fail delete order',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

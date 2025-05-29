@@ -2,6 +2,8 @@ import { sql } from 'drizzle-orm';
 
 import { boolean, date, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
+import { users } from './users';
+import { roles } from './roles';
 
 export const employees = pgTable('employees', {
   id: uuid('id')
@@ -18,4 +20,8 @@ export const employees = pgTable('employees', {
   active: boolean('active').default(false),
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
+  employerId: uuid('employer_id')
+    .notNull()
+    .references(() => users.id),
+  roleId: uuid('role_id').notNull(),
 });
