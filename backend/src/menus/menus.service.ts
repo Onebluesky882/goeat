@@ -6,36 +6,34 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { menus, schema, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { and, eq } from 'drizzle-orm';
-import { InsertMenu, UpdateMenuDto } from './menu.dto';
+import { menus, schema } from 'src/database';
+import { MenuDto } from './menus.dto';
 
 @Injectable()
 export class MenusService {
-    private readonly logger = new Logger(MenusService.name),
+  private readonly logger = new Logger(MenusService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
-  
   ) {}
 
-  async create(newTable: InsertTable, userId: string) {
+  async create(dto: MenuDto, shopId: string, userId) {
     try {
-      const inserted = await this.db
-        .insert(tables)
-        .values({ ...newTable, createBy: userId })
-        .returning();
+      const newMenu = await this.db
+        .insert(menus)
+        .values({ ...dto, shopId: shopId, createdBy: userId });
       return {
         success: true,
-        message: 'create table successfully',
-        data: inserted,
+        message: 'create menu successfully',
+        data: newMenu,
       };
     } catch (error) {
-      this.logger.error('Failed to create table', error.stack);
+      this.logger.error('Failed to create menu', error.stack);
       if (error.code === '23505') {
         throw new HttpException(
-          { success: false, message: 'Table already exists.' },
+          { success: false, message: 'menu already exists.' },
           HttpStatus.CONFLICT,
         );
       }
@@ -43,28 +41,33 @@ export class MenusService {
       throw new HttpException(
         {
           success: false,
-          message: 'An error occurred while creating the table.',
+          message: 'An error occurred while creating the menu.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getAll(userId: string) {
+  async getAll(shopId: string) {
     try {
       const result = await this.db
         .select({
-          tableLink: tables.tableLink,
-          status: tables.status,
-          name: tables.name,
+          name: menus.name,
+          price: menus.price,
+          categoryId: menus.categoryId,
+          available: menus.available,
+          createdBy: menus.createdBy,
+          description: menus.description,
+          pageId: menus.pageId,
+          imageId: menus.imageId,
+          shopId: menus.shopId,
         })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(eq(shops.ownerId, userId));
+        .from(menus)
+        .where(eq(menus.shopId, shopId));
 
       return {
         success: true,
-        message: 'Fetched all tables successfully',
+        message: 'Fetched all menus successfully',
         data: result,
       };
     } catch (error) {
@@ -72,36 +75,33 @@ export class MenusService {
       throw new HttpException(
         {
           success: false,
-          message: 'failed fetch table',
+          message: 'failed fetch menu',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getById(id: string, userId: string) {
+  async getById(id: string, shopId: string) {
     try {
-      const shop = await this.db
-        .select({ shopId: tables.shopId })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-
-      if (shop.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
       const result = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .where(eq(tables.id, id));
+        .select({
+          name: menus.name,
+          price: menus.price,
+          categoryId: menus.categoryId,
+          available: menus.available,
+          createdBy: menus.createdBy,
+          description: menus.description,
+          pageId: menus.pageId,
+          imageId: menus.imageId,
+          shopId: menus.shopId,
+        })
+        .from(menus)
+        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)));
       return {
         data: result[0],
         success: true,
-        message: 'Fetched table by ID successfully',
+        message: 'Fetched menu by ID successfully',
       };
     } catch (error) {
       this.logger.error(error);
@@ -115,67 +115,44 @@ export class MenusService {
     }
   }
 
-  async update(id: string, body: UpdateTable, userId: string) {
+  async update(id: string, body: MenuDto, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      const { status, tableLink, gridPosition, name } = body;
       const updated = await this.db
-        .update(tables)
-        .set({ status, tableLink, gridPosition, name })
-        .where(eq(tables.id, id))
+        .update(menus)
+        .set(body)
+        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)))
         .returning();
       return {
         data: updated,
         success: true,
-        message: ' updated table success ',
+        message: ' updated menu success ',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: ' fail to update table ',
+          message: ' fail to update menu ',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-  async delete(id: string, userId: string) {
+  async delete(id: string, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      await this.db.delete(tables).where(eq(tables.id, id));
+      await this.db
+        .delete(menus)
+        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)));
       return {
         success: true,
-        message: 'Table deleted successfully',
+        message: 'menu deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
         {
           success: false,
-          message: 'Fail delete Table',
+          message: 'Fail delete menu',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

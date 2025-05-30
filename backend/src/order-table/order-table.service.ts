@@ -1,5 +1,4 @@
 import {
-  Body,
   HttpException,
   HttpStatus,
   Inject,
@@ -7,42 +6,39 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { orderTable, shops, tables } from 'src/database';
+import { orderTable, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { CreateOrderTableDto } from './order-table.dto';
-import { nanoid } from 'nanoid';  
+import { OrderTableDto } from './order-table.dto';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class OrderTableService {
-  private readonly logger = new Logger(OrderTableService.name),
+  private readonly logger = new Logger(OrderTableService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    
   ) {}
-  async createTabSession(dto :CreateOrderTableDto, userId : string){
-    const token = nanoid(32)
 
-    const [created] = await this.db.insert(orderTable).values({
-      ...dto,
-       shopId: dto.shopId,
-      shareToken: token,
-      customerId: userId,
-    }).returning()
-    return {
-      ...created,
-      // todo will be back 
-      shareUrl : `https://yourapp.com/orders/view?token=${token}`
-    }
-  }
-
-  async create(newTable: InsertTable, userId: string) {
+  async create(
+    dto: OrderTableDto,
+    shopId: string,
+    userId: string,
+    isSession = false,
+  ) {
     try {
-      const inserted = await this.db
-        .insert(tables)
-        .values({ ...newTable, createBy: userId })
+      const token = isSession ? nanoid(32) : undefined;
+      const [inserted] = await this.db
+        .insert(orderTable)
+        .values({ ...dto, token: token, shopId: shopId, createById: userId })
         .returning();
+
+      if (isSession) {
+        return {
+          ...inserted,
+          shareUrl: `https://yourapp.com/orders/view?token=${token}`,
+        };
+      }
       return {
         success: true,
         message: 'create table successfully',
@@ -67,21 +63,23 @@ export class OrderTableService {
     }
   }
 
-  async getAll(userId: string) {
+  async getAll(shopId: string) {
     try {
       const result = await this.db
         .select({
-          tableLink: tables.tableLink,
-          status: tables.status,
-          name: tables.name,
+          customersId: orderTable.customersId,
+          shareToken: orderTable.token,
+          shopId: orderTable.shopId,
+          status: orderTable.status,
+          tableId: orderTable.tableId,
+          updatedAt: orderTable.updatedAt,
+          createById: orderTable.createById,
         })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(eq(shops.ownerId, userId));
-
+        .from(orderTable)
+        .where(eq(orderTable.shopId, shopId));
       return {
         success: true,
-        message: 'Fetched all tables successfully',
+        message: 'Fetched all orderTable successfully',
         data: result,
       };
     } catch (error) {
@@ -96,14 +94,12 @@ export class OrderTableService {
     }
   }
 
-  async getById(id: string, userId: string) {
+  async getById(id: string, shopId: string) {
     try {
       const shop = await this.db
-        .select({ shopId: tables.shopId })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-
+        .select({ shopId: orderTable.shopId })
+        .from(orderTable)
+        .where(and(eq(orderTable.id, id), eq(orderTable.shopId, shopId)));
       if (shop.length === 0) {
         throw new HttpException(
           'You do not have permission to access this table.',
@@ -112,9 +108,9 @@ export class OrderTableService {
       }
 
       const result = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .where(eq(tables.id, id));
+        .select({ id: orderTable.id })
+        .from(orderTable)
+        .where(eq(orderTable.id, id));
       return {
         data: result[0],
         success: true,
@@ -132,25 +128,12 @@ export class OrderTableService {
     }
   }
 
-  async update(id: string, body: UpdateTable, userId: string) {
+  async update(id: string, body: OrderTableDto, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      const { status, tableLink, gridPosition, name } = body;
       const updated = await this.db
-        .update(tables)
-        .set({ status, tableLink, gridPosition, name })
-        .where(eq(tables.id, id))
+        .update(orderTable)
+        .set(body)
+        .where(and(eq(orderTable.id, id), eq(orderTable, shopId)))
         .returning();
       return {
         data: updated,
@@ -168,21 +151,11 @@ export class OrderTableService {
       );
     }
   }
-  async delete(id: string, userId: string) {
+  async delete(id: string, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      await this.db.delete(tables).where(eq(tables.id, id));
+      await this.db
+        .delete(orderTable)
+        .where(and(eq(orderTable.id, id), eq(orderTable.shopId, shopId)));
       return {
         success: true,
         message: 'Table deleted successfully',

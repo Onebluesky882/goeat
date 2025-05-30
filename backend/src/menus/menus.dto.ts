@@ -1,12 +1,11 @@
-import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { menus } from 'src/database';
+import { InferInsertModel } from 'drizzle-orm';
+import { menus } from '../database';
 
-export type MenuInsertDto = InferInsertModel<typeof menus>;
-export type MenuReadDto = InferSelectModel<typeof menus>;
+export type InsertMenus = InferInsertModel<typeof menus>;
 
-export type UpdateMenuDto = Pick<
-  MenuInsertDto,
-  | 'id'
+export type MenuDto = Pick<
+  InsertMenus,
+  | 'shopId'
   | 'name'
   | 'price'
   | 'categoryId'
@@ -14,4 +13,5 @@ export type UpdateMenuDto = Pick<
   | 'createdBy'
   | 'description'
   | 'pageId'
+  | 'imageId'
 >;

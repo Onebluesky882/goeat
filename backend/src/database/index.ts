@@ -1,5 +1,4 @@
 import { customers } from './schema/customers';
-import { menus } from './schema/menus';
 import { orders } from './schema/orders';
 import { shops } from './schema/shops';
 import { tables } from './schema/tables';
@@ -11,9 +10,9 @@ import { employees } from './schema/employees';
 import { categories } from './schema/categories';
 import { pages } from './schema/pages';
 import { tableGridLayout } from './schema/tableGridsLayout';
+import { menus } from './schema/menus';
 
 export * from './schema/orders';
-export * from './schema/menus';
 export * from './schema/shops';
 export * from './schema/users';
 export * from './schema/customers';
@@ -25,6 +24,7 @@ export * from './schema/employees';
 export * from './schema/pages';
 export * from './schema/categories';
 export * from './schema/tableGridsLayout';
+export * from './schema/menus';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -34,7 +34,6 @@ export * from './relations/menuPhotos.relation';
 export const schema = {
   users,
   orders,
-  menus,
   shops,
   customers,
   tables,
@@ -45,4 +44,5 @@ export const schema = {
   pages,
   categories,
   tableGridLayout,
+  menus,
 };

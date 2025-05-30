@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -33,11 +32,17 @@ export class CategoriesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getById(@Query('name') name: string) {
-    if (!name) {
-      throw new BadRequestException('name query parameter is required');
+  getByName(@Query('name') name: string) {
+    if (name) {
+      return this.categories.getByName(name);
+    } else {
+      return this.categories.getAll();
     }
-    return this.categories.getByName(name);
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  getById(@Param() id: string) {
+    return this.categories.getById(id);
   }
 
   @UseGuards(AuthGuard('jwt'))

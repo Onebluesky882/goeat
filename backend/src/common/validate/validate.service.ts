@@ -53,12 +53,6 @@ export class ValidateService {
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
-  async validateShopId(shopId: string) {
-    if (!shopId) {
-      throw new BadRequestException('shopId is required');
-    }
-  }
-
   async validateShop(
     userId: string,
     shopId: string,

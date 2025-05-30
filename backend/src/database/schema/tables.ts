@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 import { users } from './users';
 import { tableGridLayout } from './tableGridsLayout';
@@ -9,6 +9,7 @@ export const tables = pgTable('tables', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   name: text('name'),
+  number: numeric('number'),
   layoutId: uuid('layout_id').references(() => tableGridLayout.id, {
     onDelete: 'cascade',
   }),

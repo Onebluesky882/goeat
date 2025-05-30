@@ -16,14 +16,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from 'src/types/auth';
 import { RolesService } from './roles.service';
 import { Roles } from './roles.dto';
-import { ShopAccessService } from '../shop-access/shop-access.service';
 
 @Controller('roles')
 export class RolesController {
-  constructor(
-    private readonly rolesService: RolesService,
-    private readonly shopAccess: ShopAccessService,
-  ) {}
+  constructor(private readonly rolesService: RolesService) {}
 
   @UseGuards(AuthGuard('jwt'))
   //create
@@ -33,7 +29,6 @@ export class RolesController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.create(body, userId, shopId);
   }
@@ -41,7 +36,6 @@ export class RolesController {
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
-    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.getAll(userId, shopId);
   }
@@ -53,7 +47,6 @@ export class RolesController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.getById(id, userId, shopId);
   }
@@ -67,7 +60,6 @@ export class RolesController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.update(id, body, userId, shopId);
   }
@@ -80,7 +72,6 @@ export class RolesController {
     @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     const userId = req.user.id;
     return this.rolesService.delete(id, userId, shopId);
   }

@@ -14,17 +14,13 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { TableGridLayoutService } from './table-grid-layout.service';
 import { InsertTableGridLayout } from './table-grid-layout.dto';
-import { ValidateService } from 'src/common/validate/validate.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('table-grid-layout')
 export class TableGridLayoutController {
-  constructor(
-    private readonly tableGridLayout: TableGridLayoutService,
-    private readonly shopAccess: ValidateService,
-  ) {}
+  constructor(private readonly tableGridLayout: TableGridLayoutService) {}
 
   @UseGuards(ShopAccessGuard)
   @Post()
@@ -33,7 +29,6 @@ export class TableGridLayoutController {
     @Body() body: InsertTableGridLayout,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     return this.tableGridLayout.create(body, shopId);
   }
   //getAll
@@ -41,7 +36,6 @@ export class TableGridLayoutController {
   @Get()
   @Roles('manager', 'owner')
   async getAll(@Query('shopId') shopId: string) {
-    await this.shopAccess.validateShopId(shopId);
     return this.tableGridLayout.getAll(shopId);
   }
   // get by id
@@ -49,7 +43,6 @@ export class TableGridLayoutController {
   @Get(':id')
   @Roles('manager', 'owner')
   async getById(@Param('id') id: string, @Query('shopId') shopId: string) {
-    await this.shopAccess.validateShopId(shopId);
     return this.tableGridLayout.getById(id, shopId);
   }
 
@@ -62,7 +55,6 @@ export class TableGridLayoutController {
     @Body() body: InsertTableGridLayout,
     @Query('shopId') shopId: string,
   ) {
-    await this.shopAccess.validateShopId(shopId);
     return this.tableGridLayout.update(id, body, shopId);
   }
 
@@ -71,7 +63,6 @@ export class TableGridLayoutController {
   @Delete(':id')
   @Roles('manager', 'owner')
   async delete(@Param('id') id: string, @Query('shopId') shopId: string) {
-    await this.shopAccess.validateShopId(shopId);
     return this.tableGridLayout.delete(id, shopId);
   }
 }

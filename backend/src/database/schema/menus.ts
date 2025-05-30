@@ -17,9 +17,7 @@ export const menus = pgTable('menus', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),
-  shopId: uuid('shop_id')
-    .notNull()
-    .references(() => shops.id, { onDelete: 'cascade' }), // FK to shops.id
+  // FK to shops.id
   createdBy: uuid('created_by').references(() => users.id),
   name: text('name').notNull(),
   description: text('description'),
@@ -29,4 +27,7 @@ export const menus = pgTable('menus', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   pageId: uuid('page_id').references(() => pages.id),
   imageId: uuid('image_id').references(() => images.id),
+  shopId: uuid('shop_id')
+    .notNull()
+    .references(() => shops.id, { onDelete: 'cascade' }),
 });

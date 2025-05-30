@@ -4,60 +4,67 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { MenusService } from './menus.service';
 import { AuthGuard } from '@nestjs/passport';
-import { MenuInsertDto } from './menus.dto';
 import { AuthRequest } from '../types/auth';
-import { InsertMenu, UpdateMenuDto } from './menu.dto';
-import { Put } from '@nestjs/common';
-
+import { MenuDto } from './menus.dto';
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+@UseGuards(AuthGuard('jwt'))
 @Controller('menus')
 export class MenusController {
   constructor(private readonly menusService: MenusService) {}
 
-  @UseGuards(AuthGuard('jwt'))
   //create
+  @UseGuards(ShopAccessGuard)
   @Post()
-  create(@Body() body: InsertTable, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.create(body, userId);
+  @Roles('manager', 'owner')
+  create(
+    @Body() body: MenuDto,
+    @Query('shopId') shopId: string,
+    @Req() req: AuthRequest,
+  ) {
+    return this.menusService.create(body, shopId, req.user.id);
   }
   //getAll
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get()
+  @Roles('manager', 'owner', 'customer', 'guest', 'staff')
   getAll(@Req() req: AuthRequest) {
     const userId = req.user.id;
-    return this.ordersService.getAll(userId);
+    return this.menusService.getAll(userId);
   }
   // get by id
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.getById(id, userId);
+  @Roles('manager', 'owner', 'customer', 'guest', 'staff')
+  getById(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.menusService.getById(id, shopId);
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Patch(':id')
+  @Roles('manager', 'owner')
   update(
     @Param('id') id: string,
-    @Body() body: UpdateTable,
-    @Req() req: AuthRequest,
+    @Body() body: MenuDto,
+    @Query('shopId') shopId: string,
   ) {
-    const userId = req.user.id;
-    return this.ordersService.update(id, body, userId);
+    return this.menusService.update(id, body, shopId);
   }
 
   // delete
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Delete(':id')
-  delete(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.delete(id, userId);
+  @Roles('manager', 'owner')
+  delete(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.menusService.delete(id, shopId);
   }
 }
