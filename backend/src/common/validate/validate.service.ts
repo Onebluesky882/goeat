@@ -58,17 +58,6 @@ export class ValidateService {
       throw new BadRequestException('shopId is required');
     }
   }
-  async validateMenu(userId: string, menuId: string) {
-    const [menuRow] = await this.db
-      .select({ shopId: menus.shopId })
-      .from(menus)
-      .where(eq(menus.id, menuId));
-
-    if (!menuRow) {
-      throw new HttpException('menu not found', HttpStatus.NOT_FOUND);
-    }
-    await this.validateShop(userId, menuRow.shopId);
-  }
 
   async validateShop(
     userId: string,

@@ -4,13 +4,14 @@ import {
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { images, menus } from 'src/database';
+import { images } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { eq, and, or } from 'drizzle-orm';
-import { InsertImage, UpdateImage } from './images.dto';
-import { ValidateService } from 'src/validate/validate.service';
+import { eq, and } from 'drizzle-orm';
+import { ValidateService } from 'src/common/validate/validate.service';
+import { ImageDto } from './images.dto';
 
 @Injectable()
 export class ImagesService {
@@ -21,19 +22,9 @@ export class ImagesService {
     private readonly access: ValidateService,
   ) {}
 
-  async create(dto: InsertImage, userId: string) {
-    if (dto.shopId) {
-      await this.access.validateShop(userId, dto.shopId);
-    } else if (dto.menuId) {
-      await this.access.validateMenu(userId, dto.menuId);
-    } else {
-      if (dto.userId != userId) {
-        throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-      }
-    }
-
+  async create(dto: ImageDto, userId: string) {
     try {
-      const [inserted] = await this.db
+      const inserted = await this.db
         .insert(images)
         .values({ ...dto, userId })
         .returning();
@@ -63,29 +54,12 @@ export class ImagesService {
 
   async getAll(userId: string, shopId: string, menuId: string) {
     try {
-      await this.access.validateShop(userId, shopId);
-
-      if (menuId) {
-        await this.access.validateMenu(userId, menuId);
-      }
-      const predicated = [eq(images.shopId, shopId), eq(images.userId, userId)];
-
-      if (menuId) {
-        predicated.push(eq(images.menuId, menuId));
-      }
+      const predicates = [eq(images.shopId, shopId), eq(images.userId, userId)];
+      if (menuId) predicates.push(eq(images.menuId, menuId));
       const result = await this.db
-        .select({
-          type: images.type,
-          imageName: images.imageName,
-          imageUrl: images.imageUrl,
-          createdAt: images.createdAt,
-          shopId: images.shopId,
-          menuId: images.menuId,
-          userId: images.userId,
-        })
+        .select()
         .from(images)
-        .where(or(...predicated));
-
+        .where(and(...predicates));
       return {
         success: true,
         message: 'Fetched all image successfully',
@@ -103,24 +77,9 @@ export class ImagesService {
     }
   }
 
-  async getById(id: string, userId: string) {
-    const [img] = await this.db
-      .select({
-        type: images.type,
-        imageName: images.imageName,
-        imageUrl: images.imageUrl,
-        createdAt: images.createdAt,
-        shopId: images.shopId,
-        menuId: images.menuId,
-        userId: images.userId,
-      })
-      .from(images)
-      .where(eq(images.id, id));
-    if (!img) {
-      throw new HttpException('image not found', HttpStatus.NOT_FOUND);
-    }
-
-    await this.access.validateImage(id, userId);
+  async getById(id: string) {
+    const [img] = await this.db.select().from(images).where(eq(images.id, id));
+    if (!img) throw new NotFoundException();
     return {
       data: img[0],
       success: true,
@@ -138,9 +97,8 @@ export class ImagesService {
     );
   }
 
-  async update(id, dto: UpdateImage, userId: string) {
+  async update(id, dto: ImageDto) {
     try {
-      await this.access.validateImage(id, userId);
       const [updated] = await this.db
         .update(images)
         .set(dto)
@@ -163,11 +121,9 @@ export class ImagesService {
     }
   }
 
-  async delete(id: string, userId: string) {
-    await this.access.validateImage(id, userId);
+  async delete(id: string) {
     try {
       await this.db.delete(images).where(eq(images.id, id)).returning();
-
       return {
         success: true,
         message: 'image deleted successfully',

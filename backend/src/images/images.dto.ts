@@ -4,7 +4,13 @@ import { images } from '../database';
 export type InsertImage = InferInsertModel<typeof images>;
 export type SelectImage = InferSelectModel<typeof images>;
 
-export type UpdateImage = Pick<
+export type ImageDto = Pick<
   InsertImage,
-  'imageName' | 'imageUrl' | 'type' | 'menuId'
+  | 'userId'
+  | 'imageName'
+  | 'imageUrl'
+  | 'type'
+  | 'menuId'
+  | 'imageUrl'
+  | 'shopId'
 >;

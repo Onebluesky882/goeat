@@ -28,8 +28,8 @@ import { RbacModule } from './rbac/rbac.module';
 import { PaginationService } from '../utils/pagination/pagination.service';
 import { PaginationModule } from '../utils/pagination/pagination.module';
 import { EmployersService } from './employers/employers.service';
-import { ValidateService } from './validate/validate.service';
-import { ValidateModule } from './validate/validate.module';
+import { ValidateService } from './common/validate/validate.service';
+import { ValidateModule } from './common/validate/validate.module';
 
 @Module({
   imports: [

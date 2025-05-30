@@ -9,9 +9,9 @@ import {
 } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 import { users } from './users';
-import { images } from './images';
 import { pages } from './pages';
 import { categories } from './categories';
+import { images } from './images';
 
 export const menus = pgTable('menus', {
   id: uuid('id')
@@ -28,4 +28,5 @@ export const menus = pgTable('menus', {
   available: boolean('available').default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   pageId: uuid('page_id').references(() => pages.id),
+  imageId: uuid('image_id').references(() => images.id),
 });
