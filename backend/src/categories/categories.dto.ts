@@ -3,11 +3,6 @@ import { categories } from '../database';
 
 export type InsertCategories = InferInsertModel<typeof categories>;
 
-export type CreateCategoryDto = {
-  name: string;
-  shopId: string;
-};
-
-export type UpdateCategoryDto = {
+export type CategoryDto = {
   name: string;
 };

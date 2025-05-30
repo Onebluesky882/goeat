@@ -9,7 +9,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { categories, schema, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { CreateCategoryDto } from './categories.dto';
+import { CategoryDto } from './categories.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -19,12 +19,9 @@ export class CategoriesService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async create(body: CreateCategoryDto, userId: string) {
+  async create(body: CategoryDto) {
     try {
-      const data = await this.db
-        .insert(categories)
-        .values({ ...body, userId })
-        .returning();
+      const data = await this.db.insert(categories).values(body).returning();
       return {
         success: true,
         message: 'Category created successfully',
@@ -41,16 +38,13 @@ export class CategoriesService {
       );
     }
   }
-  async allCategories(userId: string) {
+  async getAll() {
     try {
       const data = await this.db
         .select({
-          id: categories.id,
           name: categories.name,
-          shopId: categories.shopId,
         })
-        .from(categories)
-        .innerJoin(shops, eq(categories.shopId, shops.id));
+        .from(categories);
 
       return { success: true, message: 'get all success', data: data };
     } catch (error) {
@@ -61,15 +55,38 @@ export class CategoriesService {
       );
     }
   }
-
-  async getCategoryById(id: string, userId: string) {
+  async getById(id: string) {
     try {
       const data = await this.db
-        .select({
-          name: categories.name,
-        })
+        .select({ name: categories.name })
         .from(categories)
-        .where(and(eq(categories.id, id), eq(categories.userId, userId)));
+        .where(eq(categories.id, id));
+
+      if (data.length === 0) {
+        throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+      }
+      return {
+        success: true,
+        message: 'get by id success',
+        data: data[0],
+      };
+    } catch (error) {
+      this.logger.error('Fetch failed', error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Failed to fetch category',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  async getByName(name: string) {
+    try {
+      const data = await this.db
+        .select({ name: categories.name })
+        .from(categories)
+        .where(eq(categories.name, name));
 
       if (data.length === 0) {
         throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
@@ -91,13 +108,12 @@ export class CategoriesService {
     }
   }
 
-  async update(body: { id: string; name: string }, userId: string) {
-    const { id, name } = body;
+  async update(id: string, body: CategoryDto) {
     try {
       const updated = await this.db
         .update(categories)
-        .set({ name })
-        .where(and(eq(categories.id, id), eq(categories.userId, userId)))
+        .set(body)
+        .where(and(eq(categories.id, id)))
         .returning();
 
       if (updated.length === 0) {
@@ -120,11 +136,11 @@ export class CategoriesService {
     }
   }
 
-  async delete(body: { id: string }, userId: string) {
+  async delete(id: string) {
     try {
       const deleted = await this.db
         .delete(categories)
-        .where(and(eq(categories.id, body.id), eq(categories.userId, userId)))
+        .where(eq(categories.id, id))
         .returning();
 
       if (deleted.length === 0) {

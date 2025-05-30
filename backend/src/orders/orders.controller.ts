@@ -40,13 +40,13 @@ export class OrdersController {
   //getAll
   @UseGuards(ShopAccessGuard)
   @Get()
-  @Roles('manager', 'staff', 'owner')
+  @Roles('customer', 'manager', 'owner')
   getAll(@Query('shopId') shopId: string) {
     return this.ordersService.getAll(shopId);
   }
   // get by id
   @UseGuards(ShopAccessGuard)
-  @Roles('manager', 'staff', 'owner', 'customer')
+  @Roles()
   @Get(':id')
   getById(@Param('id') id: string, @Query('shopId') shopId: string) {
     return this.ordersService.getById(id, shopId);

@@ -51,11 +51,7 @@ export class ImagesController {
   // update
   @UseGuards(ImageAccessGuard)
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() body: ImageDto,
-    @Req() req: AuthRequest,
-  ) {
+  update(@Param('id') id: string, @Body() body: ImageDto) {
     return this.imagesService.update(id, body);
   }
 

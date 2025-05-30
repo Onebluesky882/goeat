@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
-import { PagesService } from './pages.service';
 import { PagesController } from './pages.controller';
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
+import { PagesService } from './pages.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [PagesService],
+  providers: [ShopAccessGuard, PagesService],
   controllers: [PagesController],
 })
 export class PagesModule {}

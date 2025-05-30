@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,13 +7,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { AuthRequest } from 'src/types/auth';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateCategoryDto, UpdateCategoryDto } from './categories.dto';
+import { CategoryDto } from './categories.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -20,40 +21,34 @@ export class CategoriesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() body: CreateCategoryDto, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.create(body, userId);
+  create(@Body() body: CategoryDto) {
+    return this.categories.create(body);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getAll(@Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.allCategories(userId);
+  getAll() {
+    return this.categories.getAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.getCategoryById(id, userId);
+  @Get()
+  getById(@Query('name') name: string) {
+    if (!name) {
+      throw new BadRequestException('name query parameter is required');
+    }
+    return this.categories.getByName(name);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() body: UpdateCategoryDto,
-    @Req() req: AuthRequest,
-  ) {
-    const userId = req.user.id;
-    return this.categories.update({ id, name: body.name }, userId);
+  update(@Param('id') id: string, @Body() body: CategoryDto) {
+    return this.categories.update(id, body);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  delete(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.categories.delete({ id }, userId);
+  delete(@Param('id') id: string) {
+    return this.categories.delete(id);
   }
 }

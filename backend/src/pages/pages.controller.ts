@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,50 +14,55 @@ import {
 import { AuthRequest } from 'src/types/auth';
 import { AuthGuard } from '@nestjs/passport';
 import { PagesService } from './pages.service';
-import { CreatePageDto, UpdatePageDto } from './pages.dto';
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { PageDto } from './pages.dto';
+import { shops } from 'src/database';
+
+@UseGuards(AuthGuard('jwt'))
 @Controller('pages')
 export class PagesController {
   constructor(private readonly pagesService: PagesService) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  //create
+  // create
+  @UseGuards(ShopAccessGuard)
   @Post()
-  create(@Body() body: CreatePageDto, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.pagesService.create(body, userId);
+  @Roles('manager', 'owner')
+  create(@Body() body: PageDto, @Query('shopId') shopId: string) {
+    return this.pagesService.create(body, shopId);
   }
   //getAll
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get()
-  getAll(@Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.pagesService.allPages(userId);
+  @Roles('manager', 'owner', 'staff', 'customer', 'guest')
+  getAll(@Query('shopId') shopId: string) {
+    return this.pagesService.getAll(shopId);
   }
   // get by id
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.pagesService.getPageById(id, userId);
+  @Roles('manager', 'owner', 'staff', 'customer')
+  getById(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.pagesService.getById(id, shopId);
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Patch(':id')
+  @Roles('manager', 'owner')
   update(
     @Param('id') id: string,
-    @Body() body: UpdatePageDto,
-    @Req() req: AuthRequest,
+    @Body() body: PageDto,
+    @Query('shopId') shopId: string,
   ) {
-    const userId = req.user.id;
-    return this.pagesService.update({ id, name: body.name }, userId);
+    return this.pagesService.update(id, body, shopId);
   }
 
   // delete
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Delete(':id')
-  delete(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.pagesService.delete(id, userId);
+  @Roles('manager', 'owner')
+  delete(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.pagesService.delete(id, shopId);
   }
 }

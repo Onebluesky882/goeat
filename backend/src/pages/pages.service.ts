@@ -9,7 +9,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { pages, schema, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { CreatePageDto } from './pages.dto';
+import { PageDto } from './pages.dto';
 
 @Injectable()
 export class PagesService {
@@ -19,11 +19,11 @@ export class PagesService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async create(body: CreatePageDto, userId: string) {
+  async create(body: PageDto, shopId: string) {
     try {
       const data = await this.db
         .insert(pages)
-        .values({ ...body, userId })
+        .values({ ...body, shopId })
         .returning();
       return {
         success: true,
@@ -41,17 +41,15 @@ export class PagesService {
       );
     }
   }
-  async allPages(userId: string) {
+  async getAll(shopId: string) {
     try {
       const data = await this.db
         .select({
-          id: pages.id,
           name: pages.name,
           shopId: pages.shopId,
         })
         .from(pages)
-        .innerJoin(shops, eq(pages.shopId, shops.id))
-        .where(eq(pages.userId, userId));
+        .where(eq(pages.shopId, shopId));
       return { success: true, message: 'get all success', data: data };
     } catch (error) {
       this.logger.error('allPages failed ', error);
@@ -62,16 +60,15 @@ export class PagesService {
     }
   }
 
-  async getPageById(id: string, userId: string) {
+  async getById(id: string, shopId: string) {
     try {
       const data = await this.db
         .select({
-          id: pages.id,
           name: pages.name,
           shopId: pages.shopId,
         })
         .from(pages)
-        .where(and(eq(pages.id, id), eq(pages.userId, userId)));
+        .where(and(eq(pages.id, id), eq(pages.shopId, shopId)));
 
       if (data.length === 0) {
         throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
@@ -93,13 +90,12 @@ export class PagesService {
     }
   }
 
-  async update(body: { id: string; name: string }, userId: string) {
-    const { id, name } = body;
+  async update(id: string, body: PageDto, shopId: string) {
     try {
       const updated = await this.db
         .update(pages)
-        .set({ name })
-        .where(and(eq(pages.id, id), eq(pages.userId, userId)))
+        .set(body)
+        .where(and(eq(pages.id, id), eq(pages.shopId, shopId)))
         .returning();
 
       if (updated.length === 0) {
@@ -123,16 +119,16 @@ export class PagesService {
     }
   }
 
-  async delete(id: string, userId: string) {
+  async delete(id: string, shopId: string) {
     try {
       const deleted = await this.db
         .delete(pages)
-        .where(and(eq(pages.id, id), eq(pages.userId, userId)))
+        .where(and(eq(pages.id, id), eq(pages.shopId, shopId)))
         .returning();
 
       if (deleted.length === 0) {
         this.logger.warn(
-          `Page with ID "${id}" not found or unauthorized for user "${userId}"`,
+          `Page with ID "${id}" not found or unauthorized for user "${shopId}"`,
         );
         throw new HttpException(
           {

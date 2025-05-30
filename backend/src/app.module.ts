@@ -30,6 +30,7 @@ import { PaginationModule } from '../utils/pagination/pagination.module';
 import { EmployersService } from './employers/employers.service';
 import { ValidateService } from './common/validate/validate.service';
 import { ValidateModule } from './common/validate/validate.module';
+import { MenusModule } from './menus/menus.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { ValidateModule } from './common/validate/validate.module';
     RbacModule,
     PaginationModule,
     ValidateModule,
+    MenusModule,
   ],
   controllers: [
     AppController,

@@ -4,6 +4,6 @@ import { ValidateService } from 'src/common/validate/validate.service';
 import { ImagesService } from './images.service';
 
 @Module({
-  providers: [ImageAccessGuard],
+  providers: [ImageAccessGuard, ImagesService],
 })
 export class ImagesModule {}
