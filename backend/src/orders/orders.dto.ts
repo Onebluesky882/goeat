@@ -13,6 +13,7 @@ export type CreateOrder = Pick<
   InsertOrders,
   | 'shopId'
   | 'customerId'
+  | 'createById'
   | 'createdAt'
   | 'menuId'
   | 'orderTableId'

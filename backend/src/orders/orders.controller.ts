@@ -16,69 +16,59 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from 'src/types/auth';
 import { OrdersService } from './orders.service';
 import { CreateOrder, UpdateOrder } from './orders.dto';
-import { ShopAccessService } from 'src/shop-access/shop-access.service';
-
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+@UseGuards(AuthGuard('jwt'))
 @Controller('orders')
 export class OrdersController {
-  constructor(
-    private readonly ordersService: OrdersService,
-    private readonly shopAccess: ShopAccessService,
-  ) {}
+  constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  //create
+  @UseGuards(ShopAccessGuard)
   @Post()
+  @Roles('manager', 'staff', 'owner', 'customer')
   create(@Body() body: CreateOrder, @Req() req: AuthRequest) {
     const userId = req.user.id;
-    const { shopId } = body;
-    this.shopAccess.validateShopId(shopId as string);
-    return this.ordersService.create(body, userId, shopId as string);
+    const { shopId, customerId } = body;
+
+    return this.ordersService.create(
+      body,
+      userId,
+      shopId,
+      customerId as string,
+    );
   }
   //getAll
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get()
-  getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
-    this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.ordersService.getAll(shopId, userId);
+  @Roles('manager', 'staff', 'owner')
+  getAll(@Query('shopId') shopId: string) {
+    return this.ordersService.getAll(shopId);
   }
   // get by id
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
+  @Roles('manager', 'staff', 'owner', 'customer')
   @Get(':id')
-  getById(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.ordersService.getById(id, userId, shopId);
+  getById(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.ordersService.getById(id, shopId);
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Patch(':id')
+  @Roles('manager', 'staff', 'owner')
   update(
     @Param('id') id: string,
     @Body() body: UpdateOrder,
-    @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
-    this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.ordersService.update(id, body, userId, shopId);
+    return this.ordersService.update(id, body, shopId);
   }
 
   // delete
-  @UseGuards(AuthGuard('jwt'))
+
   @Delete(':id')
-  delete(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.ordersService.delete(id, userId, shopId);
+  @Roles('manager', 'owner')
+  delete(@Param('id') id: string, @Query('shopId') shopId: string) {
+    return this.ordersService.delete(id, shopId);
   }
 }

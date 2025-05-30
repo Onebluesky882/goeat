@@ -10,8 +10,7 @@ import { tableGridLayout } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
 import { InsertTableGridLayout } from './table-grid-layout.dto';
-import { ShopAccessService } from '../shop-access/shop-access.service';
-import { PaginationService } from 'utils/pagination/pagination.service';
+import { ValidateService } from 'src/common/validate/validate.service';
 
 @Injectable()
 export class TableGridLayoutService {
@@ -19,8 +18,7 @@ export class TableGridLayoutService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly shopAccess: ShopAccessService,
-    private readonly pagination: PaginationService,
+    private readonly shopAccess: ValidateService,
   ) {}
 
   async create(

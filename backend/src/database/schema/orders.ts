@@ -4,6 +4,7 @@ import { orderTable } from './orderTable';
 import { shops } from './shops';
 import { menus } from './menus';
 import { customers } from './customers';
+import { users } from './users';
 
 export const orders = pgTable('orders', {
   id: uuid('id')
@@ -21,10 +22,10 @@ export const orders = pgTable('orders', {
   }),
 
   status: text('status').default('pending'),
-  customerId: uuid('customer_id')
+  customerId: uuid('customer_id').references(() => customers.id),
+  createById: uuid('create_by_id')
     .notNull()
-    .references(() => customers.id),
-
+    .references(() => users.id),
   quantity: numeric('quantity', { precision: 10, scale: 2 }),
 
   priceEach: numeric('price_each', { precision: 10, scale: 2 }),

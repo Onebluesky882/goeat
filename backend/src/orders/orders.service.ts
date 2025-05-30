@@ -6,11 +6,10 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { employees, roles, shops, orders } from 'src/database';
+import { shops, orders } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { InsertOrders, UpdateOrder } from './orders.dto';
-import { ShopAccessService } from 'src/shop-access/shop-access.service';
+import { CreateOrder, UpdateOrder } from './orders.dto';
 
 @Injectable()
 export class OrdersService {
@@ -18,19 +17,23 @@ export class OrdersService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly shopAccess: ShopAccessService,
   ) {}
 
-  async create(newOrder: InsertOrders, shopId: string, userId: string) {
+  async create(
+    newOrder: CreateOrder,
+    shopId: string,
+    userId: string,
+    customerId: string,
+  ) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, [
-        'manager',
-        'staff',
-        'owner',
-      ]);
       const inserted = await this.db
         .insert(orders)
-        .values({ ...newOrder, shopId: shopId })
+        .values({
+          ...newOrder,
+          shopId: shopId,
+          createById: userId,
+          customerId: customerId,
+        })
         .returning();
       return {
         success: true,
@@ -56,19 +59,14 @@ export class OrdersService {
     }
   }
 
-  async getAll(shopId: string, userId: string) {
+  async getAll(shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, [
-        'manager',
-        'staff',
-        'owner',
-      ]);
       const result = await this.db
         .select({
           status: orders.status,
-          name: orders.shopId,
           orderTableId: orders.orderTableId,
           createdAt: orders.createdAt,
+          createById: orders.createById,
           updatedAt: orders.updatedAt,
           shopId: orders.shopId,
           menuId: orders.menuId,
@@ -96,19 +94,14 @@ export class OrdersService {
     }
   }
 
-  async getById(id: string, shopId: string, userId: string) {
+  async getById(id: string, shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, [
-        'manager',
-        'staff',
-        'owner',
-      ]);
-      const order = await this.db
+      const found = await this.db
         .select({
           status: orders.status,
-          name: orders.shopId,
           orderTableId: orders.orderTableId,
           createdAt: orders.createdAt,
+          createById: orders.createById,
           updatedAt: orders.updatedAt,
           shopId: orders.shopId,
           menuId: orders.menuId,
@@ -118,21 +111,17 @@ export class OrdersService {
         })
         .from(orders)
         .innerJoin(shops, eq(orders.shopId, shops.id))
-        .where(and(eq(orders.id, id), eq(shops.ownerId, shopId)));
+        .where(and(eq(orders.id, id), eq(shops.id, shopId)));
 
-      if (order.length === 0) {
+      if (found.length === 0) {
         throw new HttpException(
           'You do not have permission to access this order.',
           HttpStatus.NOT_FOUND,
         );
       }
 
-      const result = await this.db
-        .select({ id: orders.id })
-        .from(orders)
-        .where(eq(orders.id, id));
       return {
-        data: result[0],
+        data: found[0],
         success: true,
         message: 'Fetched order by ID successfully',
       };
@@ -148,30 +137,12 @@ export class OrdersService {
     }
   }
 
-  async update(id: string, body: UpdateOrder, shopId: string, userId: string) {
+  async update(id: string, body: UpdateOrder, shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, [
-        'manager',
-        'staff',
-        'owner',
-      ]);
-      const order = await this.db
-        .select({ id: orders.id })
-        .from(orders)
-        .innerJoin(shops, eq(orders.shopId, shops.id))
-        .where(and(eq(orders.id, id), eq(shops.ownerId, shopId)));
-      if (order.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this order.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      const { menuId, quantity, updatedAt } = body;
       const updated = await this.db
         .update(orders)
-        .set({ menuId, quantity, updatedAt })
-        .where(eq(orders.id, id))
+        .set(body)
+        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)))
         .returning();
       return {
         data: updated,
@@ -189,14 +160,11 @@ export class OrdersService {
       );
     }
   }
-  async delete(id: string, shopId: string, userId: string) {
+  async delete(id: string, shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, [
-        'manager',
-        'staff',
-        'owner',
-      ]);
-      await this.db.delete(orders).where(eq(orders.id, id));
+      await this.db
+        .delete(orders)
+        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)));
       return {
         success: true,
         message: 'order deleted successfully',

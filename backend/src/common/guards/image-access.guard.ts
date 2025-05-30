@@ -14,11 +14,12 @@ export class ImageAccessGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const user = req.user;
-    if (!user) {
-      throw new UnauthorizedException();
+    if (!user?.id) {
+      throw new UnauthorizedException(
+        'User is not authenticated or missing ID.',
+      );
     }
 
-    // 1) Figure out the imageId parameter (from route or body)
     const imageId = req.params['id'] ?? req.body?.id;
     if (!imageId) {
       throw new NotFoundException('Image ID not provided');
