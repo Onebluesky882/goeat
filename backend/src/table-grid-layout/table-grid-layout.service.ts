@@ -9,7 +9,10 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { tableGridLayout } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { InsertTableGridLayout } from './table-grid-layout.dto';
+import {
+  InsertTableGridLayout,
+  UpdateTableGridLayout,
+} from './table-grid-layout.dto';
 import { ValidateService } from 'src/common/validate/validate.service';
 
 @Injectable()
@@ -21,18 +24,8 @@ export class TableGridLayoutService {
     private readonly shopAccess: ValidateService,
   ) {}
 
-  async create(
-    newTableLayout: InsertTableGridLayout,
-    userId: string,
-    shopId: string,
-  ) {
+  async create(newTableLayout: InsertTableGridLayout, shopId: string) {
     try {
-      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
-
-      const queryBuilder = this.db
-        .from(tableGridLayout)
-        .where(eq(tableGridLayout.shopId, shopId));
-
       const inserted = await this.db
         .insert(tableGridLayout)
         .values({ ...newTableLayout, shopId: shopId })
@@ -61,11 +54,11 @@ export class TableGridLayoutService {
     }
   }
 
-  async getAll(userId: string, shopId: string) {
+  async getAll(shopId: string) {
     try {
-      await this.shopAccess.validateShop(userId, shopId);
       const result = await this.db
         .select({
+          shopId: tableGridLayout.shopId,
           columns: tableGridLayout.columns,
           rows: tableGridLayout.rows,
         })
@@ -89,10 +82,8 @@ export class TableGridLayoutService {
     }
   }
 
-  async getById(id: string, userId: string, shopId: string) {
+  async getById(id: string, shopId: string) {
     try {
-      await this.shopAccess.validateShop(userId, shopId);
-
       const result = await this.db
         .select({
           columns: tableGridLayout.columns,
@@ -119,19 +110,14 @@ export class TableGridLayoutService {
     }
   }
 
-  async update(
-    id: string,
-    body: InsertTableGridLayout,
-    userId: string,
-    shopId: string,
-  ) {
+  async update(id: string, body: UpdateTableGridLayout, shopId: string) {
     try {
-      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
-
       const updated = await this.db
         .update(tableGridLayout)
-        .set({ columns: body.columns, rows: body.rows })
-        .where(eq(tableGridLayout.id, id))
+        .set(body)
+        .where(
+          and(eq(tableGridLayout.id, id), eq(tableGridLayout.shopId, shopId)),
+        )
         .returning();
       return {
         data: updated,
@@ -149,10 +135,14 @@ export class TableGridLayoutService {
       );
     }
   }
-  async delete(id: string, userId: string, shopId: string) {
+  async delete(id: string, shopId: string) {
     try {
-      await this.shopAccess.validateShop(userId, shopId, ['owner', 'manager']);
-      await this.db.delete(tableGridLayout).where(eq(tableGridLayout.id, id));
+      await this.db
+        .delete(tableGridLayout)
+        .where(
+          and(eq(tableGridLayout.id, id), eq(tableGridLayout.shopId, shopId)),
+        )
+        .returning();
       return {
         success: true,
         message: 'Table GridLayout deleted successfully',

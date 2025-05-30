@@ -1,6 +1,5 @@
 import {
   Controller,
-  Req,
   UseGuards,
   Post,
   Body,
@@ -13,75 +12,66 @@ import {
 
 import { AuthGuard } from '@nestjs/passport';
 
-import { AuthRequest } from 'src/types/auth';
 import { TableGridLayoutService } from './table-grid-layout.service';
 import { InsertTableGridLayout } from './table-grid-layout.dto';
-import { ShopAccessService } from '../shop-access/shop-access.service';
+import { ValidateService } from 'src/common/validate/validate.service';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('table-grid-layout')
 export class TableGridLayoutController {
   constructor(
     private readonly tableGridLayout: TableGridLayoutService,
-    private readonly shopAccess: ShopAccessService,
+    private readonly shopAccess: ValidateService,
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  //create
+  @UseGuards(ShopAccessGuard)
   @Post()
+  @Roles('manager', 'owner')
   async create(
     @Body() body: InsertTableGridLayout,
-    @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
     await this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.tableGridLayout.create(body, userId, shopId);
+    return this.tableGridLayout.create(body, shopId);
   }
   //getAll
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get()
-  async getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
+  @Roles('manager', 'owner')
+  async getAll(@Query('shopId') shopId: string) {
     await this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.tableGridLayout.getAll(userId, shopId);
+    return this.tableGridLayout.getAll(shopId);
   }
   // get by id
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Get(':id')
-  async getById(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
+  @Roles('manager', 'owner')
+  async getById(@Param('id') id: string, @Query('shopId') shopId: string) {
     await this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.tableGridLayout.getById(id, userId, shopId);
+    return this.tableGridLayout.getById(id, shopId);
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Patch(':id')
+  @Roles('manager', 'owner')
   async update(
     @Param('id') id: string,
     @Body() body: InsertTableGridLayout,
-    @Req() req: AuthRequest,
     @Query('shopId') shopId: string,
   ) {
     await this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.tableGridLayout.update(id, body, userId, shopId);
+    return this.tableGridLayout.update(id, body, shopId);
   }
 
   // delete
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Delete(':id')
-  async delete(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
+  @Roles('manager', 'owner')
+  async delete(@Param('id') id: string, @Query('shopId') shopId: string) {
     await this.shopAccess.validateShopId(shopId);
-    const userId = req.user.id;
-    return this.tableGridLayout.delete(id, userId, shopId);
+    return this.tableGridLayout.delete(id, shopId);
   }
 }

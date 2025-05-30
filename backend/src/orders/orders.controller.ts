@@ -65,7 +65,7 @@ export class OrdersController {
   }
 
   // delete
-
+  @UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string, @Query('shopId') shopId: string) {

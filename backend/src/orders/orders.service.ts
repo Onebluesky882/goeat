@@ -164,7 +164,8 @@ export class OrdersService {
     try {
       await this.db
         .delete(orders)
-        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)));
+        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)))
+        .returning();
       return {
         success: true,
         message: 'order deleted successfully',
