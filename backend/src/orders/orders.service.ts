@@ -31,7 +31,7 @@ export class OrdersService {
         .values({
           ...newOrder,
           shopId: shopId,
-          createById: userId,
+          createdById: userId,
           customerId: customerId,
         })
         .returning();
@@ -66,7 +66,7 @@ export class OrdersService {
           status: orders.status,
           orderTableId: orders.orderTableId,
           createdAt: orders.createdAt,
-          createById: orders.createById,
+          createdById: orders.createdById,
           updatedAt: orders.updatedAt,
           shopId: orders.shopId,
           menuId: orders.menuId,
@@ -101,7 +101,7 @@ export class OrdersService {
           status: orders.status,
           orderTableId: orders.orderTableId,
           createdAt: orders.createdAt,
-          createById: orders.createById,
+          createdById: orders.createdById,
           updatedAt: orders.updatedAt,
           shopId: orders.shopId,
           menuId: orders.menuId,

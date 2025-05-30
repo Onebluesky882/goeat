@@ -1,68 +1,66 @@
 import {
-  Body,
   Controller,
-  Get,
-  Param,
-  Post,
   Req,
   UseGuards,
+  Post,
+  Body,
+  Get,
+  Query,
+  Param,
+  Patch,
+  Delete,
 } from '@nestjs/common';
-import { ShopsService } from './shops.service';
-import { ShopInsert } from './shops.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
-interface AuthUser {
-  id: string;
-  email: string;
-  name: string;
+
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { AuthRequest } from 'src/types/auth';
+import { ShopDto } from './shops.dto';
+import { ShopsService } from './shops.service';
+
+@UseGuards(AuthGuard('jwt'))
+@Controller('tables')
+export class TablesController {
+  constructor() {}
 }
 
-interface AuthRequest extends Request {
-  user: AuthUser;
-}
 @Controller('shops')
 export class ShopsController {
-  constructor(private readonly shopsService: ShopsService) {}
+  constructor(private readonly ShopsService: ShopsService) {}
 
   @UseGuards(AuthGuard('jwt'))
-  //create
   @Post()
-  create(@Body() body: InsertTable, @Req() req: AuthRequest) {
+  @Roles('owner')
+  create(@Body() body: ShopDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
-    return this.ordersService.create(body, userId);
+
+    return this.ShopsService.create(body, userId);
   }
   //getAll
-  @UseGuards(AuthGuard('jwt'))
+
   @Get()
-  getAll(@Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.getAll(userId);
+  getAll() {
+    return this.ShopsService.getAll();
   }
   // get by id
-  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.getById(id, userId);
+  getById(@Param('id') id: string) {
+    return this.ShopsService.getById(id);
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() body: UpdateTable,
-    @Req() req: AuthRequest,
-  ) {
-    const userId = req.user.id;
-    return this.ordersService.update(id, body, userId);
+  @Roles('manager', 'owner')
+  update(@Param('id') id: string, @Body() body: ShopDto) {
+    return this.ShopsService.update(id, body);
   }
 
   // delete
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Delete(':id')
-  delete(@Param('id') id: string, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.ordersService.delete(id, userId);
+  @Roles('manager', 'owner')
+  delete(@Param('id') id: string) {
+    return this.ShopsService.delete(id);
   }
 }

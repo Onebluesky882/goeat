@@ -17,6 +17,8 @@ export const tables = pgTable('tables', {
   tableLink: text('table_link').notNull(),
   status: text('status').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
+  createdById: uuid('created_by_id').references(() => users.id),
 });
 
 //const url = 'https://yourdomain.com/orderId to qr code';

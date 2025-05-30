@@ -4,7 +4,14 @@ import { tables } from '../database';
 export type InsertTable = InferInsertModel<typeof tables>;
 export type ReadTables = InferSelectModel<typeof tables>;
 
-export type UpdateTable = Pick<
+export type TableDto = Pick<
   InsertTable,
-  'name' | 'gridPosition' | 'status' | 'tableLink'
+  | 'layoutId'
+  | 'name'
+  | 'number'
+  | 'position'
+  | 'status'
+  | 'tableLink'
+  | 'createdById'
+  | 'shopId'
 >;

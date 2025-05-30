@@ -7,10 +7,10 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { shops, tables } from 'src/database';
+import { tables } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { InsertTable, UpdateTable } from './table.dto';
 import { eq, and } from 'drizzle-orm';
+import { TableDto } from './table.dto';
 
 @Injectable()
 export class TablesService {
@@ -20,12 +20,13 @@ export class TablesService {
     private readonly db: NodePgDatabase,
   ) {}
 
-  async create(newTable: InsertTable, userId: string) {
+  async create(dto: TableDto, shopId: string, userId: string) {
     try {
-      const inserted = await this.db
+      const [inserted] = await this.db
         .insert(tables)
-        .values({ ...newTable, createBy: userId })
+        .values({ ...dto, shopId: shopId, createdById: userId })
         .returning();
+
       return {
         success: true,
         message: 'create table successfully',
@@ -50,18 +51,21 @@ export class TablesService {
     }
   }
 
-  async getAll(userId: string) {
+  async getAll(shopId: string) {
     try {
       const result = await this.db
         .select({
-          tableLink: tables.tableLink,
+          shopId: tables.shopId,
           status: tables.status,
+          createdById: tables.createdById,
+          layoutId: tables.layoutId,
           name: tables.name,
+          number: tables.number,
+          position: tables.position,
+          tableLink: tables.tableLink,
         })
         .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(eq(shops.ownerId, userId));
-
+        .where(eq(tables.shopId, shopId));
       return {
         success: true,
         message: 'Fetched all tables successfully',
@@ -79,25 +83,21 @@ export class TablesService {
     }
   }
 
-  async getById(id: string, userId: string) {
+  async getById(id: string, shopId: string) {
     try {
-      const shop = await this.db
-        .select({ shopId: tables.shopId })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-
-      if (shop.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
       const result = await this.db
-        .select({ id: tables.id })
+        .select({
+          shopId: tables.shopId,
+          status: tables.status,
+          createdById: tables.createdById,
+          layoutId: tables.layoutId,
+          name: tables.name,
+          number: tables.number,
+          position: tables.position,
+          tableLink: tables.tableLink,
+        })
         .from(tables)
-        .where(eq(tables.id, id));
+        .where(and(eq(tables.id, id), eq(tables.shopId, shopId)));
       return {
         data: result[0],
         success: true,
@@ -115,25 +115,12 @@ export class TablesService {
     }
   }
 
-  async update(id: string, body: UpdateTable, userId: string) {
+  async update(id: string, body: TableDto, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      const { status, tableLink, gridPosition, name } = body;
       const updated = await this.db
         .update(tables)
-        .set({ status, tableLink, gridPosition, name })
-        .where(eq(tables.id, id))
+        .set(body)
+        .where(and(eq(tables.id, id), eq(tables, shopId)))
         .returning();
       return {
         data: updated,
@@ -151,21 +138,11 @@ export class TablesService {
       );
     }
   }
-  async delete(id: string, userId: string) {
+  async delete(id: string, shopId: string) {
     try {
-      const table = await this.db
-        .select({ id: tables.id })
-        .from(tables)
-        .innerJoin(shops, eq(tables.shopId, shops.id))
-        .where(and(eq(tables.id, id), eq(shops.ownerId, userId)));
-      if (table.length === 0) {
-        throw new HttpException(
-          'You do not have permission to access this table.',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      await this.db.delete(tables).where(eq(tables.id, id));
+      await this.db
+        .delete(tables)
+        .where(and(eq(tables.id, id), eq(tables.shopId, shopId)));
       return {
         success: true,
         message: 'Table deleted successfully',

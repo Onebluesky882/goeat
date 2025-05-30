@@ -19,5 +19,5 @@ export const orderTable = pgTable('order_table', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   token: text('token').unique(),
-  createById: uuid('create_by_id').references(() => users.id),
+  createdById: uuid('create_by_id').references(() => users.id),
 });

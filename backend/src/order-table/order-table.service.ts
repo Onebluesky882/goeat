@@ -30,7 +30,7 @@ export class OrderTableService {
       const token = isSession ? nanoid(32) : undefined;
       const [inserted] = await this.db
         .insert(orderTable)
-        .values({ ...dto, token: token, shopId: shopId, createById: userId })
+        .values({ ...dto, token: token, shopId: shopId, createdById: userId })
         .returning();
 
       if (isSession) {
@@ -73,7 +73,7 @@ export class OrderTableService {
           status: orderTable.status,
           tableId: orderTable.tableId,
           updatedAt: orderTable.updatedAt,
-          createById: orderTable.createById,
+          createdById: orderTable.createdById,
         })
         .from(orderTable)
         .where(eq(orderTable.shopId, shopId));

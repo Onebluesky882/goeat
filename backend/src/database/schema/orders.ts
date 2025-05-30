@@ -23,7 +23,7 @@ export const orders = pgTable('orders', {
 
   status: text('status').default('pending'),
   customerId: uuid('customer_id').references(() => customers.id),
-  createById: uuid('create_by_id')
+  createdById: uuid('create_by_id')
     .notNull()
     .references(() => users.id),
   quantity: numeric('quantity', { precision: 10, scale: 2 }),

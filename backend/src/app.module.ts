@@ -21,16 +21,11 @@ import { RolesModule } from './roles/roles.module';
 import { EmployeesModule } from './employees/employees.module';
 import { TableGridLayoutService } from './table-grid-layout/table-grid-layout.service';
 import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
-import { ShopAccessService } from './shop-access/shop-access.service';
-import { ShopAccessModule } from './shop-access/shop-access.module';
-import { UserPermissionsModule } from './user-permissions/user-permissions.module';
-import { RbacModule } from './rbac/rbac.module';
-import { PaginationService } from '../utils/pagination/pagination.service';
-import { PaginationModule } from '../utils/pagination/pagination.module';
 import { EmployersService } from './employers/employers.service';
 import { ValidateService } from './common/validate/validate.service';
 import { ValidateModule } from './common/validate/validate.module';
 import { MenusModule } from './menus/menus.module';
+import { EmployersModule } from './employers/employers.module';
 
 @Module({
   imports: [
@@ -49,12 +44,9 @@ import { MenusModule } from './menus/menus.module';
     RolesModule,
     EmployeesModule,
     TableGridLayoutModule,
-    ShopAccessModule,
-    UserPermissionsModule,
-    RbacModule,
-    PaginationModule,
     ValidateModule,
     MenusModule,
+    EmployersModule,
   ],
   controllers: [
     AppController,
@@ -66,8 +58,6 @@ import { MenusModule } from './menus/menus.module';
     CategoriesService,
     RolesService,
     TableGridLayoutService,
-    ShopAccessService,
-    PaginationService,
     EmployersService,
     ValidateService,
   ],
