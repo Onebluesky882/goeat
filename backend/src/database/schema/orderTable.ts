@@ -3,7 +3,6 @@ import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 import { customers } from './customers';
 import { tables } from './tables';
-import { orders } from './orders';
 import { users } from './users';
 
 // order_tables – โต๊ะที่สั่งออเดอร์ (1 โต๊ะ = 1 กลุ่มออเดอร์)

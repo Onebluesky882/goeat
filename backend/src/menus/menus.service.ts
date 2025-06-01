@@ -142,7 +142,8 @@ export class MenusService {
     try {
       await this.db
         .delete(menus)
-        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)));
+        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)))
+        .returning();
       return {
         success: true,
         message: 'menu deleted successfully',

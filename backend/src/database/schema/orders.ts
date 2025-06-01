@@ -27,7 +27,7 @@ export const orders = pgTable('orders', {
     .notNull()
     .references(() => users.id),
   quantity: numeric('quantity', { precision: 10, scale: 2 }),
-
+  totalPrice: numeric('total_price', { precision: 10, scale: 2 }),
   priceEach: numeric('price_each', { precision: 10, scale: 2 }),
 
   createdAt: timestamp('created_at').notNull().defaultNow(),

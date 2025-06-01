@@ -1,4 +1,4 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { employees } from 'src/database';
+import { employees } from '../database';
 
-export type InsertPages = InferInsertModel<typeof employees>;
+export type EmployeesDto = InferInsertModel<typeof employees>;

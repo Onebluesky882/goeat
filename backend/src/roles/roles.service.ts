@@ -126,7 +126,6 @@ export class RolesService {
   }
   async delete(id: string, userId: string, shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, ['owner', 'manager']);
       await this.db.delete(roles).where(eq(roles.id, id));
       return {
         success: true,

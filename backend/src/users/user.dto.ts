@@ -5,7 +5,7 @@ import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 export type SelectUsers = InferSelectModel<typeof users>;
 export type InsertUsers = InferInsertModel<typeof users>;
 
-export type CreateUser = Pick<InsertUsers, 'email' | 'password' | 'name'>;
+export type CreateUser = Pick<InsertUsers, 'email' | 'username' | 'password'>;
 
 export class CreateUserDto implements CreateUser {
   @IsEmail()
@@ -16,5 +16,5 @@ export class CreateUserDto implements CreateUser {
   password!: InsertUsers['password'];
 
   @IsNotEmpty()
-  name!: InsertUsers['name'];
+  username: InsertUsers['username'];
 }

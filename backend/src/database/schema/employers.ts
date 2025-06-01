@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 import { boolean, date, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 
-export const categories = pgTable('categories', {
+export const employers = pgTable('categories', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),

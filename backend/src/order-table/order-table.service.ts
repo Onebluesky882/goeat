@@ -155,7 +155,8 @@ export class OrderTableService {
     try {
       await this.db
         .delete(orderTable)
-        .where(and(eq(orderTable.id, id), eq(orderTable.shopId, shopId)));
+        .where(and(eq(orderTable.id, id), eq(orderTable.shopId, shopId)))
+        .returning();
       return {
         success: true,
         message: 'Table deleted successfully',

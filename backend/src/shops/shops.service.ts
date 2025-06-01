@@ -137,7 +137,7 @@ export class ShopsService {
   }
   async delete(id: string) {
     try {
-      await this.db.delete(shops).where(eq(shops.id, id));
+      await this.db.delete(shops).where(eq(shops.id, id)).returning();
       return {
         success: true,
         message: 'shop deleted successfully',

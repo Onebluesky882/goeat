@@ -11,6 +11,7 @@ import { categories } from './schema/categories';
 import { pages } from './schema/pages';
 import { tableGridLayout } from './schema/tableGridsLayout';
 import { menus } from './schema/menus';
+import { employers } from './schema/employers';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -25,6 +26,7 @@ export * from './schema/pages';
 export * from './schema/categories';
 export * from './schema/tableGridsLayout';
 export * from './schema/menus';
+export * from './schema/employers';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -45,4 +47,5 @@ export const schema = {
   categories,
   tableGridLayout,
   menus,
+  employers,
 };
