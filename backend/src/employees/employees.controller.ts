@@ -21,7 +21,7 @@ import { EmployeesService } from './employees.service';
 import { shops } from 'src/database';
 
 @Controller('employees')
-export class EmployersController {
+export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
   @UseGuards(ShopAccessGuard)
   //create

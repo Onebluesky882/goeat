@@ -21,7 +21,7 @@ export class EmployeesService {
 
   async create(dto: EmployeesDto, shopId: string, userId: string) {
     try {
-      const [inserted] = await this.db
+      const inserted = await this.db
         .insert(employees)
         .values({ ...dto, shopId: shopId, userId: userId })
         .returning();

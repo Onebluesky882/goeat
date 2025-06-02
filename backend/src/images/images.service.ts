@@ -78,10 +78,10 @@ export class ImagesService {
   }
 
   async getById(id: string) {
-    const [img] = await this.db.select().from(images).where(eq(images.id, id));
+    const img = await this.db.select().from(images).where(eq(images.id, id));
     if (!img) throw new NotFoundException();
     return {
-      data: img[0],
+      data: img,
       success: true,
       message: 'Fetched image by ID successfully',
     };
@@ -99,7 +99,7 @@ export class ImagesService {
 
   async update(id, dto: ImageDto) {
     try {
-      const [updated] = await this.db
+      const updated = await this.db
         .update(images)
         .set(dto)
         .where(eq(images.id, id))
@@ -108,7 +108,7 @@ export class ImagesService {
         throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
       }
       return {
-        data: updated,
+        data: updated[0],
         success: true,
         message: 'Image updated successfully',
       };

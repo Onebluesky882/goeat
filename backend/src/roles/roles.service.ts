@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { roles, schema, shops } from 'src/database';
+import { roles, schema } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq } from 'drizzle-orm';
 import { RolesDto } from './roles.dto';

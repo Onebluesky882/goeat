@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { orderTable, shops } from 'src/database';
-import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
 import { OrderTableDto } from './order-table.dto';
 import { nanoid } from 'nanoid';
+import { DATABASE_CONNECTION } from 'src/database/database-connection';
 
 @Injectable()
 export class OrderTableService {
@@ -28,7 +28,7 @@ export class OrderTableService {
   ) {
     try {
       const token = isSession ? nanoid(32) : undefined;
-      const [inserted] = await this.db
+      const inserted = await this.db
         .insert(orderTable)
         .values({ ...dto, token: token, shopId: shopId, createdById: userId })
         .returning();

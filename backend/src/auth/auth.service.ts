@@ -22,7 +22,7 @@ export class AuthService {
     if (!existing) {
       await this.db.insert(users).values({
         email: user.email,
-        name: user.name,
+        username: user.username,
       });
     }
 
@@ -30,7 +30,7 @@ export class AuthService {
       const payload = {
         id: existing?.id,
         email: existing?.email,
-        name: existing?.name,
+        username: existing?.username,
       };
 
       const token = this.jwtService.sign(payload);
@@ -74,7 +74,7 @@ export class AuthService {
     const payload = {
       id: user?.id,
       email: user?.email,
-      name: user?.name,
+      username: user?.username,
     };
     const token = this.jwtService.sign(payload);
 

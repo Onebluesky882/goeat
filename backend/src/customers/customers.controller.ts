@@ -20,7 +20,7 @@ import { CustomerService } from './customers.service';
 import { CustomerDto } from './customers.dto';
 
 @Controller('customers')
-export class EmployersController {
+export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
   //create
   @UseGuards(AuthGuard('jwt'))

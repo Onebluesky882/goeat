@@ -21,7 +21,7 @@ export class CustomerService {
 
   async create(dto: CustomerDto, userId: string) {
     try {
-      const [inserted] = await this.db
+      const inserted = await this.db
         .insert(customers)
         .values({ ...dto, userId: userId })
         .returning();

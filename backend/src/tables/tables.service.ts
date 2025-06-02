@@ -22,7 +22,7 @@ export class TablesService {
 
   async create(dto: TableDto, shopId: string, userId: string) {
     try {
-      const [inserted] = await this.db
+      const inserted = await this.db
         .insert(tables)
         .values({ ...dto, shopId: shopId, createdById: userId })
         .returning();

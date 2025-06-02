@@ -36,14 +36,14 @@ export class UsersService {
     const hashed = await bcrypt.hash(data.password, saltRounds);
 
     try {
-      const [inserted] = await this.db
+      const [inserted] = (await this.db
         .insert(users)
         .values({
           email: data.email,
           username: data.username,
           password: hashed,
         })
-        .returning();
+        .returning()) as any[];
 
       const { password, ...userWithoutPassword } = inserted;
       return userWithoutPassword;
