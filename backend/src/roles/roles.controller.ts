@@ -1,78 +1,55 @@
 import {
-  Controller,
-  Req,
-  UseGuards,
-  Post,
   Body,
+  Controller,
+  Delete,
   Get,
   Param,
   Patch,
-  Delete,
+  Post,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
-
-import { AuthRequest } from 'src/types/auth';
+import { RolesDto } from './roles.dto';
 import { RolesService } from './roles.service';
-import { Roles } from './roles.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  // create
   @UseGuards(AuthGuard('jwt'))
-  //create
   @Post()
-  async create(
-    @Body() body: Roles,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    const userId = req.user.id;
-    return this.rolesService.create(body, userId, shopId);
+  create(@Body() body: RolesDto) {
+    return this.rolesService.create(body);
   }
   //getAll
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getAll(@Req() req: AuthRequest, @Query('shopId') shopId: string) {
-    const userId = req.user.id;
-    return this.rolesService.getAll(userId, shopId);
+  getAll(@Query('shopId') shopId: string) {
+    return this.rolesService.getAll(shopId);
   }
   // get by id
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  async getById(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    const userId = req.user.id;
-    return this.rolesService.getById(id, userId, shopId);
+  getById(@Param('id') id: string) {
+    return this.rolesService.getById(id);
   }
 
   // update
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() body: Roles,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    const userId = req.user.id;
-    return this.rolesService.update(id, body, userId, shopId);
+  update(@Param('id') id: string, @Body() body: RolesDto) {
+    return this.rolesService.update(id, body);
   }
 
   // delete
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async delete(
-    @Param('id') id: string,
-    @Req() req: AuthRequest,
-    @Query('shopId') shopId: string,
-  ) {
-    const userId = req.user.id;
-    return this.rolesService.delete(id, userId, shopId);
+  delete(@Param('id') id: string) {
+    return this.rolesService.delete(id);
   }
 }

@@ -1,6 +1,6 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { roles } from 'src/database';
+import { roles } from '../database';
 
 export type InsertRoles = InferInsertModel<typeof roles>;
 
-export type Roles = Pick<InsertRoles, 'name'>;
+export type RolesDto = Pick<InsertRoles, 'name' | 'shopId'>;

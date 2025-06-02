@@ -1,5 +1,4 @@
 import {
-  Body,
   HttpException,
   HttpStatus,
   Inject,
@@ -7,136 +6,133 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { roles, schema, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq } from 'drizzle-orm';
-import { roles } from '../database/schema/roles';
-import { Roles } from './roles.dto';
-import { ShopAccessService } from 'src/shop-access/shop-access.service';
+import { RolesDto } from './roles.dto';
 
 @Injectable()
 export class RolesService {
   private readonly logger = new Logger(RolesService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
-    private readonly db: NodePgDatabase,
-    private readonly shopAccess: ShopAccessService,
+    private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async create(newRoles: Roles, userId: string, shopId: string) {
+  async create(body: RolesDto) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, ['owner', 'manager']);
-      const inserted = await this.db.insert(roles).values(newRoles).returning();
+      const data = await this.db.insert(roles).values(body).returning();
       return {
         success: true,
-        message: 'Role created successfully',
-        data: inserted,
+        message: 'Roles created successfully',
+        data: data,
       };
     } catch (error) {
-      this.logger.error('Failed to create role', error.stack);
-      if (error.code === '23505') {
-        throw new HttpException(
-          { success: false, message: 'role already exists.' },
-          HttpStatus.CONFLICT,
-        );
-      }
-
+      this.logger.error('Insert failed ', error);
       throw new HttpException(
         {
           success: false,
-          message: 'An error occurred while creating the role.',
+          message: 'fail to insert new Roles',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-
-  async getAll(userId: string, shopId: string) {
+  async getAll(shopId: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, ['owner', 'manager']);
-      const result = await this.db
-        .select()
+      const data = await this.db
+        .select({
+          name: roles.name,
+          shopId: roles.shopId,
+        })
         .from(roles)
         .where(eq(roles.shopId, shopId));
-
-      return {
-        success: true,
-        message: 'Fetched all roles successfully',
-        data: result,
-      };
+      return { success: true, message: 'get all success', data: data };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('allPages failed ', error);
       throw new HttpException(
-        {
-          success: false,
-          message: 'failed fetch roles',
-        },
+        { success: false, message: 'Failed to fetch roles' },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getById(id: string, shopId: string, userId: string) {
+  async getById(id: string) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, ['owner', 'manager']);
-      const result = await this.db
-        .select({ id: roles.id })
+      const data = await this.db
+        .select({
+          name: roles.name,
+          shopId: roles.shopId,
+        })
         .from(roles)
         .where(eq(roles.id, id));
+
+      if (data.length === 0) {
+        throw new HttpException('Roles not found', HttpStatus.NOT_FOUND);
+      }
       return {
-        data: result[0],
         success: true,
-        message: 'Fetched roles by ID successfully',
+        message: 'get by id success',
+        data: data[0],
       };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('Fetch failed', error);
       throw new HttpException(
         {
           success: false,
-          message: 'unable to fetch by id',
+          message: 'Failed to fetch Roles',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async update(id: string, body: Roles, userId: string, shopId: string) {
+  async update(id: string, body: RolesDto) {
     try {
-      await this.shopAccess.validateShop(shopId, userId, ['owner', 'manager']);
-      const { name } = body;
       const updated = await this.db
         .update(roles)
-        .set({ name })
+        .set(body)
         .where(eq(roles.id, id))
         .returning();
+
+      if (updated.length === 0) {
+        throw new HttpException('Roles not found', HttpStatus.NOT_FOUND);
+      }
       return {
-        data: updated,
         success: true,
-        message: 'Role updated successfully',
+        message: 'Roles updated successfully',
+        data: updated[0],
       };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('updated failed ', error.message);
+
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to update role',
+          message: 'Failed to update Roles',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-  async delete(id: string, userId: string, shopId: string) {
+
+  async delete(id: string) {
     try {
-      await this.db.delete(roles).where(eq(roles.id, id));
+      const deleted = await this.db
+        .delete(roles)
+        .where(eq(roles.id, id))
+        .returning();
+
       return {
         success: true,
-        message: 'role deleted successfully',
+        message: 'Roles deleted successfully.',
       };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('❌ Delete failed', error.stack || error.message);
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to delete role',
+          message: 'Failed to delete Roles due to a server error.',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

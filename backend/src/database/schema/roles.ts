@@ -7,4 +7,5 @@ export const roles = pgTable('roles', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   name: text('name').notNull().unique(),
+  shopId: uuid('shop_id').references(() => shops.id, { onDelete: 'cascade' }),
 });
