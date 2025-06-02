@@ -24,7 +24,7 @@ export class UsersService {
       .select({
         id: users.id,
         email: users.email,
-        name: users.name,
+        username: users.username,
       })
       .from(users)
       .where(eq(users.id, user.id));
@@ -40,7 +40,7 @@ export class UsersService {
         .insert(users)
         .values({
           email: data.email,
-          name: data.name,
+          username: data.username,
           password: hashed,
         })
         .returning();

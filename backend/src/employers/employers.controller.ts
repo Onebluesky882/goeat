@@ -26,7 +26,11 @@ export class EmployersController {
   //create
   @UseGuards(AuthGuard('jwt'))
   @Post('/employer')
-  create(@Body() body: EmployersDto, @Req() req: AuthRequest) {
+  create(
+    @Body() body: EmployersDto,
+    @Query('shopId') shopId: string,
+    @Req() req: AuthRequest,
+  ) {
     const userId = req.user.id;
     return this.employersService.create(body, shopId, userId);
   }

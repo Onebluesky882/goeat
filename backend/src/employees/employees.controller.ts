@@ -18,6 +18,7 @@ import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { EmployeesDto } from './employees.dto';
 import { EmployeesService } from './employees.service';
+import { shops } from 'src/database';
 
 @Controller('employees')
 export class EmployersController {
@@ -26,9 +27,13 @@ export class EmployersController {
   //create
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() body: EmployeesDto, @Req() req: AuthRequest) {
+  create(
+    @Body() body: EmployeesDto,
+    @Query('shopId') shopId: string,
+    @Req() req: AuthRequest,
+  ) {
     const userId = req.user.id;
-    return this.employeesService.create(body, userId);
+    return this.employeesService.create(body, shopId, userId);
   }
   //getAll
   @UseGuards(AuthGuard('jwt'))
