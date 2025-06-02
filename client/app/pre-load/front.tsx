@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Header } from "@/components/Header";
 import { ExclusiveBanner } from "@/components/ExclusiveBanner";
@@ -11,33 +12,22 @@ import { LoyaltyTracker } from "@/components/LoyaltyTracker";
 import { MenuCategories } from "@/components/MenuCategories";
 import { PromoSection } from "@/components/PromoSection";
 import { InviteFriends } from "@/components/InviteFriends";
-import { QRFlyer } from "@/components/QRFlyer";
-import { BottomNav } from "@/components/BottomNav";
-import { useToast } from "@/hooks/use-toast";
-
-const Index = () => {
+import { QRFlyer } from "@/components/QrFlyer";
+import { BottomNav } from "@/components/ButtonNav";
+import { toast } from "sonner";
+const Homepage = () => {
   const [showQRFlyer, setShowQRFlyer] = useState(false);
-  const { toast } = useToast();
 
   const handleQRScan = () => {
-    toast({
-      title: "QR Scanner",
-      description: "Opening camera to scan QR code...",
-    });
+    toast("Opening camera to scan QR code...");
   };
 
   const handleQuickOrder = () => {
-    toast({
-      title: "Quick Order",
-      description: "Loading your favorite items...",
-    });
+    toast("Loading your favorite items...");
   };
 
   const handleRepeatOrder = () => {
-    toast({
-      title: "Repeat Order",
-      description: "Adding your last order to cart...",
-    });
+    toast("Adding your last order to cart...");
   };
 
   return (
@@ -91,4 +81,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Homepage;

@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 
 export const Header = () => {
   return (
-    <header className="bg-white/90 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-50">
+    <header className="bg-white/90 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-50  ">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-lg">F</span>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">FoodieApp</h1>
+            <h1 className="text-xl font-bold text-gray-800">MenuX</h1>
             <p className="text-xs text-gray-500">Delivering happiness</p>
           </div>
         </div>
