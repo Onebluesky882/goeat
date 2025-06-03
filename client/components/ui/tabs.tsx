@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { cn } from "@/components/utils/tailwind-merge";
+import { cn } from "@/lib/utils/tailwind-merge";
 
 function Tabs({
   className,
