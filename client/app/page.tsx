@@ -1,9 +1,13 @@
-import Homepage from "./pre-load/front";
+import Sidebar from "@/components/Sidebar";
+import Homepage from "./pre-load/Homepage";
+import { BottomNav } from "@/components/ButtonNav";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className="  my-2 mx-2">
       <Homepage />
+      <Sidebar />
+      <BottomNav />
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 
 export const Header = () => {
   return (
-    <header className="bg-white/90 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-50  ">
-      <div className="px-4 py-3 flex items-center justify-between">
+    <header className="   sticky top-0 z-50 mt-2 ml-2 max-sm:m-2  max-sm:pt-2 ">
+      <div className="px-2 py-2 flex items-center justify-between bg-white  shadow-sm rounded-sm  ">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-lg">F</span>
