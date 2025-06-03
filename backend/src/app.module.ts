@@ -18,6 +18,7 @@ import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.mod
 import { ValidateModule } from './common/validate/validate.module';
 import { MenusModule } from './menus/menus.module';
 import { EmployersModule } from './employers/employers.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { EmployersModule } from './employers/employers.module';
     EmployersModule,
     RolesModule,
     OrderTableModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [],

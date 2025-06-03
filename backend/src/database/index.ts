@@ -12,6 +12,7 @@ import { pages } from './schema/pages';
 import { tableGridLayout } from './schema/tableGridsLayout';
 import { menus } from './schema/menus';
 import { employers } from './schema/employers';
+import { userFcmToken } from './schema/userFcmTokens';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -27,6 +28,7 @@ export * from './schema/categories';
 export * from './schema/tableGridsLayout';
 export * from './schema/menus';
 export * from './schema/employers';
+export * from './schema/userFcmTokens';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -48,4 +50,5 @@ export const schema = {
   tableGridLayout,
   menus,
   employers,
+  userFcmToken,
 };
