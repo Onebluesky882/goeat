@@ -1,32 +1,21 @@
-// pages/_app.tsx or components/NotificationSetup.tsx
+"use client";
+import { subscribeFCM } from "@/lib/utils/subscribeFCM";
 import { useEffect } from "react";
-import { getToken, onMessage } from "firebase/messaging";
-import { messaging } from "@/firebase";
 
-const vapidKey = "YOUR_WEB_PUSH_CERTIFICATE_KEY_PAIR"; // from Firebase Console
-
-export default function NotificationSetup() {
+const NotificationSetup = ({ userId }: { userId: string }) => {
   useEffect(() => {
-    // Request permission and get token
-    const initFCM = async () => {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
-        const token = await getToken(messaging, { vapidKey });
-        console.log("FCM Token:", token);
-        // ✅ Send token to backend to save it
-      } else {
-        console.warn("Notification permission denied.");
+    async function setup() {
+      const token = await subscribeFCM();
+      if (token && userId) {
+        await fetch("api/save-fcm-token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, token }),
+        });
       }
-    };
-
-    initFCM();
-
-    // Optional: handle incoming messages in foreground
-    onMessage(messaging, (payload) => {
-      console.log("Message received in foreground:", payload);
-      // You can show a toast or alert here
-    });
-  }, []);
-
+    }
+    setup();
+  }, [userId]);
   return null;
-}
+};
+export default NotificationSetup;

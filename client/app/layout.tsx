@@ -4,6 +4,7 @@ import "./globals.css";
 import { BottomNav } from "@/components/ButtonNav";
 import { Header } from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import NotificationSetup from "@/components/NotificationSetup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
 
           {children}
         </div>
+        <NotificationSetup userId={""} />
       </body>
     </html>
   );

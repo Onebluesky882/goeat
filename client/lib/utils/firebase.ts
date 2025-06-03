@@ -1,7 +1,7 @@
 // utils/firebase.ts or lib/firebase.ts
 
 import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA3QCigrn4mmO9UWyKPHGJwASUKjfR_lc0",
@@ -19,4 +19,4 @@ const app = initializeApp(firebaseConfig);
 // Initialize Messaging
 const messaging = getMessaging(app);
 
-export { app, messaging };
+export { messaging, getToken, onMessage };
