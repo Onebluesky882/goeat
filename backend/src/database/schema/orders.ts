@@ -20,7 +20,7 @@ export const orders = pgTable('orders', {
   orderTableId: uuid('order_table_id').references(() => orderTable.id, {
     onDelete: 'cascade',
   }),
-
+  orderId: text('order_id').unique().notNull(),
   status: text('status').default('pending'),
   customerId: uuid('customer_id').references(() => customers.id),
   createdById: uuid('create_by_id')

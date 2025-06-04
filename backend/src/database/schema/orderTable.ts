@@ -19,4 +19,5 @@ export const orderTable = pgTable('order_table', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   token: text('token').unique(),
   createdById: uuid('create_by_id').references(() => users.id),
+  orderCode: text('order_code').unique().notNull(), // for refer bill
 });
