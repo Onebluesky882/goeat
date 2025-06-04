@@ -1,53 +1,119 @@
-import { useUserStore } from "@/stores/userStore";
-
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserStore } from "@/stores/userStore";
+import { FaUserCircle } from "react-icons/fa";
+import { BsShop } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
 const Header = () => {
   const { fetchProfile } = useUserStore();
 
+  const navigate = useNavigate();
   useEffect(() => {
     fetchProfile();
   }, []);
-
+  const profile = useUserStore((state) => state.user);
+  const handleOnclick = () => {
+    navigate("/login");
+  };
   return (
-    <header className="py-3 ">
-      <div className="flex justify-around  items-center px-6  py-6 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
-        <div className="text-2xl font-semibold text-gray-800  text-center max-sm:mr-10     ">
-          <span className="text-3xl">🍽️</span>
-          <span className="text-indigo-600 text-3xl mx-2">
-            <Link to={"/"}>MenuX</Link>{" "}
+    <header className="my-2 ">
+      <div className="flex   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
+        <div className="flex  w-full items-center text-2xl font-semibold text-gray-800  text-center max-sm:mr-10   justify-between    ">
+          <span className="rounded-full border-2 border-amber-100 p-3">
+            <BsShop className="text-gray-600 " />
           </span>
-        </div>
-
-        <div className="flex gap-2   items-baseline  sm:gap-10">
-          <div className="flex  text-center  flex-col max-sm:gap-y-5 ">
-            <p className="text-gray-500 text-sm">Restaurant</p>
-            <h3 className="text-sm sm:text-2xl font-bold text-gray-800 ">
-              152
-            </h3>
+          <div>
+            <span className="text-3xl">🍽️</span>
+            <span className="text-indigo-600 text-3xl mx-2">
+              <Link to={"/"}>MenuX</Link>{" "}
+            </span>
           </div>
-
-          <div className="text-center flex justify-center flex-col">
-            <p className="text-gray-500 text-sm">Real time Order</p>
-            <h3 className="text-sm sm:text-2xl  font-bold text-emerald-600 ">
-              ฿4,290
-            </h3>
-          </div>
-          <div className="flex flex-col text-center  max-sm:gap-y-5  ">
-            <p className="text-gray-500 text-sm">Summary</p>
-            <h3 className="text-sm sm:text-2xl font-bold  text-emerald-600">
-              ฿4,290
-            </h3>
-          </div>
-          <div className="text-center">
-            <p className="text-gray-500 text-sm">Today's Earnings</p>
-            <h3 className="text-sm sm:text-2xl  font-bold text-emerald-600">
-              ฿4,290
-            </h3>
-          </div>
+          {profile ? (
+            <>
+              <div>user : {profile.email}</div>
+              <IoIosArrowDropdownCircle />
+            </>
+          ) : (
+            <span
+              onClick={handleOnclick}
+              className="flex items-center flex-col"
+            >
+              <FaUserCircle className="outline-none text-gray-600 " size={35} />
+              <span className="text-[12px]">Login</span>
+            </span>
+          )}
         </div>
       </div>
     </header>
   );
 };
 export default Header;
+
+export function DropdownMenuHeader() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <FaUserCircle className="outline-none text-gray-600" size={35} />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-50 border-gray-100  " align="start">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            Profile
+            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            Billing
+            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            Settings
+            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Email</DropdownMenuItem>
+                <DropdownMenuItem>Message</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>More...</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+          <DropdownMenuItem>
+            New Team
+            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem>Support</DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <span>{} Log out</span>
+          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

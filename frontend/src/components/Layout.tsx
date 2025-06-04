@@ -1,15 +1,16 @@
-import { Outlet, useParams } from "react-router-dom";
-import Footer from "./Footer";
+import { Outlet } from "react-router-dom";
+import Footer from "./Footer/Footer";
 import Header from "./Header";
+import TopBar from "./TopBar";
 
 const Layout = () => {
-  const { shopId } = useParams();
   return (
     <div className=" mx-4 flex flex-col">
       <Header />
+      <TopBar />
       <Outlet />
 
-      <Footer shopId={shopId as string} />
+      <Footer />
     </div>
   );
 };
