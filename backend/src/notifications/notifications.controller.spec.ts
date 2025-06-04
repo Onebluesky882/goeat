@@ -1,18 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { NotificationsController } from './notifications.controller';
+// notifications.controller.ts
+import { Controller, Post, Body } from '@nestjs/common';
+import { NotificationsService } from './notifications.service';
 
-describe('NotificationsController', () => {
-  let controller: NotificationsController;
+@Controller('notifications')
+export class NotificationsController {
+  constructor(private readonly notificationsService: NotificationsService) {}
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [NotificationsController],
-    }).compile();
-
-    controller = module.get<NotificationsController>(NotificationsController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+  @Post('customer')
+  async notify(@Body('orderId') orderId: string) {
+    await this.notificationsService.notifyCustomer(orderId);
+    return { success: true };
+  }
+}
