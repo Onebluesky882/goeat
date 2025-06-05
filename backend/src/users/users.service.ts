@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   async getProfile(userId: string) {
-    const [rows] = await this.db
+    const rows = await this.db
       .select({
         id: users.id,
         email: users.email,

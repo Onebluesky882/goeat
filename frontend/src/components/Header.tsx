@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "@/stores/userStore";
 import { FaUserCircle } from "react-icons/fa";
@@ -18,19 +18,25 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
+import useUsers from "@/hooks/useUsers";
+
 const Header = () => {
-  const { fetchProfile } = useUserStore();
-  const profile = useUserStore((state) => state.user);
-
   const navigate = useNavigate();
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
+  const [loading, setLoading] = useState(false);
+  const { profile, logoutUser } = useUsers();
   console.log("profile :", profile);
   const handleOnclick = () => {
     navigate("/login");
   };
+
+  const logout = () => {
+    setLoading(true);
+
+    logoutUser();
+    window.location.href = "/";
+    setLoading(false);
+  };
+
   return (
     <header className="my-2 ">
       <div className="flex   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
@@ -47,7 +53,7 @@ const Header = () => {
           {profile ? (
             <>
               <div>user : {profile.email}</div>
-              <IoIosArrowDropdownCircle />
+              <DropdownMenuHeader logout={logout} loading={loading} />
             </>
           ) : (
             <span
@@ -65,11 +71,17 @@ const Header = () => {
 };
 export default Header;
 
-export function DropdownMenuHeader() {
+export function DropdownMenuHeader({
+  logout,
+  loading,
+}: {
+  logout: () => void;
+  loading: boolean;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <FaUserCircle className="outline-none text-gray-600" size={35} />
+        <IoIosArrowDropdownCircle />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-50 border-gray-100  " align="start">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -112,7 +124,8 @@ export function DropdownMenuHeader() {
 
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <span>{} Log out</span>
+          <span onClick={logout}>Log out</span>
+
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

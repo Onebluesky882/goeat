@@ -2,12 +2,13 @@ import z from "zod";
 
 export const schema = z
   .object({
-    email: z.string().transform((val) => val.trim()),
-    name: z.string().transform((val) => val.trim()),
-    password: z
+    email: z
       .string()
-      .min(8, "password must be at least 8 characters")
-      .regex(/[A-Z]/, "Must contain an uppercase letter"),
+      .email({ message: "Invalid email address" })
+      .transform((val) => val.trim().toLowerCase()),
+    name: z.string().transform((val) => val.trim()),
+    password: z.string().min(8, "password must be at least 8 characters"),
+    // .regex(/[A-Z]/, "Must contain an uppercase letter"),
     confirmPassword: z.string(),
   })
   .refine((vals) => vals.password === vals.confirmPassword, {

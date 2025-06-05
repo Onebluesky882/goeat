@@ -5,10 +5,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log(
-  'FIREBASE_SERVICE_ACCOUNT_BASE64:',
-  process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
-);
 if (!process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
   throw new Error('Missing FIREBASE_SERVICE_ACCOUNT_BASE64 in env');
 }

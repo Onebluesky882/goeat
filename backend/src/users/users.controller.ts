@@ -10,7 +10,6 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   getProfile(@Req() req: AuthRequest) {
-    console.log('User from req:', req.user);
     return this.usersService.getProfile(req.user.id);
   }
 }

@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
-import LogOut from "./pages/LogOut.tsx";
 import { Toaster } from "sonner";
 import UserProfile from "./pages/UserProfile.tsx";
 import FeedbackForm from "./pages/FeedbackForm.tsx";
@@ -24,7 +23,6 @@ createRoot(document.getElementById("root")!).render(
           <Route index element={<App />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="logout" element={<LogOut />} />
           <Route path="profile" element={<UserProfile />} />
           <Route path="dashboard" element={<Controller />} />
           <Route path="feedback" element={<FeedbackForm />} />

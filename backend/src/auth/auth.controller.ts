@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Post,
   Req,
   Res,
@@ -44,17 +45,24 @@ export class AuthController {
     @Body() creds: { email: string; password: string },
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token } = await this.auth.login(creds.email, creds.password);
+    try {
+      const { access_token } = await this.auth.login(
+        creds.email,
+        creds.password,
+      );
 
-    // if you want to set it as a cookie:
-    res.cookie('access_token', access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 86400 * 1000,
-    });
+      // if you want to set it as a cookie:
+      res.cookie('access_token', access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 86400 * 1000,
+      });
 
-    return { access_token };
+      return { access_token, status: 'success' };
+    } catch (error) {
+      console.error('login failed', error);
+    }
   }
 
   @Post('register')
@@ -63,12 +71,13 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     // 1) delegate creation to the plain UsersService
-    const user = await this.usersService.createUser(dto);
+    const newUser = await this.usersService.createUser(dto);
+
     // 2) issue a token
     const token = this.auth.signToken({
-      id: user.id,
-      email: user.email,
-      name: user.name ?? '',
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
     });
     // 3) optionally set it as a cookie
     res.cookie('access_token', token, {
@@ -78,6 +87,18 @@ export class AuthController {
       maxAge: 7 * 86400 * 1000, // 7 days
     });
     // 4) return the token (and/or user profile)
-    return { access_token: token, user };
+    return {
+      access_token: token,
+      newUser,
+      message: 'User registered successfully',
+      status: 'success',
+    };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    return { status: 'success', message: 'logout' };
   }
 }

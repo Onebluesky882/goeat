@@ -16,7 +16,7 @@ export const useUserStore = create<UserStore>((set, get) => {
   const channel = new BroadcastChannel("user-session");
 
   channel.onmessage = (event) => {
-    if (event.data?.type !== "SET_USER") {
+    if (event.data?.type === "SET_USER") {
       const current = get().user;
       const incoming = event.data.user;
       if (current?.id !== incoming?.id) {
@@ -40,7 +40,7 @@ export const useUserStore = create<UserStore>((set, get) => {
         const res = await api.get("/users/profile", {
           withCredentials: true,
         });
-        console.log("Fetched profile data:", res.data);
+
         const user = res.data;
 
         const current = get().user;

@@ -1,16 +1,54 @@
+import { useForm } from "react-hook-form";
 import LoginAuthGoogle from "../components/LoginAuthGoogle";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema, type LoginField } from "@/schema/loginField";
+import useUsers from "@/hooks/useUsers";
+import { useState } from "react";
+import Loader from "@/components/spinner/loader";
+
+// todo problem not pare password
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const { login } = useUsers();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginField>({ resolver: zodResolver(schema), mode: "onChange" });
+
+  const onSubmit = async (data: LoginField) => {
+    setLoading(true);
+
+    try {
+      const success = await login(data);
+      if (success) {
+        window.location.href = "/dashboard";
+      } else {
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 10000);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      reset();
+    }
+  };
+
   return (
-    <div className="py-10 flex items-center justify-center bg-gradient-to-b from-white to-gray-100 rounded-sm">
+    <div className="py-10 flex items-center justify-center bg-gray-100/50   from-white to-gray-100 rounded-sm">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100 p-8 animate-fade-in">
         <LoginAuthGoogle title="LogIn With" />
 
         <h2 className="text-2xl font-bold my-6 text-gray-900 text-center tracking-tight">
           Sign in to your account
         </h2>
-        <form className="space-y-5">
+        <form className="relative space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label
               htmlFor="email"
@@ -19,7 +57,7 @@ const Login = () => {
               Email
             </label>
             <input
-              required
+              {...register("email")}
               type="email"
               id="email"
               autoComplete="email"
@@ -35,7 +73,7 @@ const Login = () => {
               Password
             </label>
             <input
-              required
+              {...register("password")}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -45,28 +83,43 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 active:scale-95"
+            disabled={loading}
+            className={`w-full flex justify-center items-center px-4 py-2 bg-blue-600 ${
+              loading && "bg-blue-600/50"
+            } hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 active:scale-95`}
           >
-            Login
+            {loading ? (
+              <>
+                {" "}
+                <Loader />
+              </>
+            ) : (
+              <span>Login</span>
+            )}
           </button>
         </form>
-        <div className="mt-4 flex items-center gap-2">
-          <Link
-            to="/signup"
-            className="text-md text-gray-500 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
-          >
-            Signup
-          </Link>{" "}
-          <Link
-            to="#"
-            className="text-sm text-gray-400 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
-          >
-            Forgot Password?
-          </Link>
-        </div>
+        <FooterForm />
       </div>
     </div>
   );
 };
 
+const FooterForm = () => {
+  return (
+    <div className="mt-4 flex items-center gap-2">
+      <Link
+        to="/signup"
+        className="text-md text-gray-500 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
+      >
+        Signup
+      </Link>{" "}
+      <Link
+        to="#"
+        className="text-sm text-gray-400 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
+      >
+        Forgot Password?
+      </Link>
+    </div>
+  );
+};
 export default Login;
