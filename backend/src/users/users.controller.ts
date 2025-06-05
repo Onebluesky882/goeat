@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  UseGuards,
-  HttpStatus,
-  HttpException,
-} from '@nestjs/common';
+import { Body, Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from 'src/types/auth';
@@ -19,6 +10,7 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   getProfile(@Req() req: AuthRequest) {
-    return this.usersService.getProfile(req.user);
+    console.log('User from req:', req.user);
+    return this.usersService.getProfile(req.user.id);
   }
 }

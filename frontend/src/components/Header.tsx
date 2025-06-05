@@ -20,12 +20,14 @@ import {
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 const Header = () => {
   const { fetchProfile } = useUserStore();
+  const profile = useUserStore((state) => state.user);
 
   const navigate = useNavigate();
   useEffect(() => {
     fetchProfile();
   }, []);
-  const profile = useUserStore((state) => state.user);
+
+  console.log("profile :", profile);
   const handleOnclick = () => {
     navigate("/login");
   };

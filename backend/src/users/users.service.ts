@@ -1,10 +1,4 @@
-import {
-  Body,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { users } from '../database/schema/users';
@@ -19,15 +13,16 @@ export class UsersService {
     private db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async getProfile(user: { id: string }) {
-    const rows = await this.db
+  async getProfile(userId: string) {
+    const [rows] = await this.db
       .select({
         id: users.id,
         email: users.email,
         username: users.username,
       })
       .from(users)
-      .where(eq(users.id, user.id));
+      .where(eq(users.id, userId))
+      .limit(1);
     return rows[0];
   }
 

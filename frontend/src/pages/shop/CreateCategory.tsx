@@ -1,18 +1,12 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { schema, type CategoryField } from "../../../schema/categoryField";
+import { schema, type CategoryField } from "../../schema/categoryField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
-import { category } from "@/Api/category.api";
-import { it } from "node:test";
-import { shopAPI } from "@/Api/shop.api";
-import { useUserStore } from "@/stores/userStore";
-import { useParams } from "react-router-dom";
 
 // inside your component
 
 const CreateCategory = () => {
-  const profile = useUserStore((state) => state.user);
   const [categories, setCategories] = useState<CategoryField[]>([]);
 
   useEffect(() => {}, []);
@@ -37,7 +31,6 @@ const CreateCategory = () => {
     reset();
   };
 
-  console.log("profile :", profile);
   //   const onSubmit = async () => {
   //     const transform: CategoryField[] = categories.map((item) => ({
   //          ...item ,

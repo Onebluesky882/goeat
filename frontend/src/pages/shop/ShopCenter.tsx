@@ -31,8 +31,6 @@ const ShopCenter = () => {
   useEffect(() => {
     fetchShops();
   }, []);
-  console.log("shopId", shopId);
-  console.log("shopName", shopName);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

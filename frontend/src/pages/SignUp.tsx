@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userApi } from "@/Api/user.api";
 import { schema, type SignupField } from "@/schema/signUpField";
+import BeatLoader from "react-spinners/BeatLoader";
 
 type SignupProps = {
   email: string;
@@ -19,7 +20,7 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors },
   } = useForm<SignupField>({
     resolver: zodResolver(schema),
     mode: "onChange",

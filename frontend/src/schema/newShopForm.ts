@@ -10,3 +10,5 @@ export const newShopSchema = z.object({
     instagram: z.string().optional(),
   }),
 });
+
+export type FormFields = z.infer<typeof newShopSchema>;

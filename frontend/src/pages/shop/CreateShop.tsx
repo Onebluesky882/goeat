@@ -1,14 +1,11 @@
 import { shopAPI } from "@/Api/shop.api";
 import FromNewShop from "@/components/createNewShop/createShop";
-import { newShopSchema } from "@/schema/newShopForm";
+import { newShopSchema, type FormFields } from "@/schema/newShopForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import { date, type z } from "zod";
-
-export type FormFields = z.infer<typeof newShopSchema>;
 
 const emptyValues = {
   name: "",

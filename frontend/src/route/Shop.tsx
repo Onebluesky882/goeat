@@ -8,7 +8,7 @@ import OrderStatus from "../pages/shop/[shopId]/orders/OrderStatus";
 import StaffManagement from "../pages/shop/[shopId]/staff/StaffManagement";
 import Cctv from "../pages/shop/[shopId]/cctv/Cctv";
 import MenuManagement from "../pages/shop/[shopId]/menu/MenuManagement";
-import CreateCategory from "@/pages/shop/[shopId]/CreateCategory";
+import CreateCategory from "@/pages/shop/CreateCategory";
 
 export const Shop = () => (
   <>

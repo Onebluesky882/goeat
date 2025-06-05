@@ -40,7 +40,7 @@ export const useUserStore = create<UserStore>((set, get) => {
         const res = await api.get("/users/profile", {
           withCredentials: true,
         });
-
+        console.log("Fetched profile data:", res.data);
         const user = res.data;
 
         const current = get().user;
