@@ -1,7 +1,13 @@
 import { Controller, Get, Req } from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
+  @Get()
+  getRoot(@Req() res: Response) {
+    return { message: 'hello' };
+  }
+
   @Get('protected')
   getProtected(@Req() req) {
     return {

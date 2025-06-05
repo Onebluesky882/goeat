@@ -19,7 +19,6 @@ import { ValidateModule } from './common/validate/validate.module';
 import { MenusModule } from './menus/menus.module';
 import { EmployersModule } from './employers/employers.module';
 import { NotificationsModule } from './notifications/notifications.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),

@@ -15,4 +15,5 @@ export type OrderTableDto = Pick<
   | 'totalPrice'
   | 'updatedAt'
   | 'createdById'
+  | 'orderCode'
 >;
