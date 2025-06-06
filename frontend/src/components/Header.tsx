@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserStore } from "@/stores/userStore";
 import { FaUserCircle } from "react-icons/fa";
 import { BsShop } from "react-icons/bs";
 import {
@@ -22,7 +21,6 @@ import useUsers from "@/hooks/useUsers";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const { profile, logoutUser } = useUsers();
   console.log("profile :", profile);
   const handleOnclick = () => {
@@ -30,11 +28,8 @@ const Header = () => {
   };
 
   const logout = () => {
-    setLoading(true);
-
     logoutUser();
-    window.location.href = "/";
-    setLoading(false);
+    navigate("/");
   };
 
   return (
@@ -50,19 +45,35 @@ const Header = () => {
               <Link to={"/"}>MenuX</Link>{" "}
             </span>
           </div>
+
           {profile ? (
-            <>
-              <div>user : {profile.email}</div>
-              <DropdownMenuHeader logout={logout} loading={loading} />
-            </>
+            <div className="flex outline-1 items-center gap-2 ">
+              <div className="flex-col flex">
+                <span className="text-start text-[12px] font-medium text-gray-500">
+                  {" "}
+                  Logged as :
+                </span>
+                <span className="text-[15px] font-medium text-gray-700">
+                  {" "}
+                  {profile.email}
+                </span>
+              </div>
+
+              <DropdownMenuHeader logout={logout} />
+            </div>
           ) : (
-            <span
-              onClick={handleOnclick}
-              className="flex items-center flex-col"
-            >
-              <FaUserCircle className="outline-none text-gray-600 " size={35} />
-              <span className="text-[12px]">Login</span>
-            </span>
+            <div className="flex">
+              <span
+                onClick={handleOnclick}
+                className="flex items-center flex-col"
+              >
+                <FaUserCircle
+                  className="outline-none text-gray-600 "
+                  size={35}
+                />
+                <span className="text-[12px]">Login</span>
+              </span>
+            </div>
           )}
         </div>
       </div>
@@ -71,13 +82,7 @@ const Header = () => {
 };
 export default Header;
 
-export function DropdownMenuHeader({
-  logout,
-  loading,
-}: {
-  logout: () => void;
-  loading: boolean;
-}) {
+export function DropdownMenuHeader({ logout }: { logout: () => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

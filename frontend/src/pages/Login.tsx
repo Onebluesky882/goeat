@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import LoginAuthGoogle from "../components/LoginAuthGoogle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema, type LoginField } from "@/schema/loginField";
 import useUsers from "@/hooks/useUsers";
 import { useState } from "react";
 import Loader from "@/components/spinner/loader";
+import { toast } from "sonner";
 
 // todo problem not pare password
 
@@ -13,30 +14,30 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useUsers();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<LoginField>({ resolver: zodResolver(schema), mode: "onChange" });
+  const { register, handleSubmit, reset } = useForm<LoginField>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+  });
 
+  const navigate = useNavigate();
   const onSubmit = async (data: LoginField) => {
     setLoading(true);
 
     try {
       const success = await login(data);
       if (success) {
-        window.location.href = "/dashboard";
+        navigate("/dashboard");
+        reset();
       } else {
+        toast.error("Invalid email or password");
         setTimeout(() => {
-          window.location.href = "/login";
-        }, 10000);
+          navigate("/");
+        }, 20000);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
-      reset();
     }
   };
 
@@ -61,7 +62,7 @@ const Login = () => {
               type="email"
               id="email"
               autoComplete="email"
-              className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
+              className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-gray-50 text-gray-900 transition"
               placeholder="you@email.com"
             />
           </div>
@@ -85,7 +86,7 @@ const Login = () => {
             type="submit"
             disabled={loading}
             className={`w-full flex justify-center items-center px-4 py-2 bg-blue-600 ${
-              loading && "bg-blue-600/50"
+              loading && "bg-blue-600/50 hover:bg-blue-600/50 "
             } hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 active:scale-95`}
           >
             {loading ? (
@@ -98,6 +99,7 @@ const Login = () => {
             )}
           </button>
         </form>
+
         <FooterForm />
       </div>
     </div>

@@ -47,15 +47,6 @@ const Controller = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-purple-50">
-      <div className="w-full py-4 flex flex-col items-center animate-fade-in">
-        <span className="text-gray-500 text-xs mb-0.5">Logged in as</span>
-        <span className="font-bold text-base text-gray-700">
-          {profile?.name}
-        </span>{" "}
-        <span className="font-bold text-base text-gray-700">
-          {profile?.email}
-        </span>
-      </div>
       <div className="container flex flex-col flex-1 py-8 max-w-4xl mx-auto w-full">
         <h1 className="text-3xl md:text-4xl font-playfair font-bold text-primary mb-6">
           Dashboard

@@ -25,6 +25,8 @@ const useUsers = () => {
       if (response.data.status === "success") {
         navigate("/dashboard");
         return true;
+      } else {
+        return false;
       }
     } catch (error) {
       console.error(error);
