@@ -1,8 +1,7 @@
 import { useUserStore } from "@/stores/userStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 const Controller = () => {
   const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
   // url/shops/shopid
@@ -30,20 +29,6 @@ const Controller = () => {
   });
 
   const [selectedBranch, setSelectedBranch] = React.useState(branches[0]);
-
-  const navigate = useNavigate();
-
-  // checkUser
-  // const timeOutUser = () => {
-  //   const timeout = setTimeout(() => {
-  //     if (profile === null) return navigate("/");
-  //   }, 1000);
-  //   return () => clearTimeout(timeout);
-  // };
-
-  useEffect(() => {
-    // timeOutUser();
-  }, [profile]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-purple-50">
