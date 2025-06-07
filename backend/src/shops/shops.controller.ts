@@ -18,16 +18,11 @@ import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('tables')
-export class TablesController {
-  constructor() {}
-}
-
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(ShopAccessGuard)
   @Post()
   @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
@@ -37,11 +32,13 @@ export class ShopsController {
   }
   //getAll
 
+  @UseGuards(ShopAccessGuard)
   @Get()
   getAll() {
     return this.ShopsService.getAll();
   }
   // get by id
+  @UseGuards(ShopAccessGuard)
   @Get(':id')
   getById(@Param('id') id: string) {
     return this.ShopsService.getById(id);

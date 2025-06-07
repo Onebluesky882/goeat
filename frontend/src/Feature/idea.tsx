@@ -20,3 +20,7 @@ const Feature = () => {
   );
 };
 export default Feature;
+
+//** เมนูเห็นเร็ว เห็นภาพเมนู ใหญ่ๆๆ ตัวอย่างอาหาร
+// qr code 1 เข้า shop
+// order เจน id
