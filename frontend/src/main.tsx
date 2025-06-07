@@ -12,8 +12,9 @@ import Feature from "./feature/idea.tsx";
 import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import { Shop } from "./route/Shop.tsx";
-import Controller from "./pages/Controller.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import TodoList from "./feature/todo.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -24,11 +25,12 @@ createRoot(document.getElementById("root")!).render(
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="profile" element={<UserProfile />} />
-          <Route path="dashboard" element={<Controller />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="feedback" element={<FeedbackForm />} />
           <Route path="feature" element={<Feature />} />
           {Shop()}
           <Route path="*" element={<NotFound />} />
+          <Route path="todo" element={<TodoList />} />
         </Route>
       </Routes>
       <Toaster />

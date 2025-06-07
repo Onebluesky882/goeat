@@ -11,3 +11,5 @@ export type PartialCreateShop = Pick<
   | "website"
   | "updatedAt"
 >;
+
+export type StoreType = "retail" | "restaurant" | "bar" | null;

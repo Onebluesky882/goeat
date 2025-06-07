@@ -9,7 +9,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { ShopDto } from './shops.dto';
+import { CreateShopDto, UpdateShopDto } from './shops.dto';
 
 @Injectable()
 export class ShopsService {
@@ -19,7 +19,7 @@ export class ShopsService {
     private readonly db: NodePgDatabase,
   ) {}
 
-  async create(dto: ShopDto, userId: string) {
+  async create(dto: CreateShopDto, userId: string) {
     try {
       const inserted = await this.db
         .insert(shops)
@@ -112,7 +112,7 @@ export class ShopsService {
     }
   }
 
-  async update(id: string, body: ShopDto) {
+  async update(id: string, body: UpdateShopDto) {
     try {
       const updated = await this.db
         .update(shops)

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const useUsers = () => {
   const { setUser } = useUserStore.getState();
-  const fetchProfile = useUserStore((state) => state.fetchProfile);
+  const { fetchProfile } = useUserStore();
 
   const profile = useUserStore((state) => state.user);
   const navigate = useNavigate();

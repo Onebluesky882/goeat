@@ -14,27 +14,13 @@ const Footer = () => {
 
   const mainMenu = [
     {
-      path: "login",
-      label: {
-        en: "login",
-        th: "ลงชื่อเข้า",
-      },
-      potion: "top-10",
-    },
-
-    {
       path: "dashboard",
       label: { en: "Dashboard", th: "ศูนย์กลาง" },
       potion: "top-10",
     },
     {
-      path: "shops/create",
-      label: { en: "Add Shop", th: "สร้างร้านค้า" },
-      potion: "top-10",
-    },
-    {
       path: "shops",
-      label: { en: "My Shops", th: "ร้านอาหารของคุณ" },
+      label: { en: "MyShop", th: "ร้านของฉัน" },
       potion: "top-10",
     },
     {
@@ -47,17 +33,18 @@ const Footer = () => {
       label: { en: "feedback", th: "แนะนำติชม" },
       potion: "top-10",
     },
-    {
-      path: "logout",
-      label: { en: "logout", th: "ลงชื่อออก" },
-      potion: "top-10",
-    },
   ];
 
   const shopMenu = [
     {
-      path: "/",
-      label: { en: "Main", th: "mapping" },
+      path: "dashboard",
+      label: { en: "Main", th: "หน้าหลัก" },
+      icon: <FaHome size={24} />,
+      potion: "top-10",
+    },
+    {
+      path: `shops`,
+      label: { en: "shop center", th: "ร้านของฉัน" },
       icon: <FaHome size={24} />,
       potion: "top-10",
     },
@@ -90,15 +77,15 @@ const Footer = () => {
           } 
         } `}
         >
-          <nav className="flex   justify-between mx-auto   ">
+          <nav className="flex   justify-between mx-auto  not-visited: ">
             {/* Desktop Menu */}
-            <div className="flex flex-col gap-6">
+            <div className="flex w-full gap-6 outline-1">
               {location.pathname.startsWith("/shops") ? (
-                <div>
+                <div className="flex">
                   {shopMenu.map((menu, index) => (
                     <Link key={index} to={`/${menu.path}`}>
                       <span
-                        className={`text-md font-medium outline-1 text-blue-900  ${
+                        className={`text-md font-medium  text-blue-900  ${
                           location.pathname === `/${menu.path}`
                             ? "text-blue-600 border-b-2 border-blue-600"
                             : "text-white hover:text-blue-500"

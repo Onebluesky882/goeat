@@ -1,10 +1,7 @@
-import { useUserStore } from "@/stores/userStore";
 import { BranchScroller } from "@/components/BranchScroller";
 import { DateRangeFilter } from "@/components/DateRangeFilterProps";
 import React from "react";
-const Controller = () => {
-  const profile = useUserStore((state) => state.user); // <-- Get the logged-in user
-  // url/shops/shopid
+const Dashboard = () => {
   const summaryData = [
     { name: "Restaurant 1", earning: 12890, orders: 320, customers: 180 },
     { name: "Restaurant 2", earning: 8450, orders: 210, customers: 132 },
@@ -67,4 +64,4 @@ const Controller = () => {
   );
 };
 
-export default Controller;
+export default Dashboard;
