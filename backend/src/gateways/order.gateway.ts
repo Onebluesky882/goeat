@@ -4,7 +4,6 @@ import {
   WebSocketServer,
   MessageBody,
 } from '@nestjs/websockets';
-import { date } from 'drizzle-orm/mysql-core';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -13,7 +12,8 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class OrderGateway {
-  @WebSocketServer() server: Server;
+  @WebSocketServer()
+  server: Server;
 
   handleConnection(client: Socket) {
     const { shopId } = client.handshake.query;
@@ -25,7 +25,12 @@ export class OrderGateway {
     this.server.to(shopId).emit('newOrder', order);
   }
 
+  notifyOrderUpdate(order: any, shopId: string) {
+    this.server.to(shopId).emit('orderUpdated', order);
+  }
+
+  @SubscribeMessage('orderStatusUpdate')
   handleStatusUpdate(@MessageBody() data: { shopId: string; status: string }) {
-    this.server.to(data.shopId).emit('orderStatusUpdated', data);
+    this.server.to(data.shopId).emit('orderUpdated', data);
   }
 }

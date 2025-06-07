@@ -9,7 +9,8 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { shops, orders } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { CreateOrder, UpdateOrder } from './orders.dto';
+import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
+import { OrderGateway } from 'src/gateways/order.gateway';
 
 @Injectable()
 export class OrdersService {
@@ -17,10 +18,11 @@ export class OrdersService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
+    private readonly orderGateway: OrderGateway,
   ) {}
 
   async create(
-    newOrder: CreateOrder,
+    newOrder: CreateOrderDto,
     shopId: string,
     userId: string,
     customerId: string,
@@ -35,10 +37,11 @@ export class OrdersService {
           customerId: customerId,
         })
         .returning();
+      const createdOrder = inserted[0];
+      this.orderGateway.notifyNewOrder(createdOrder, shopId);
       return {
         success: true,
-        message: 'create order successfully',
-        data: inserted,
+        data: createdOrder,
       };
     } catch (error) {
       this.logger.error('Failed to create ', error.stack);
@@ -72,13 +75,13 @@ export class OrdersService {
           customerId: orders.customerId,
           quantity: orders.quantity,
           priceEach: orders.priceEach,
+          totalPrice: orders.totalPrice,
         })
         .from(orders)
         .where(eq(orders.shopId, shopId));
 
       return {
         success: true,
-        message: 'Fetched all orders successfully',
         data: result,
       };
     } catch (error) {
@@ -106,6 +109,7 @@ export class OrdersService {
           customerId: orders.customerId,
           quantity: orders.quantity,
           priceEach: orders.priceEach,
+          totalPrice: orders.totalPrice,
         })
         .from(orders)
         .innerJoin(shops, eq(orders.shopId, shops.id))
@@ -121,7 +125,6 @@ export class OrdersService {
       return {
         data: found[0],
         success: true,
-        message: 'Fetched order by ID successfully',
       };
     } catch (error) {
       this.logger.error(error);
@@ -135,7 +138,7 @@ export class OrdersService {
     }
   }
 
-  async update(id: string, body: UpdateOrder, shopId: string) {
+  async update(id: string, body: UpdateOrderDto, shopId: string) {
     try {
       const updated = await this.db
         .update(orders)
@@ -145,7 +148,6 @@ export class OrdersService {
       return {
         data: updated,
         success: true,
-        message: ' updated order success ',
       };
     } catch (error) {
       this.logger.error(error);
@@ -162,11 +164,10 @@ export class OrdersService {
     try {
       await this.db
         .delete(orders)
-        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)))
-        .returning();
+        .where(and(eq(orders.id, id), eq(orders.shopId, shopId)));
+
       return {
         success: true,
-        message: 'order deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);

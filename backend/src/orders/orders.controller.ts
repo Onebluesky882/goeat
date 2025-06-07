@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
 import { OrdersService } from './orders.service';
-import { CreateOrder, UpdateOrder } from './orders.dto';
+import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 @UseGuards(AuthGuard('jwt'))
@@ -26,7 +26,7 @@ export class OrdersController {
   @UseGuards(ShopAccessGuard)
   @Post()
   @Roles('manager', 'staff', 'owner', 'customer')
-  create(@Body() body: CreateOrder, @Req() req: AuthRequest) {
+  create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
     const { shopId, customerId } = body;
 
@@ -58,7 +58,7 @@ export class OrdersController {
   @Roles('manager', 'staff', 'owner')
   update(
     @Param('id') id: string,
-    @Body() body: UpdateOrder,
+    @Body() body: UpdateOrderDto,
     @Query('shopId') shopId: string,
   ) {
     return this.ordersService.update(id, body, shopId);

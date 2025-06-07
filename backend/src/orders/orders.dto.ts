@@ -4,21 +4,21 @@ import { orders } from 'src/database';
 export type InsertOrders = InferInsertModel<typeof orders>;
 export type SelectOrders = InferSelectModel<typeof orders>;
 
-export type UpdateOrder = Pick<
+export type UpdateOrderDto = Pick<
   InsertOrders,
-  'updatedAt' | 'menuId' | 'quantity'
+  'updatedAt' | 'quantity' | 'status' | 'totalPrice'
 >;
 
-export type CreateOrder = Pick<
+export type CreateOrderDto = Pick<
   InsertOrders,
   | 'shopId'
   | 'customerId'
   | 'createdById'
   | 'createdAt'
-  | 'menuId'
   | 'orderTableId'
   | 'priceEach'
   | 'quantity'
   | 'status'
   | 'updatedAt'
+  | 'totalPrice'
 >;

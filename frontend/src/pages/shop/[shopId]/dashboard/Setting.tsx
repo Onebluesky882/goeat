@@ -8,11 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShopDetailsTab } from "@/components/dashboard/ShopDetailsTab";
-import { MenuManagementTab } from "@/components/dashboard/MenuManagementTab";
-import { PaymentTab } from "@/components/dashboard/PaymentTab";
 import { Store, Menu, CreditCard, Settings, User, LogOut } from "lucide-react";
+import { ShopDetailsTab } from "@/components/dashboard/ShopDetailsTab";
+import { MenuManagementTab } from "@/components/shops/dashboard/MenuManagementTabs";
+import { PaymentTab } from "@/components/shops/dashboard/ShopDetail";
 
+// todo
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
