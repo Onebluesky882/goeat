@@ -23,11 +23,10 @@ export class ShopsService {
     try {
       const inserted = await this.db
         .insert(shops)
-        .values({ ...dto, ownerId: userId })
+        .values({ ...dto, ownerId: userId, active: true })
         .returning();
       return {
         success: true,
-        message: 'create shop successfully',
         data: inserted,
       };
     } catch (error) {
@@ -56,16 +55,12 @@ export class ShopsService {
           name: shops.name,
           ownerId: shops.ownerId,
           address: shops.address,
-          googleMaps: shops.googleMaps,
-          phone: shops.phone,
-          website: shops.website,
           updatedAt: shops.updatedAt,
           active: shops.active,
         })
         .from(shops);
       return {
         success: true,
-        message: 'Fetched all shops successfully',
         data: result,
       };
     } catch (error) {
@@ -84,21 +79,17 @@ export class ShopsService {
     try {
       const result = await this.db
         .select({
-          active: shops.active,
-          ownerId: shops.ownerId,
           name: shops.name,
+          ownerId: shops.ownerId,
           address: shops.address,
-          googleMaps: shops.googleMaps,
-          phone: shops.phone,
-          website: shops.website,
           updatedAt: shops.updatedAt,
+          active: shops.active,
         })
         .from(shops)
         .where(and(eq(shops.id, id)));
       return {
         data: result[0],
         success: true,
-        message: 'Fetched shop by ID successfully',
       };
     } catch (error) {
       this.logger.error(error);
@@ -122,7 +113,6 @@ export class ShopsService {
       return {
         data: updated,
         success: true,
-        message: ' updated shop success ',
       };
     } catch (error) {
       this.logger.error(error);
@@ -137,10 +127,9 @@ export class ShopsService {
   }
   async delete(id: string) {
     try {
-      await this.db.delete(shops).where(eq(shops.id, id)); //.returning();
+      await this.db.delete(shops).where(eq(shops.id, id));
       return {
         success: true,
-        message: 'shop deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);

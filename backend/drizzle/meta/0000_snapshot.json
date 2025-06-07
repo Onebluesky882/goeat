@@ -1,5 +1,5 @@
 {
-  "id": "4f12b47b-abe2-4f4b-8736-33c26cd66bd9",
+  "id": "41896b82-51b5-481e-a0fd-24c22cc87262",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -92,6 +92,20 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -464,6 +478,83 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.order_items": {
+      "name": "order_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "menu_id": {
+          "name": "menu_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_each": {
+          "name": "price_each",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_price": {
+          "name": "total_price",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "order_items_menu_id_menus_id_fk": {
+          "name": "order_items_menu_id_menus_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "menus",
+          "columnsFrom": [
+            "menu_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.order_table": {
       "name": "order_table",
       "schema": "",
@@ -520,11 +611,23 @@
           "notNull": true,
           "default": "now()"
         },
-        "share_token": {
-          "name": "share_token",
+        "token": {
+          "name": "token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "create_by_id": {
+          "name": "create_by_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "order_code": {
+          "name": "order_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -567,15 +670,35 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "order_table_create_by_id_users_id_fk": {
+          "name": "order_table_create_by_id_users_id_fk",
+          "tableFrom": "order_table",
+          "tableTo": "users",
+          "columnsFrom": [
+            "create_by_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "order_table_share_token_unique": {
-          "name": "order_table_share_token_unique",
+        "order_table_token_unique": {
+          "name": "order_table_token_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "share_token"
+            "token"
+          ]
+        },
+        "order_table_order_code_unique": {
+          "name": "order_table_order_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "order_code"
           ]
         }
       },
@@ -596,12 +719,6 @@
         },
         "shop_id": {
           "name": "shop_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "menu_id": {
-          "name": "menu_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -637,6 +754,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "total_price": {
+          "name": "total_price",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "price_each": {
           "name": "price_each",
           "type": "numeric(10, 2)",
@@ -656,6 +779,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "order_type": {
+          "name": "order_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -666,19 +795,6 @@
           "tableTo": "shops",
           "columnsFrom": [
             "shop_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "orders_menu_id_menus_id_fk": {
-          "name": "orders_menu_id_menus_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "menus",
-          "columnsFrom": [
-            "menu_id"
           ],
           "columnsTo": [
             "id"
@@ -801,10 +917,30 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "roles_shop_id_shops_id_fk": {
+          "name": "roles_shop_id_shops_id_fk",
+          "tableFrom": "roles",
+          "tableTo": "shops",
+          "columnsFrom": [
+            "shop_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "roles_name_unique": {
@@ -1015,6 +1151,18 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by_id": {
+          "name": "created_by_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1025,6 +1173,92 @@
           "tableTo": "table_grids_layout",
           "columnsFrom": [
             "layout_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "tables_shop_id_shops_id_fk": {
+          "name": "tables_shop_id_shops_id_fk",
+          "tableFrom": "tables",
+          "tableTo": "shops",
+          "columnsFrom": [
+            "shop_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "tables_created_by_id_users_id_fk": {
+          "name": "tables_created_by_id_users_id_fk",
+          "tableFrom": "tables",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_fcm_tokens": {
+      "name": "user_fcm_tokens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_fcm_tokens_user_id_users_id_fk": {
+          "name": "user_fcm_tokens_user_id_users_id_fk",
+          "tableFrom": "user_fcm_tokens",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -1054,7 +1288,7 @@
           "name": "email",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "password": {
           "name": "password",
@@ -1076,6 +1310,12 @@
           "notNull": false,
           "default": false
         },
+        "nickname": {
+          "name": "nickname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "image_url": {
           "name": "image_url",
           "type": "text",
@@ -1092,7 +1332,7 @@
           "name": "username",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "birthday": {
           "name": "birthday",
@@ -1128,13 +1368,13 @@
           "name": "first_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "last_name": {
           "name": "last_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "role_id": {
           "name": "role_id",

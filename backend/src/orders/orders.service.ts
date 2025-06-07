@@ -145,6 +145,9 @@ export class OrdersService {
         .set(body)
         .where(and(eq(orders.id, id), eq(orders.shopId, shopId)))
         .returning();
+
+      const updateOrder = updated[0];
+      this.orderGateway.notifyOrderUpdate(updateOrder, shopId);
       return {
         data: updated,
         success: true,

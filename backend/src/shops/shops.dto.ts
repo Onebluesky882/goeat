@@ -4,17 +4,7 @@ import { shops } from '../database';
 export type ShopSelect = InferSelectModel<typeof shops>;
 export type ShopInsert = InferInsertModel<typeof shops>;
 
-export type CreateShopDto = Pick<
-  ShopInsert,
-  | 'active'
-  | 'address'
-  | 'googleMaps'
-  | 'name'
-  | 'ownerId'
-  | 'phone'
-  | 'website'
-  | 'socials'
->;
+export type CreateShopDto = Pick<ShopInsert, 'name'>;
 
 export type UpdateShopDto = Pick<
   ShopInsert,
@@ -26,5 +16,4 @@ export type UpdateShopDto = Pick<
   | 'phone'
   | 'updatedAt'
   | 'website'
-  | 'socials'
 >;

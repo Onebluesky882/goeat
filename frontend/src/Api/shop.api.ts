@@ -1,7 +1,7 @@
 import { api } from ".";
 
 export const shopAPI = {
-  create: (data: any) => api.post("/shops/create", data),
+  create: (data: any) => api.post("/shops", data),
   getAll: () => api.get("/shops"),
   getById: (id: string) => api.get(`/shops/${id}`),
   update: (id: string, data: any) => api.put(`/shops/${id}`, data),

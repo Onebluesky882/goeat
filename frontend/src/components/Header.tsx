@@ -48,7 +48,7 @@ const Header = () => {
           </div>
         </div>
         <div className="col-span-1    justify-end flex">
-          {" "}
+          <div className="flex items-center space-x-4"></div>{" "}
           {profile ? (
             <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">

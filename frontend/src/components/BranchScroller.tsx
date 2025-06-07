@@ -20,7 +20,7 @@ export const BranchScroller: React.FC<BranchScrollerProps> = ({
             className={clsx(
               "whitespace-nowrap px-6 py-2 rounded-lg font-semibold transition-all duration-200",
               branch === selected
-                ? "bg-brand text-white shadow-md scale-105"
+                ? "bg-brand text-blue-700 shadow-md   border-2"
                 : "bg-gray-100 text-gray-700 hover:bg-brand/20"
             )}
             onClick={() => onSelect(branch)}

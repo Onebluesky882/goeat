@@ -8,7 +8,7 @@ const Layout = () => {
     <div className=" mx-4 flex flex-col min-h-screen">
       <div>
         <Header />
-        <TopBar />
+        {/* <TopBar /> */}
       </div>
 
       <main className="flex-1 mx-4 mb-20">

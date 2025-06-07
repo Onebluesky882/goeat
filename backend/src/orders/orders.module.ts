@@ -5,9 +5,10 @@ import { ShopsService } from 'src/shops/shops.service';
 import { DatabaseModule } from 'src/database/database.module';
 import { ValidateModule } from 'src/common/validate/validate.module';
 import { OrdersService } from './orders.service';
+import { GatewaysModule } from 'src/gateways/gateways.module';
 
 @Module({
-  imports: [DatabaseModule, ValidateModule],
+  imports: [DatabaseModule, ValidateModule, GatewaysModule],
   providers: [ShopAccessGuard, OrdersService],
   controllers: [OrdersController],
 })

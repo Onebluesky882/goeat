@@ -1,9 +1,21 @@
 import { shopAPI } from "@/Api/shop.api";
 import type { NewShopFormField } from "@/schema/newShopForm";
+import { useShopStore } from "@/stores/shopStore";
 import type { AxiosError } from "axios";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 const useShop = () => {
+  const { setShop } = useShopStore();
+  useEffect(() => {
+    const fetchShops = async () => {
+      const res = await shopAPI.getAll();
+      const { id, name } = res.data;
+      setShop(id, name);
+    };
+    fetchShops();
+  }, []);
+
   const updateShopDetail = async (data: NewShopFormField) => {
     try {
       const response = await shopAPI.create(data);

@@ -22,16 +22,14 @@ import { ShopsService } from './shops.service';
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
 
-  @UseGuards(ShopAccessGuard)
   @Post()
   @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
-
     return this.ShopsService.create(body, userId);
   }
-  //getAll
 
+  //getAll
   @UseGuards(ShopAccessGuard)
   @Get()
   getAll() {

@@ -19,7 +19,7 @@ const Footer = () => {
       potion: "top-10",
     },
     {
-      path: "shops",
+      path: "shops/dashboard",
       label: { en: "MyShop", th: "ร้านของฉัน" },
       potion: "top-10",
     },
@@ -37,13 +37,13 @@ const Footer = () => {
 
   const shopMenu = [
     {
-      path: "dashboard",
+      path: "",
       label: { en: "Main", th: "หน้าหลัก" },
       icon: <FaHome size={24} />,
       potion: "top-10",
     },
     {
-      path: `shops`,
+      path: `shops/dashboard`,
       label: { en: "shop center", th: "ร้านของฉัน" },
       icon: <FaHome size={24} />,
       potion: "top-10",
@@ -79,7 +79,7 @@ const Footer = () => {
         >
           <nav className="flex   justify-between mx-auto  not-visited: ">
             {/* Desktop Menu */}
-            <div className="flex w-full gap-6 outline-1">
+            <div className="flex w-full gap-6  ">
               {location.pathname.startsWith("/shops") ? (
                 <div className="flex">
                   {shopMenu.map((menu, index) => (
@@ -91,7 +91,7 @@ const Footer = () => {
                             : "text-white hover:text-blue-500"
                         }`}
                       >
-                        <span className="m-2 flex flex-col outline-1 text-center ">
+                        <span className="m-2 flex flex-col  text-center ">
                           <span className="flex  justify-center">
                             {" "}
                             {menu.icon}

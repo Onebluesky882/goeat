@@ -1,17 +1,16 @@
 import { userApi } from "@/Api/user.api";
 import { useUserStore } from "@/stores/userStore";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const useUsers = () => {
   const { setUser } = useUserStore.getState();
   const { fetchProfile } = useUserStore();
 
   const profile = useUserStore((state) => state.user);
-  const navigate = useNavigate();
+
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile()]);
+  }, []);
 
   const login = async ({
     email,
@@ -23,7 +22,7 @@ const useUsers = () => {
     const response = await userApi.login({ email, password });
     try {
       if (response.data.status === "success") {
-        navigate("/dashboard");
+        window.location.href = "/dashboard";
         return true;
       } else {
         return false;

@@ -1,12 +1,5 @@
 import { sql } from 'drizzle-orm';
-import {
-  boolean,
-  jsonb,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { users } from './users';
 
 export const shops = pgTable('shops', {
@@ -22,5 +15,4 @@ export const shops = pgTable('shops', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   active: boolean('active').default(true),
-  socials: jsonb('socials').default({}),
 });

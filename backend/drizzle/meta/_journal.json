@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1748596642463,
-      "tag": "0000_setup_tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1749041742468,
-      "tag": "0001_chilly_skreet",
+      "when": 1749313634719,
+      "tag": "0000_special_sunfire",
       "breakpoints": true
     }
   ]

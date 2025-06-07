@@ -1,15 +1,8 @@
-import type { ShopSelect } from "../../backend/dist/src/shops/shops.dto";
+import type { ShopSelect } from "../../backend/src/shops/shops.dto";
 
-export type PartialCreateShop = Pick<
+export type ShopDto = Pick<
   ShopSelect,
-  | "name"
-  | "ownerId"
-  | "active"
-  | "address"
-  | "googleMaps"
-  | "phone"
-  | "website"
-  | "updatedAt"
+  "name" | "ownerId" | "active" | "updatedAt"
 >;
 
 export type StoreType = "retail" | "restaurant" | "bar" | null;
