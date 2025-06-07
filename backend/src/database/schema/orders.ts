@@ -13,9 +13,6 @@ export const orders = pgTable('orders', {
   shopId: uuid('shop_id')
     .notNull()
     .references(() => shops.id),
-  menuId: uuid('menu_id')
-    .notNull()
-    .references(() => menus.id),
 
   orderTableId: uuid('order_table_id').references(() => orderTable.id, {
     onDelete: 'cascade',
@@ -31,4 +28,5 @@ export const orders = pgTable('orders', {
 
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  orderType: text('order_type'), // takeaways or dine-in
 });

@@ -4,7 +4,9 @@ import { shops } from '../database';
 export type ShopSelect = InferSelectModel<typeof shops>;
 export type ShopInsert = InferInsertModel<typeof shops>;
 
-export type ShopDto = Pick<
+export type CreateShopDto = Pick<ShopInsert, 'name'>;
+
+export type UpdateShopDto = Pick<
   ShopInsert,
   | 'active'
   | 'address'

@@ -4,10 +4,9 @@ import Clock from "../Clock";
 type ShopProps = {
   id: string;
   name: string;
-  setShop: (id: string, name: string) => void;
 };
 
-const ShopBars = ({ id, name, setShop }: ShopProps) => {
+const ShopBars = ({ id, name }: ShopProps) => {
   return (
     <div className="flex relative border-gray-200 border-1 rounded-sm py-2 justify-around items-center shadow-sm bg-blue-200 mb-3">
       <div className=" -ml-20  ">
@@ -16,7 +15,7 @@ const ShopBars = ({ id, name, setShop }: ShopProps) => {
       </div>
       <div className="flex justify-center gap-2 overflow-auto">
         <NavLink
-          onClick={() => setShop(id, name)}
+          onClick={() => {}}
           key={id}
           to={id}
           className={({ isActive }) =>

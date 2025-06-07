@@ -1,5 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { schema, type CategoryField } from "../../schema/categoryField";
+import { schema, type CategoryField } from "../../../schema/categoryField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";

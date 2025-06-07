@@ -1,14 +1,10 @@
 import z from "zod";
 export const newShopSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  address: z.string().min(1, "Address is required"),
-  phone: z.string().min(1, "Phone is required"),
-  googleMaps: z.string().optional(),
-  website: z.string().optional(),
-  socials: z.object({
-    facebook: z.string().optional(),
-    instagram: z.string().optional(),
-  }),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .transform((vel) => vel.trim()),
+  address: z.string().min(1, "Address is required").optional(),
 });
 
-export type FormFields = z.infer<typeof newShopSchema>;
+export type NewShopFormField = z.infer<typeof newShopSchema>;

@@ -41,7 +41,6 @@ export class OrderTableService {
       }
       return {
         success: true,
-        message: 'create table successfully',
         data: inserted,
       };
     } catch (error) {
@@ -79,7 +78,6 @@ export class OrderTableService {
         .where(eq(orderTable.shopId, shopId));
       return {
         success: true,
-        message: 'Fetched all orderTable successfully',
         data: result,
       };
     } catch (error) {
@@ -114,7 +112,6 @@ export class OrderTableService {
       return {
         data: result[0],
         success: true,
-        message: 'Fetched table by ID successfully',
       };
     } catch (error) {
       this.logger.error(error);
@@ -138,7 +135,6 @@ export class OrderTableService {
       return {
         data: updated,
         success: true,
-        message: ' updated table success ',
       };
     } catch (error) {
       this.logger.error(error);
@@ -159,7 +155,6 @@ export class OrderTableService {
         .returning();
       return {
         success: true,
-        message: 'Table deleted successfully',
       };
     } catch (error) {
       this.logger.error(error);

@@ -1,97 +1,45 @@
-import { shopAPI } from "@/Api/shop.api";
-import FromNewShop from "@/components/createNewShop/createShop";
-import { newShopSchema, type FormFields } from "@/schema/newShopForm";
+import RestaurantForm from "@/components/shops/newShop/RestaurantForm/RestaurantForm";
+import useShop from "@/hooks/useShop";
+import { newShopSchema, type NewShopFormField } from "@/schema/newShopForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
-import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
-const emptyValues = {
-  name: "",
-  address: "",
-  phone: "",
-  googleMaps: "",
-  website: "",
-  socials: {
-    facebook: "",
-    instagram: "",
-  },
-};
-
-const CreateNewShop = () => {
-  const [_submitted, setSubmitted] = useState<FormFields | null>(null);
-
+const CreateShop = () => {
+  const { updateShopDetail } = useShop();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isValid, isSubmitting },
-    watch,
-  } = useForm<FormFields>({
-    resolver: zodResolver(newShopSchema), // ✅ plug in schema
-    defaultValues: emptyValues,
+  } = useForm<NewShopFormField>({
+    resolver: zodResolver(newShopSchema),
     mode: "onChange",
   });
-  const watchAll = watch();
 
-  const shouldShowPreview = Object.values(watchAll).some((value) => {
-    if (typeof value === "string") return value.trim() !== "";
-    if (typeof value === "object" && value !== null) {
-      return Object.values(value).some(
-        (v) => typeof v === "string" && v.trim() !== ""
-      );
+  const onSubmit: SubmitHandler<NewShopFormField> = async (data) => {
+    const updated = await updateShopDetail(data);
+    if (updated) {
+      console.log("data :", data);
+      console.log("data : ", data);
+      reset();
+      navigate(`/shops/${updated.id}`);
     }
-    return false;
-  });
-
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const socials: { [k: string]: string } = {};
-    Object.entries(data.socials).forEach(([key, value]) => {
-      if (value && value.trim() !== "") socials[key] = value.trim();
-    });
-    const preview: FormFields = {
-      ...data,
-      name: data.name ?? "",
-      socials,
-    };
-    setSubmitted(preview);
-
-    try {
-      const response = await shopAPI.create(preview);
-      if (response.data) {
-        toast.success("✅ Shop created successfully!");
-        handleReset();
-        // redirect to shops/name/
-      }
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const errorMessage =
-        error.response?.data?.message ?? "An unknown error occurred.";
-
-      toast.error(`❌ Failed to create shop: ${errorMessage}`);
-    }
-  };
-
-  // When resetting the form
-  const handleReset = () => {
-    reset(emptyValues);
   };
 
   return (
     <div>
-      <FromNewShop
-        onSubmit={handleSubmit(onSubmit)}
+      <RestaurantForm
         register={register}
         errors={errors}
+        onSubmit={handleSubmit(onSubmit)}
         isValid={isValid}
         isSubmitting={isSubmitting}
-        handleReset={handleReset}
-        shouldShowPreview={shouldShowPreview}
-        blank={undefined}
+        handleReset={reset}
       />
     </div>
   );
 };
 
-export default CreateNewShop;
+export default CreateShop;

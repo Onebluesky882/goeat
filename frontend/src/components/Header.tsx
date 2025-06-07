@@ -32,21 +32,25 @@ const Header = () => {
   };
 
   return (
-    <header className="my-2 ">
-      <div className="flex   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
-        <div className="flex  w-full items-center text-2xl font-semibold text-gray-800  text-center max-sm:mr-10   justify-between    ">
+    <header className="my-2      ">
+      <div className="grid grid-cols-3   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
+        <div className=" col-span-1 flex  w-full items-center text-2xl     max-sm:mr-10     ">
           <span className="rounded-full border-2 border-amber-100 p-3">
             <BsShop className="text-gray-600 " />
           </span>
+        </div>
+        <div className="col-span-1    justify-center flex">
           <div>
             <span className="text-3xl">🍽️</span>
             <span className="text-indigo-600 text-3xl mx-2">
               <Link to={"/"}>MenuX</Link>{" "}
             </span>
           </div>
-
+        </div>
+        <div className="col-span-1    justify-end flex">
+          <div className="flex items-center space-x-4"></div>{" "}
           {profile ? (
-            <div className="flex outline-1 items-center gap-2 ">
+            <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">
                 <span className="text-start text-[12px] font-medium text-gray-500">
                   {" "}
@@ -85,9 +89,9 @@ export function DropdownMenuHeader({ logout }: { logout: () => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <IoIosArrowDropdownCircle />
+        <IoIosArrowDropdownCircle size={25} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-50 border-gray-100  " align="start">
+      <DropdownMenuContent className="w-50 border-gray-100 " align="start">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>

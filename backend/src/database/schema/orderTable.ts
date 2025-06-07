@@ -21,3 +21,8 @@ export const orderTable = pgTable('order_table', {
   createdById: uuid('create_by_id').references(() => users.id),
   orderCode: text('order_code').unique().notNull(), // for refer bill
 });
+/* 
+order_table
+  └── 1 → many orders
+             └── 1 → many order_items
+*/

@@ -1,5 +1,5 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { orderTable } from 'src/database';
+import { orderTable } from '../database';
 
 export type InsertOrdersTable = InferInsertModel<typeof orderTable>;
 
