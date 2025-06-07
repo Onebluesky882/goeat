@@ -19,6 +19,9 @@ import { ValidateModule } from './common/validate/validate.module';
 import { MenusModule } from './menus/menus.module';
 import { EmployersModule } from './employers/employers.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { OrderItemsController } from './order-items/order-items.controller';
+import { OrderItemsService } from './order-items/order-items.service';
+import { OrderItemsModule } from './order-items/order-items.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -41,9 +44,10 @@ import { NotificationsModule } from './notifications/notifications.module';
     RolesModule,
     OrderTableModule,
     NotificationsModule,
+    OrderItemsModule,
   ],
-  controllers: [AppController],
-  providers: [],
+  controllers: [AppController, OrderItemsController],
+  providers: [OrderItemsService],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}
