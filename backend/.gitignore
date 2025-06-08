@@ -45,7 +45,6 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
-/src/lib/firebase/firebase-admin-sdk.json
 
 # Runtime data
 pids
