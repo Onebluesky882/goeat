@@ -26,7 +26,6 @@ export class MenusService {
         .values({ ...dto, shopId: shopId, createdBy: userId });
       return {
         success: true,
-        message: 'create menu successfully',
         data: newMenu,
       };
     } catch (error) {

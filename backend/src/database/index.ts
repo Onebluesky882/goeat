@@ -13,6 +13,7 @@ import { tableGridLayout } from './schema/tableGridsLayout';
 import { menus } from './schema/menus';
 import { employers } from './schema/employers';
 import { orderItems } from './schema/orderItems';
+import { lineUser } from './schema/lineUser';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -29,6 +30,7 @@ export * from './schema/tableGridsLayout';
 export * from './schema/menus';
 export * from './schema/employers';
 export * from './schema/orderItems';
+export * from './schema/lineUser';
 
 export * from './relations/orders.relation';
 export * from './relations/owner.relation';
@@ -51,4 +53,5 @@ export const schema = {
   menus,
   employers,
   orderItems,
+  lineUser,
 };

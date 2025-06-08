@@ -22,6 +22,7 @@ import { OrderItemsController } from './order-items/order-items.controller';
 import { OrderItemsService } from './order-items/order-items.service';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { GatewaysModule } from './gateways/gateways.module';
+import { LineUsersModule } from './line_users/line_users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -45,6 +46,7 @@ import { GatewaysModule } from './gateways/gateways.module';
     OrderTableModule,
     OrderItemsModule,
     GatewaysModule,
+    LineUsersModule,
   ],
   controllers: [AppController, OrderItemsController],
   providers: [OrderItemsService],

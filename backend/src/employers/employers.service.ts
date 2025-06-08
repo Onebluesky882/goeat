@@ -8,11 +8,9 @@ import {
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { employers, orderTable, shops } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
-import { nanoid } from 'nanoid';
 import { EmployersDto } from './employers.dto';
-import { users } from '../database/schema/users';
 
 @Injectable()
 export class EmployersService {

@@ -1,16 +1,21 @@
 import React from "react";
 import { User, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Header = () => {
   return (
     <header className="   sticky top-0 z-50 mt-2 ml-2 max-sm:m-2  max-sm:pt-2 ">
       <div className="px-2 py-2 flex items-center justify-between bg-white  shadow-sm rounded-sm  ">
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-co items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-lg">F</span>
+            <Link href={"/"}>
+              <span className="text-white font-bold text-lg">F</span>{" "}
+            </Link>
           </div>
+
           <div>
+            {" "}
             <h1 className="text-xl font-bold text-gray-800">MenuX</h1>
             <p className="text-xs text-gray-500">Delivering happiness</p>
           </div>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { Sidebar } from "lucide-react";
+import { BottomNav } from "@/components/ButtonNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,10 +30,24 @@ export default function RootLayout({
       <body
         className={`  ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="sm:flex min-h-screen bg-gray-100   ">
+        <div className="min-h-screen flex flex-col bg-gray-100">
+          {/* Header - always shown */}
           <Header />
 
-          {children}
+          <div className="flex flex-1">
+            {/* Sidebar - hidden on mobile */}
+            <aside className="hidden sm:block w-64 bg-white border-r">
+              <Sidebar />
+            </aside>
+
+            {/* Main content */}
+            <main className="flex-1 p-4">{children}</main>
+          </div>
+
+          {/* BottomNav - mobile only */}
+          <div className="block sm:hidden">
+            <BottomNav />
+          </div>
         </div>
       </body>
     </html>
