@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Timer, Zap } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 export const FlashDealBanner = () => {
   const [timeLeft, setTimeLeft] = useState({

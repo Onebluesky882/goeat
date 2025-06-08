@@ -35,9 +35,7 @@ export const CategoryTabs = () => {
           <TabsContent key={category.id} value={category.id} className="mt-4">
             <div className="text-center py-8 text-gray-500">
               <category.icon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>
-                Items for "{category.label}" category will be displayed here
-              </p>
+              <p>Items for {category.label} category will be displayed here</p>
             </div>
           </TabsContent>
         ))}

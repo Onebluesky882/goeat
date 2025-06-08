@@ -13,7 +13,6 @@ import { PromoSection } from "@/components/PromoSection";
 import { InviteFriends } from "@/components/InviteFriends";
 import { QRFlyer } from "@/components/QrFlyer";
 import { toast } from "sonner";
-import { Sidebar } from "lucide-react";
 const Homepage = () => {
   const [showQRFlyer, setShowQRFlyer] = useState(false);
 

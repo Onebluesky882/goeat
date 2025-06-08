@@ -12,8 +12,8 @@ export const DailySpecial = () => {
             <Star className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-800">Today's Special</h3>
-            <p className="text-sm text-gray-600">Chef's recommendation</p>
+            <h3 className="font-bold text-gray-800">Today is Special</h3>
+            <p className="text-sm text-gray-600">Chef is recommendation</p>
           </div>
           <Button variant="ghost" size="icon" className="ml-auto">
             <Bell className="h-4 w-4 text-gray-500" />
