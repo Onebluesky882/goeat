@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Post,
   Req,
   Res,
@@ -12,13 +13,16 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/user.dto';
+import { LineUsersDto } from 'src/line_users/line_users.dto';
+import { LineUsersService } from '../line_users/line_users.service';
 import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private auth: AuthService,
-    private readonly usersService: UsersService,
+    private lineUsersService: LineUsersService,
+    private usersService: UsersService,
   ) {}
 
   @Get('google')
@@ -63,6 +67,21 @@ export class AuthController {
     } catch (error) {
       console.error('login failed', error);
     }
+  }
+  @Post(':id')
+  async loginByLine(
+    @Param('id') id: string,
+    @Body() body: LineUsersDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const lineUserId = await this.lineUsersService.create(body);
+    const jwt = await this.auth.loginByLine(lineUserId);
+    res.cookie('access_token', jwt.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 86400 * 1000,
+    });
+    return { success: true };
   }
 
   @Post('register')

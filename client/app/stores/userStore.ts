@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { users } from "../api/users";
 
 type User = {
   id: string;
@@ -21,8 +20,8 @@ export const useUserStore = create<UserState>((set) => ({
   },
   fetchProfile: async (id) => {
     try {
-      const res = await users.getUserById(id);
-      set({ user: res.data });
+      // const res = await users.getUserById(id);
+      // set({ user: res.data });
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
     }

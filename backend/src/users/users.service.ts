@@ -56,19 +56,4 @@ export class UsersService {
       );
     }
   }
-
-  async getPictureById(id: string) {
-    try {
-      await this.db
-        .select({ linePictureUrl: users.linePictureUrl })
-        .from(users)
-        .where(eq(users.id, id));
-
-      return {
-        success: true,
-      };
-    } catch (error) {
-      this.logger.error('Failed to get line id user', error.stack || error);
-    }
-  }
 }

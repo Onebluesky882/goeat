@@ -10,10 +10,12 @@ import { customers, lineUser, schema, users } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { LineUsersDto } from './line_users.dto';
 import { eq } from 'drizzle-orm';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class LineUsersService {
   private readonly logger = new Logger(LineUsersService.name);
+
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase<typeof schema>,
@@ -21,8 +23,7 @@ export class LineUsersService {
 
   async create(data: LineUsersDto) {
     try {
-      this.logger.log('Inserting lineUser...');
-      const lineInsert = await this.db
+      await this.db
         .insert(lineUser)
         .values(data)
         .onConflictDoNothing()
@@ -37,25 +38,33 @@ export class LineUsersService {
         })
         .onConflictDoNothing()
         .returning();
-      this.logger.log('Inserted lineUser', lineInsert);
 
-      this.logger.log('Fetching user by lineUserId...');
-      const userRecord = await this.db
+      const [userRecord] = await this.db
         .select({ id: users.id, lineUserId: users.lineUserId })
         .from(users)
         .where(eq(users.lineUserId, data.userId))
         .limit(1);
-      this.logger.log('Found user:', userRecord);
 
-      const newCustomer = userRecord[0];
-      await this.db.insert(customers).values({
-        userId: newCustomer.id,
-        lineUserId: newCustomer.lineUserId,
-      });
-      return {
-        data: lineInsert,
-        status: true,
-      };
+      if (!userRecord) {
+        throw new Error('User not found after insert');
+      }
+
+      const existingCustomer = await this.db
+        .select()
+        .from(customers)
+        .where(eq(customers.userId, userRecord.id))
+        .limit(1);
+
+      // Insert customer only if it doesn't exist
+      if (existingCustomer.length === 0) {
+        await this.db.insert(customers).values({
+          userId: userRecord.id,
+          lineUserId: userRecord.lineUserId,
+        });
+      }
+
+      //get jwt using Auth sevice
+      return userRecord.lineUserId;
     } catch (error) {
       this.logger.error('Failed to create line user', error.stack || error);
 

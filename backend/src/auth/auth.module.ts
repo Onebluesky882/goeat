@@ -7,6 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import * as dotenv from 'dotenv';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
+import { LineUsersModule } from 'src/line_users/line_users.module';
 dotenv.config();
 if (!process.env.JWT_SECRET) {
   console.error('Missing ENV JWT_SECRET');
@@ -20,6 +21,7 @@ if (!process.env.JWT_SECRET) {
     }),
     DatabaseModule,
     UsersModule,
+    LineUsersModule,
   ],
   providers: [AuthService, GoogleStrategy, JwtStrategy],
 

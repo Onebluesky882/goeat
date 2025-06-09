@@ -1,12 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import liff from "@line/liff";
-import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { LineUser } from "../../types/lineUser";
-import { postUserApi } from "../../api/lineId";
+import { LineUser } from "../types/lineUser";
 import { useUserStore } from "@/app/stores/userStore";
+import { api } from "@/app/api/lineUsers";
 
 const page = () => {
   const [user, setUser] = useState<LineUser | null>(null);
@@ -30,11 +29,10 @@ const page = () => {
 
         setUser(userData);
 
-        // post new user to db
-        await postUserApi.post(userData);
-
+        // api store user to db and  jwt
+        await api.getLineUserById(user.userId);
         // keep user state global
-        await fetchProfile(user?.userId);
+        await fetchProfile(user.userId);
       } catch (error) {
         console.error("LIFF init error", error);
       }
@@ -76,3 +74,6 @@ const page = () => {
 // shop create menu
 // scan qr code to shop
 export default page;
+function getUserById() {
+  throw new Error("Function not implemented.");
+}

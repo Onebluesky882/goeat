@@ -1,7 +1,7 @@
 import { axiosInstance } from ".";
 
-export const users = {
-  getUserById: async (id: string) => {
+export const api = {
+  getLineUserById: async (id: string) => {
     return await axiosInstance.get(`/auth/${id}`);
   },
 };
