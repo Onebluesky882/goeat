@@ -8,6 +8,7 @@ import { CreateUserDto } from './user.dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
+  logger: any;
   constructor(
     @Inject(DATABASE_CONNECTION)
     private db: NodePgDatabase<typeof schema>,
@@ -47,6 +48,21 @@ export class UsersService {
         'Could not create user',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  async getPictureById(id: string) {
+    try {
+      await this.db
+        .select({ linePictureUrl: users.linePictureUrl })
+        .from(users)
+        .where(eq(users.id, id));
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      this.logger.error('Failed to get line id user', error.stack || error);
     }
   }
 }

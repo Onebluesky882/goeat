@@ -28,8 +28,8 @@ const page = () => {
         };
 
         setUser(userData);
-        console.log("userData :", userData);
-        postUserApi(userData);
+
+        postUserApi.post(userData);
       } catch (error) {
         console.error("LIFF init error", error);
       }
@@ -62,9 +62,12 @@ const page = () => {
 };
 
 // ref https://developers.line.biz/en/reference/messaging-api
-// if client want follow must register first
+
 // .....................
 // client add channel
-// frontend get data from Line  send data to backend to store user
-//
+// user subscription channel
+// frontend get data from Line  send data to backend to store user done !
+// upload image r3
+// shop create menu
+// scan qr code to shop
 export default page;

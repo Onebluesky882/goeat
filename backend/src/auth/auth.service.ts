@@ -5,7 +5,6 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { schema, users } from 'src/database';
 import { Response } from 'express';
-import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
@@ -65,9 +64,6 @@ export class AuthService {
     const { password: _p, ...safeUser } = user;
     return safeUser;
   }
-  signToken(payload: { id: string; email: string; username?: string }) {
-    return this.jwtService.sign(payload);
-  }
 
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
@@ -78,6 +74,30 @@ export class AuthService {
     };
     const token = this.jwtService.sign(payload);
 
+    return { access_token: token };
+  }
+
+  // line validate
+  async validateLineLogin(id: string) {
+    const user = await this.db.query.users.findFirst({
+      where: eq(users.lineUserId, id),
+    });
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    return user;
+  }
+  signToken(payload: { id: string; email?: string; username?: string }) {
+    return this.jwtService.sign(payload);
+  }
+
+  async loginByLine(lineUserId: string) {
+    const user = await this.validateLineLogin(lineUserId);
+    const payload = {
+      id: user.id,
+    };
+    const token = this.jwtService.sign(payload);
+    console.log('access_token :', token);
     return { access_token: token };
   }
 }

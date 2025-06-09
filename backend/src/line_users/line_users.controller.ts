@@ -1,14 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LineUsersService } from './line_users.service';
 import { LineUsersDto } from './line_users.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('line-users')
 export class LineUsersController {
-  constructor(private readonly lineUsersService: LineUsersService) {}
+  constructor(
+    private readonly lineUsersService: LineUsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   // store line user to our db
+
   @Post()
-  create(@Body() body: LineUsersDto) {
-    return this.lineUsersService.create(body);
+  async createAndLogin(@Body() body: LineUsersDto) {
+    await this.lineUsersService.create(body);
+    return this.authService.loginByLine(body.userId);
   }
 }
