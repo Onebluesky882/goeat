@@ -1,7 +1,7 @@
 import { customers } from './schema/customers';
 import { orders } from './schema/orders';
 import { shops } from './schema/shops';
-import { tables } from './schema/tables';
+import { shopTables } from './schema/shopTables';
 import { users } from './schema/users';
 import { orderTable } from './schema/orderTable';
 import { images } from './schema/images';
@@ -19,7 +19,7 @@ export * from './schema/orders';
 export * from './schema/shops';
 export * from './schema/users';
 export * from './schema/customers';
-export * from './schema/tables';
+export * from './schema/shopTables';
 export * from './schema/orderTable';
 export * from './schema/images';
 export * from './schema/roles';
@@ -42,7 +42,7 @@ export const schema = {
   orders,
   shops,
   customers,
-  tables,
+  shopTables,
   orderTable,
   employees,
   images,

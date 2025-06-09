@@ -4,7 +4,7 @@ import { shops } from './shops';
 import { users } from './users';
 import { tableGridLayout } from './tableGridsLayout';
 
-export const tables = pgTable('tables', {
+export const shopTables = pgTable('shop_tables', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),

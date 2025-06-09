@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { shops } from './shops';
 import { customers } from './customers';
-import { tables } from './tables';
+import { shopTables } from './shopTables';
 import { users } from './users';
 
 // order_tables – โต๊ะที่สั่งออเดอร์ (1 โต๊ะ = 1 กลุ่มออเดอร์)
@@ -11,7 +11,7 @@ export const orderTable = pgTable('order_table', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   shopId: uuid('shop_id').references(() => shops.id),
-  tableId: uuid('table_number').references(() => tables.id),
+  tableId: uuid('table_number').references(() => shopTables.id),
   customersId: uuid('customer_id').references(() => customers.id),
   totalPrice: numeric('total_price', { precision: 10, scale: 2 }),
   status: text('status').default('pending'),

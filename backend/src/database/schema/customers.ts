@@ -7,9 +7,8 @@ export const customers = pgTable('customers', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   active: boolean('active').default(false),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => users.id),
+  userId: uuid('user_id').references(() => users.id),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
+  lineUserId: text('line_user_id').references(() => users.lineUserId),
 });

@@ -7,7 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { tables } from 'src/database';
+import { shopTables } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
 import { TableDto } from './table.dto';
@@ -23,7 +23,7 @@ export class TablesService {
   async create(dto: TableDto, shopId: string, userId: string) {
     try {
       const inserted = await this.db
-        .insert(tables)
+        .insert(shopTables)
         .values({ ...dto, shopId: shopId, createdById: userId })
         .returning();
 
@@ -55,20 +55,20 @@ export class TablesService {
     try {
       const result = await this.db
         .select({
-          shopId: tables.shopId,
-          status: tables.status,
-          createdById: tables.createdById,
-          layoutId: tables.layoutId,
-          name: tables.name,
-          number: tables.number,
-          position: tables.position,
-          tableLink: tables.tableLink,
+          shopId: shopTables.shopId,
+          status: shopTables.status,
+          createdById: shopTables.createdById,
+          layoutId: shopTables.layoutId,
+          name: shopTables.name,
+          number: shopTables.number,
+          position: shopTables.position,
+          tableLink: shopTables.tableLink,
         })
-        .from(tables)
-        .where(eq(tables.shopId, shopId));
+        .from(shopTables)
+        .where(eq(shopTables.shopId, shopId));
       return {
         success: true,
-        message: 'Fetched all tables successfully',
+        message: 'Fetched all shopTables successfully',
         data: result,
       };
     } catch (error) {
@@ -87,17 +87,17 @@ export class TablesService {
     try {
       const result = await this.db
         .select({
-          shopId: tables.shopId,
-          status: tables.status,
-          createdById: tables.createdById,
-          layoutId: tables.layoutId,
-          name: tables.name,
-          number: tables.number,
-          position: tables.position,
-          tableLink: tables.tableLink,
+          shopId: shopTables.shopId,
+          status: shopTables.status,
+          createdById: shopTables.createdById,
+          layoutId: shopTables.layoutId,
+          name: shopTables.name,
+          number: shopTables.number,
+          position: shopTables.position,
+          tableLink: shopTables.tableLink,
         })
-        .from(tables)
-        .where(and(eq(tables.id, id), eq(tables.shopId, shopId)));
+        .from(shopTables)
+        .where(and(eq(shopTables.id, id), eq(shopTables.shopId, shopId)));
       return {
         data: result[0],
         success: true,
@@ -118,9 +118,9 @@ export class TablesService {
   async update(id: string, body: TableDto, shopId: string) {
     try {
       const updated = await this.db
-        .update(tables)
+        .update(shopTables)
         .set(body)
-        .where(and(eq(tables.id, id), eq(tables, shopId)))
+        .where(and(eq(shopTables.id, id), eq(shopTables, shopId)))
         .returning();
       return {
         data: updated,
@@ -141,8 +141,8 @@ export class TablesService {
   async delete(id: string, shopId: string) {
     try {
       await this.db
-        .delete(tables)
-        .where(and(eq(tables.id, id), eq(tables.shopId, shopId)))
+        .delete(shopTables)
+        .where(and(eq(shopTables.id, id), eq(shopTables.shopId, shopId)))
         .returning();
       return {
         success: true,

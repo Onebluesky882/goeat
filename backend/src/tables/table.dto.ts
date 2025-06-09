@@ -1,8 +1,8 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { tables } from '../database';
+import { shopTables } from '../database';
 
-export type InsertTable = InferInsertModel<typeof tables>;
-export type ReadTables = InferSelectModel<typeof tables>;
+export type InsertTable = InferInsertModel<typeof shopTables>;
+export type ReadTables = InferSelectModel<typeof shopTables>;
 
 export type TableDto = Pick<
   InsertTable,

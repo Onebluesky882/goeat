@@ -1,6 +1,7 @@
 import { pgTable, uuid, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { roles } from './roles';
+import { lineUser } from './lineUser';
 export const users = pgTable('users', {
   id: uuid('id')
     .primaryKey()
@@ -21,4 +22,7 @@ export const users = pgTable('users', {
   firstName: text('first_name'),
   lastName: text('last_name'),
   roleId: uuid('role_id').references(() => roles.id),
+  lineUserId: text('line_user_id').unique(),
+  linePictureUrl: text('line_picture_url'),
+  lineDisplayName: text('line_display_name'),
 });
