@@ -5,8 +5,8 @@ import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [DatabaseModule, AuthModule],
+  imports: [DatabaseModule, AuthModule], // ✅ IMPORT AuthModule
   controllers: [LineUsersController],
-  providers: [LineUsersService],
+  providers: [LineUsersService], // ✅ DO NOT add AuthService manually here
 })
 export class LineUsersModule {}

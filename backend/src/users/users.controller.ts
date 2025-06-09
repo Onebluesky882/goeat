@@ -12,10 +12,4 @@ export class UsersController {
   getProfile(@Req() req: AuthRequest) {
     return this.usersService.getProfile(req.user.id);
   }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
-  getPictureById(@Param('id') id: string) {
-    return this.getPictureById(id);
-  }
 }

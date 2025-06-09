@@ -4,12 +4,13 @@ import liff from "@line/liff";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { LineUser } from "../types/lineUser";
-import { postUserApi } from "../api/lineId";
+import { LineUser } from "../../types/lineUser";
+import { postUserApi } from "../../api/lineId";
+import { useUserStore } from "@/app/stores/userStore";
 
 const page = () => {
   const [user, setUser] = useState<LineUser | null>(null);
-
+  const { user: lineUserId, fetchProfile } = useUserStore();
   useEffect(() => {
     const initLiff = async () => {
       try {
@@ -29,7 +30,11 @@ const page = () => {
 
         setUser(userData);
 
-        postUserApi.post(userData);
+        // post new user to db
+        await postUserApi.post(userData);
+
+        // keep user state global
+        await fetchProfile(user?.userId);
       } catch (error) {
         console.error("LIFF init error", error);
       }

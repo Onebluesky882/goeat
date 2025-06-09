@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { users } from '../database/schema/users';
@@ -8,7 +14,7 @@ import { CreateUserDto } from './user.dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
-  logger: any;
+  private readonly logger = new Logger(UsersService.name);
   constructor(
     @Inject(DATABASE_CONNECTION)
     private db: NodePgDatabase<typeof schema>,

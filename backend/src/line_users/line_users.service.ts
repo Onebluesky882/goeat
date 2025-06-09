@@ -9,7 +9,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { customers, lineUser, schema, users } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { LineUsersDto } from './line_users.dto';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class LineUsersService {
