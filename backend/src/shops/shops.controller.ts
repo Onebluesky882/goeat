@@ -21,6 +21,11 @@ import { ShopsService } from './shops.service';
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
+  //getAll
+  @Get()
+  getAll() {
+    return this.ShopsService.getAll();
+  }
 
   @Post()
   @Roles('owner')
@@ -29,12 +34,6 @@ export class ShopsController {
     return this.ShopsService.create(body, userId);
   }
 
-  //getAll
-  @UseGuards(ShopAccessGuard)
-  @Get()
-  getAll() {
-    return this.ShopsService.getAll();
-  }
   // get by id
   @UseGuards(ShopAccessGuard)
   @Get(':id')

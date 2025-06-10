@@ -20,7 +20,7 @@ export class ShopAccessGuard implements CanActivate {
 
     const shopId = request.params.shopId || request.body?.shopId;
     if (!shopId) {
-      throw new ForbiddenException('Shop ID not provided.');
+      return true;
     }
 
     await this.validateService.validateShop(shopId, user.id, ['staff']);

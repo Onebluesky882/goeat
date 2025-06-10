@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import LoginAuthGoogle from "../components/LoginAuthGoogle";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema, type LoginField } from "@/schema/loginField";
 import useUsers from "@/hooks/useUsers";
@@ -11,6 +11,7 @@ import { toast } from "sonner";
 // todo problem not pare password
 
 const Login = () => {
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const { login } = useUsers();
 
@@ -18,21 +19,18 @@ const Login = () => {
     resolver: zodResolver(schema),
     mode: "onChange",
   });
-
+  const from = location.state;
   const navigate = useNavigate();
   const onSubmit = async (data: LoginField) => {
     setLoading(true);
-
     try {
       const success = await login(data);
       if (success) {
-        navigate("/dashboard");
+        // window.location.pathname = "/";
+        navigate(from, { replace: true });
         reset();
       } else {
         toast.error("Invalid email or password");
-        setTimeout(() => {
-          navigate("/");
-        }, 20000);
       }
     } catch (error) {
       console.error(error);

@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const CreateShop = () => {
-  const { updateShopDetail } = useShop();
+  const { createShop, setShopById } = useShop();
   const navigate = useNavigate();
   const {
     register,
@@ -19,12 +19,15 @@ const CreateShop = () => {
   });
 
   const onSubmit: SubmitHandler<NewShopFormField> = async (data) => {
-    const updated = await updateShopDetail(data);
-    if (updated) {
-      console.log("data :", data);
-      console.log("data : ", data);
+    const newShop = await createShop(data);
+
+    if (newShop.data.length > 0) {
       reset();
-      navigate(`/shops/${updated.id}`);
+
+      const shopId = newShop.data[0];
+
+      await setShopById(shopId);
+      navigate(`/shops/${shopId.id}`);
     }
   };
 

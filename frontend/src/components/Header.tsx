@@ -36,7 +36,10 @@ const Header = () => {
       <div className="grid grid-cols-3   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
         <div className=" col-span-1 flex  w-full items-center text-2xl     max-sm:mr-10     ">
           <span className="rounded-full border-2 border-amber-100 p-3">
-            <BsShop className="text-gray-600 " />
+            <BsShop
+              onClick={() => navigate("/shops/dashboard")}
+              className="text-gray-600 "
+            />
           </span>
         </div>
         <div className="col-span-1    justify-center flex">

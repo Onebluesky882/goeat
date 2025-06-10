@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 const useUsers = () => {
   const { setUser } = useUserStore.getState();
-  const { fetchProfile } = useUserStore();
 
+  const fetchProfile = useUserStore((state) => state.fetchProfile);
   const profile = useUserStore((state) => state.user);
 
   useEffect(() => {
@@ -21,8 +21,7 @@ const useUsers = () => {
   }) => {
     const response = await userApi.login({ email, password });
     try {
-      if (response.data.status === "success") {
-        window.location.href = "/dashboard";
+      if (response.data.success) {
         return true;
       } else {
         return false;

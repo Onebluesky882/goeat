@@ -8,9 +8,19 @@ import {
 import { Button } from "../../ui/button";
 import { BarChart3, Plus, Store, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/stores/userStore";
 
 const QuickOpenShop = () => {
   const navigate = useNavigate();
+  const { user } = useUserStore();
+  const handleSubmitNewShop = () => {
+    if (user) {
+      navigate("/shops/create");
+    } else {
+      navigate("/login", { state: location.pathname });
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto mb-12 mt-1">
       <Card className="shadow-lg border-0 bg-white/70 backdrop-blur-sm">
@@ -24,7 +34,7 @@ const QuickOpenShop = () => {
         </CardHeader>
         <CardContent>
           <Button
-            onClick={() => navigate("/shops/create")}
+            onClick={handleSubmitNewShop}
             size="lg"
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
@@ -33,12 +43,11 @@ const QuickOpenShop = () => {
           </Button>
         </CardContent>
       </Card>
-      <FeatureGrid />
     </div>
   );
 };
 
-const FeatureGrid = () => {
+export const FeatureGrid = () => {
   return (
     <div className="mt-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">

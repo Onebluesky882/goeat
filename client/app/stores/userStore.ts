@@ -20,8 +20,7 @@ export const useUserStore = create<UserState>((set) => ({
   },
   fetchProfile: async (id) => {
     try {
-      // const res = await users.getUserById(id);
-      // set({ user: res.data });
+      // const user = apiUser;
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
     }

@@ -47,57 +47,70 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    // 1. check user
     const user = await this.db.query.users.findFirst({
       where: eq(users.email, email),
     });
+
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      return { success: false };
     }
-    // bcrypt.compare is async!
-    const matches = await bcrypt.compare(password, user.password as string);
+
+    if (!user.password) {
+      return { success: false };
+    }
+
+    const matches = await bcrypt.compare(password, user.password);
     if (!matches) {
-      throw new UnauthorizedException('Invalid credentials');
+      return { success: false };
     }
 
     //3. replace stack value
     const { password: _p, ...safeUser } = user;
-    return safeUser;
+    return { success: true, data: safeUser };
   }
 
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
+
+    if (!user.success) {
+      return user; // error
+    }
+
     const payload = {
-      id: user?.id,
-      email: user?.email,
-      username: user?.username,
+      id: user?.data?.id,
+      email: user?.data?.email,
+      username: user?.data?.username,
     };
+
     const token = this.jwtService.sign(payload);
 
-    return { access_token: token };
+    return {
+      success: true,
+      access_token: token,
+    };
   }
 
   // line validate
-  async validateLineLogin(id: string) {
-    const user = await this.db.query.users.findFirst({
-      where: eq(users.lineUserId, id),
-    });
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    return user;
-  }
+  // async validateLineLogin(id: string) {
+  //   const user = await this.db.query.users.findFirst({
+  //     where: eq(users.lineUserId, id),
+  //   });
+  //   if (!user) {
+  //     throw new UnauthorizedException('Invalid credentials');
+  //   }
+  //   return user;
+  // }
   signToken(payload: { id: string; email?: string; username?: string }) {
     return this.jwtService.sign(payload);
   }
 
-  async loginByLine(lineUserId: string) {
-    const user = await this.validateLineLogin(lineUserId);
-    const payload = {
-      id: user.id,
-    };
-    const token = this.jwtService.sign(payload);
-    console.log('access_token :', token);
-    return { access_token: token };
-  }
+  // async loginByLine(lineUserId: string) {
+  //   const user = await this.validateLineLogin(lineUserId);
+  //   const payload = {
+  //     id: user.id,
+  //   };
+  //   const token = this.jwtService.sign(payload);
+  //   console.log('access_token :', token);
+  //   return { access_token: token };
+  // }
 }

@@ -1,22 +1,13 @@
 import { shopAPI } from "@/Api/shop.api";
 import type { NewShopFormField } from "@/schema/newShopForm";
-import { useShopStore } from "@/stores/shopStore";
+import { useShopStore, type Shop } from "@/stores/shopStore";
 import type { AxiosError } from "axios";
-import { useEffect } from "react";
 import { toast } from "sonner";
 
 const useShop = () => {
-  const { setShop } = useShopStore();
-  useEffect(() => {
-    const fetchShops = async () => {
-      const res = await shopAPI.getAll();
-      const { id, name } = res.data;
-      setShop(id, name);
-    };
-    fetchShops();
-  }, []);
+  const { setShops, setSelectedShop } = useShopStore();
 
-  const updateShopDetail = async (data: NewShopFormField) => {
+  const createShop = async (data: NewShopFormField) => {
     try {
       const response = await shopAPI.create(data);
       if (response.data) {
@@ -32,7 +23,27 @@ const useShop = () => {
       return null;
     }
   };
-  return { updateShopDetail };
-};
 
+  const setAllShops = async () => {
+    const res = await shopAPI.getAll();
+    setShops(res.data.data);
+  };
+
+  const setShopById = async (selected: Shop) => {
+    setSelectedShop(selected);
+  };
+
+  const shops = useShopStore((state) => state.shops);
+  const selectShop = useShopStore((state) => state.selectedShop);
+  const clearSelectedShop = useShopStore(() => null);
+
+  return {
+    setAllShops,
+    setShopById,
+    createShop,
+    shops,
+    selectShop,
+    clearSelectedShop,
+  };
+};
 export default useShop;

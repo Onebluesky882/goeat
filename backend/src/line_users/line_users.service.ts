@@ -22,6 +22,7 @@ export class LineUsersService {
   ) {}
 
   async create(data: LineUsersDto) {
+    this.logger.debug('Received Line user data:', data);
     try {
       await this.db
         .insert(lineUser)
