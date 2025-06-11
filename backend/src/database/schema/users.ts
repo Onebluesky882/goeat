@@ -1,4 +1,11 @@
-import { pgTable, uuid, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  text,
+  timestamp,
+  boolean,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { roles } from './roles';
 import { lineUser } from './lineUser';
@@ -25,4 +32,9 @@ export const users = pgTable('users', {
   lineUserId: text('line_user_id').unique(),
   linePictureUrl: text('line_picture_url'),
   lineDisplayName: text('line_display_name'),
+  resetToken: varchar('reset_token', { length: 255 }),
+  resetTokenExpiry: timestamp('reset_token_expiry'),
+  lastLoginAt: timestamp('last_login_at'),
+  emailVerified: boolean('email_verified').default(false),
+  provider: varchar('provider', { length: 50 }),
 });

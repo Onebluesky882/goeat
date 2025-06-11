@@ -2,28 +2,22 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
-  Param,
+  HttpCode,
+  HttpStatus,
   Post,
   Req,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Response } from 'express';
 import { CreateUserDto } from 'src/users/user.dto';
-import { LineUsersDto } from 'src/line_users/line_users.dto';
-import { LineUsersService } from '../line_users/line_users.service';
-import { UsersService } from 'src/users/users.service';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private lineUsersService: LineUsersService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -48,32 +42,109 @@ export class AuthController {
     );
   }
 
+  @Post('register')
+  async register(
+    @Body() dto: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    // 1) delegate creation to the plain UsersService
+    const result = await this.authService.register(dto);
+
+    // 2) issue a token
+    this.authService.setTokenCookies(res, {
+      access_token: result.accessToken,
+      refresh_token: result.refreshToken,
+    });
+
+    // 4) return the token (and/or user profile)
+    return {
+      success: true,
+      message: 'Registration successful',
+      user: result.user,
+      access_token: result.access_token,
+    };
+  }
+
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   async login(
-    @Body() creds: { email: string; password: string },
+    @Body() dto: { email: string; password: string },
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const result = await this.authService.login(creds.email, creds.password);
+      const result = await this.authService.login(dto.email, dto.password);
 
-      if (!result.success || !('access_token' in result)) {
-        return {
-          status: 'error',
-        };
-      }
-      // if you want to set it as a cookie:
-      res.cookie('access_token', result.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 86400 * 1000,
+      this.authService.setTokenCookies(res, {
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
       });
 
-      return { access_token: result.access_token, status: 'success' };
+      return {
+        success: true,
+        message: 'Login successful',
+        user: result.user,
+        access_token: result.access_token,
+      };
     } catch (error) {
       console.error('login failed', error);
     }
   }
+  // ===== REFRESH TOKEN =====
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies?.refresh_token;
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token not found');
+    }
+
+    const result = await this.authService.refreshToken(refreshToken);
+    this.authService.setTokenCookies(res, {
+      access_token: result.access_token,
+      refresh_token: result.refresh_token,
+    });
+    return {
+      success: true,
+      access_token: result.access_token,
+      user: result.user,
+    };
+  }
+  // ===== FORGOT PASSWORD =====
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() dto: { email: string }) {
+    return this.authService.requestPasswordReset(dto.email);
+  }
+
+  // ===== RESET PASSWORD =====
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() dto: { token: string; password: string }) {
+    return this.authService.resetPassword(dto.token, dto.password);
+  }
+
+  // ===== LOGOUT =====
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    this.authService.clearTokenCookies(res);
+    return { success: true, message: 'Logout successful' };
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getProfile(@Req() req) {
+    return {
+      success: true,
+      user: req.user,
+    };
+  }
+
+  // line login
+
   // @Post(':id')
   // async loginByLine(
   //   @Body() body: LineUsersDto,
@@ -88,41 +159,4 @@ export class AuthController {
   //   });
   //   return { success: true };
   // }
-
-  @Post('register')
-  async register(
-    @Body() dto: CreateUserDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    // 1) delegate creation to the plain UsersService
-    const newUser = await this.usersService.createUser(dto);
-
-    // 2) issue a token
-    const token = this.authService.signToken({
-      id: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-    });
-    // 3) optionally set it as a cookie
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 86400 * 1000, // 7 days
-    });
-    // 4) return the token (and/or user profile)
-    return {
-      access_token: token,
-      newUser,
-      message: 'User registered successfully',
-      status: 'success',
-    };
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token');
-    return { status: 'success', message: 'logout' };
-  }
 }

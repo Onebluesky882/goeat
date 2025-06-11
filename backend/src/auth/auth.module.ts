@@ -17,7 +17,6 @@ if (!process.env.JWT_SECRET) {
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7d' }, // TODO: Extend the expired
     }),
     DatabaseModule,
     UsersModule,

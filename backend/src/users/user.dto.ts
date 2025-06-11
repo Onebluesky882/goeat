@@ -6,5 +6,5 @@ export type InsertUsers = InferInsertModel<typeof users>;
 
 export type CreateUserDto = Pick<
   InsertUsers,
-  'email' | 'password' | 'username'
+  'email' | 'password' | 'username' | 'emailVerified'
 >;
