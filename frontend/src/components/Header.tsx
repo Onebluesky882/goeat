@@ -28,7 +28,7 @@ const Header = () => {
 
   const logout = () => {
     logoutUser();
-    navigate("/");
+    window.location.pathname = "/";
   };
 
   return (

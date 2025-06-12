@@ -5,10 +5,11 @@ import DashBoard from "../pages/shop/[shopId]/dashboard/DashBoard";
 import OrderStatus from "../pages/shop/[shopId]/orders/OrderStatus";
 import StaffManagement from "../pages/shop/[shopId]/staff/StaffManagement";
 import Cctv from "../pages/shop/[shopId]/cctv/Cctv";
-import MenuManagement from "../pages/shop/[shopId]/menu/MenuManagement";
+import MenuManagement from "../components/shops/menu/MenuManagement";
 import CreateCategory from "@/pages/shop/[shopId]/CreateCategory";
 import CreateNewShop from "@/pages/shop/CreateShop";
 import Dashboard from "@/pages/Dashboard";
+import ShopLayout from "@/components/shops/ShopLayout";
 
 export const ShopRoute = (
   <>
@@ -16,7 +17,7 @@ export const ShopRoute = (
       <Route path="create" element={<CreateNewShop />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="add-category" element={<CreateCategory />} />
-      <Route path=":shopId" element={<Controller />}>
+      <Route path=":shopId" element={<ShopLayout />}>
         <Route path="tables" element={<TableLayout />} />
         <Route path="menu" element={<MenuManagement />} />
         <Route path="dashboard" element={<DashBoard />} />

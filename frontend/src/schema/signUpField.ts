@@ -6,7 +6,7 @@ export const schema = z
       .string()
       .email({ message: "Invalid email address" })
       .transform((val) => val.trim().toLowerCase()),
-    name: z.string().transform((val) => val.trim()),
+    username: z.string().transform((val) => val.trim()),
     password: z.string().min(8, "password must be at least 8 characters"),
     // .regex(/[A-Z]/, "Must contain an uppercase letter"),
     confirmPassword: z.string(),

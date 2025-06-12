@@ -1,5 +1,5 @@
 import { userApi } from "@/Api/user.api";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/GlobalContext/userStore";
 import { useEffect } from "react";
 
 const useUsers = () => {
@@ -22,9 +22,9 @@ const useUsers = () => {
     const response = await userApi.login({ email, password });
     try {
       if (response.data.success) {
-        return true;
+        return response.data;
       } else {
-        return false;
+        return { success: false, message: "Unexpected error occurred" };
       }
     } catch (error) {
       console.error(error);
@@ -40,6 +40,6 @@ const useUsers = () => {
     const channel = new BroadcastChannel("user-session");
     channel.postMessage({ type: "SET_USER", user: null });
   };
-  return { logoutUser, profile, login };
+  return { logoutUser, profile, login, fetchProfile };
 };
 export default useUsers;

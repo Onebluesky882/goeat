@@ -52,8 +52,8 @@ export class AuthController {
 
     // 2) issue a token
     this.authService.setTokenCookies(res, {
-      access_token: result.accessToken,
-      refresh_token: result.refreshToken,
+      access_token: result.access_token,
+      refresh_token: result.access_token,
     });
 
     // 4) return the token (and/or user profile)
@@ -87,6 +87,7 @@ export class AuthController {
       };
     } catch (error) {
       console.error('login failed', error);
+      throw error;
     }
   }
   // ===== REFRESH TOKEN =====
@@ -137,9 +138,16 @@ export class AuthController {
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
   async getProfile(@Req() req) {
+    const user = req.user;
     return {
       success: true,
-      user: req.user,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        display: user.lineDisplayName,
+        imageUrl: user.linePictureUrl,
+      },
     };
   }
 

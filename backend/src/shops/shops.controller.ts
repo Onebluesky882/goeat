@@ -35,7 +35,7 @@ export class ShopsController {
   }
 
   // get by id
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Get(':id')
   getById(@Param('id') id: string) {
     return this.ShopsService.getById(id);

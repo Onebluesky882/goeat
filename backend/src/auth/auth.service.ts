@@ -60,7 +60,12 @@ export class AuthService {
       });
 
       const { password: _, ...safeUser } = newUser;
-      return safeUser;
+      return {
+        message: 'Registration successful',
+        success: true,
+        user: safeUser,
+        ...tokens,
+      };
     } catch (error) {
       this.logger.error('Registration failed:', error);
       throw error;
@@ -80,14 +85,18 @@ export class AuthService {
         id: String(user?.data?.id),
         email: String(user?.data?.email),
         username: String(user?.data?.username),
+        linePictureUrl: String(user?.data?.linePictureUrl),
+        lineDisplayName: String(user?.data?.lineDisplayName),
       });
 
       await this.db
         .update(users)
-        .set({ lasLogInAt: new Date() })
+        .set({ lastLoginAt: new Date() })
         .where(eq(users.id, user.data?.id));
 
       return {
+        message: 'Login successful',
+        status: 'success',
         success: true,
         user: user.data,
         ...tokens,
@@ -244,7 +253,9 @@ export class AuthService {
   async generateTokens(payload: {
     id: string;
     email: string;
-    username: string;
+    username?: string;
+    lineDisplayName?: string;
+    linePictureUrl?: string;
   }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {

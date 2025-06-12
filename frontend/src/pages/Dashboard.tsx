@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import useShop from "@/hooks/useShop";
 import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
 import { useNavigate } from "react-router-dom";
-import type { Shop } from "@/stores/shopStore";
 const Dashboard = () => {
   const { setAllShops, shops, selectShop, setShopById } = useShop();
   useEffect(() => {
@@ -15,8 +14,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const handleShopId = (id: string) => {
     const shop = shops.find((shop) => shop.id === id);
-
-    setShopById(shop as Shop);
+    if (!shop) return;
+    setShopById(shop.id);
     navigate(`/shops/${id}`);
   };
 
@@ -49,6 +48,7 @@ const Dashboard = () => {
 
                   {shopLists.map((shop) => (
                     <ShopCard
+                      key={shop.id}
                       shop={{
                         id: shop.id,
                         name: shop.name,

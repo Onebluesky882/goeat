@@ -1,6 +1,6 @@
 import { shopAPI } from "@/Api/shop.api";
 import type { NewShopFormField } from "@/schema/newShopForm";
-import { useShopStore, type Shop } from "@/stores/shopStore";
+import { useShopStore, type Shop } from "@/GlobalContext/shopStore";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
@@ -29,8 +29,10 @@ const useShop = () => {
     setShops(res.data.data);
   };
 
-  const setShopById = async (selected: Shop) => {
-    setSelectedShop(selected);
+  const setShopById = async (id: string) => {
+    const res = await shopAPI.getById(id);
+    const shopId = res.data.data;
+    setSelectedShop(shopId);
   };
 
   const shops = useShopStore((state) => state.shops);

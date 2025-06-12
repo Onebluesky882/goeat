@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {
@@ -17,5 +16,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_SECRET'),
     });
+  }
+  async validate(payload: any) {
+    // This return value will be assigned to `req.user`
+    return {
+      id: payload.id,
+      email: payload.email,
+      username: payload.username,
+      pictureUrl: payload.imageUrl,
+      displayname: payload.display,
+    };
   }
 }

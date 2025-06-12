@@ -6,10 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userApi } from "@/Api/user.api";
 import { schema, type SignupField } from "@/schema/signUpField";
 import BeatLoader from "react-spinners/BeatLoader";
+import useUsers from "@/hooks/useUsers";
 
 type SignupProps = {
   email: string;
-  name: string;
+  username: string;
   password: string;
 };
 
@@ -17,6 +18,9 @@ const SignUp = () => {
   const navigator = useNavigate();
   const [user, setUser] = useState<SignupProps>();
   const [loading, setLoading] = useState(false);
+
+  const { profile, fetchProfile } = useUsers();
+
   const {
     register,
     handleSubmit,
@@ -37,15 +41,16 @@ const SignUp = () => {
       if (!user) return;
       try {
         const newUser = await userApi.create(user);
+        await fetchProfile();
         return { success: true, data: newUser };
       } catch (error) {
         console.error("Registration failed:", error);
       } finally {
         setLoading(false);
-        navigator("/dashboard");
+        await navigator("/dashboard");
       }
     };
-
+    console.log("new profile", profile);
     insertNewUser();
   }, [user]);
 
@@ -81,15 +86,15 @@ const SignUp = () => {
               Username
             </label>
             <input
-              {...register("name")}
+              {...register("username")}
               type="name"
               id="name"
               autoComplete="name"
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="name"
             />{" "}
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username.message}</p>
             )}
           </div>{" "}
           <div>

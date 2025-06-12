@@ -13,24 +13,34 @@ import { toast } from "sonner";
 const Login = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const { login } = useUsers();
+  const { login, fetchProfile } = useUsers();
+  const navigate = useNavigate();
 
   const { register, handleSubmit, reset } = useForm<LoginField>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
-  const from = location.state;
-  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginField) => {
     setLoading(true);
+
     try {
-      const success = await login(data);
-      if (success) {
-        // window.location.pathname = "/";
-        navigate(from, { replace: true });
+      if (!data.email || !data.password) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+
+      const result = await login(data);
+      if (result?.success === true || result?.status === "success") {
+        toast.success(result.message || "Login successful!");
         reset();
+        await fetchProfile();
+        navigate("/dashboard");
+      } else if (result === false || result?.status === "error") {
+        const errorMessage = result?.message || "Invalid email or password";
+        toast.error(errorMessage);
       } else {
-        toast.error("Invalid email or password");
+        toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error(error);

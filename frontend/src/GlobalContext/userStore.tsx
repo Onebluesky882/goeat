@@ -4,6 +4,8 @@ type User = {
   id: string;
   name: string;
   email: string;
+  pictureUrl?: string;
+  displayname?: string;
 };
 
 type UserStore = {
@@ -37,12 +39,12 @@ export const useUserStore = create<UserStore>((set, get) => {
     },
     fetchProfile: async () => {
       try {
-        const res = await api.get("/users/profile", {
+        const res = await api.get("/auth/profile", {
           withCredentials: true,
         });
 
-        const user = res.data;
-
+        const user = res.data.user;
+        console.log("user : ", user);
         const current = get().user;
         if (current?.id !== user?.id) {
           set({ user });
