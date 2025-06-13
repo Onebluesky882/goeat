@@ -1,4 +1,4 @@
-import ShopLayout from "@/components/shops/ShopLayout";
+import ShopLayout from "@/pages/shop/[shopId]/ShopLayout";
 import useShop from "@/hooks/useShop";
 import { Link, Outlet } from "react-router-dom";
 

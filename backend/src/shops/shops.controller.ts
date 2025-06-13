@@ -9,19 +9,19 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
 import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthRequest } from 'src/types/auth';
 import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
-
+import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
   //getAll
+  // @UseGuards(ShopAccessGuard)
   @Get()
   getAll() {
     return this.ShopsService.getAll();
@@ -34,13 +34,11 @@ export class ShopsController {
     return this.ShopsService.create(body, userId);
   }
 
-  // get by id
-  // @UseGuards(ShopAccessGuard)
   @Get(':id')
   getById(@Param('id') id: string) {
+    console.log('🛬 Request received. ID:', id);
     return this.ShopsService.getById(id);
   }
-
   // update
   @UseGuards(ShopAccessGuard)
   @Patch(':id')

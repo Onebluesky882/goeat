@@ -80,6 +80,7 @@ export class ShopsService {
     try {
       const result = await this.db
         .select({
+          id: shops.id,
           name: shops.name,
           ownerId: shops.ownerId,
           address: shops.address,
@@ -88,12 +89,14 @@ export class ShopsService {
         })
         .from(shops)
         .where(and(eq(shops.id, id)));
+      console.log('📦 DB result:', result);
       return {
         data: result[0],
         success: true,
       };
     } catch (error) {
       this.logger.error(error);
+      console.log('error here');
       throw new HttpException(
         {
           success: false,

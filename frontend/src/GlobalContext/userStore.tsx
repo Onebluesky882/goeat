@@ -1,11 +1,11 @@
-import { api } from "@/Api";
+import { userApi } from "@/Api/user.api";
 import { create } from "zustand";
 type User = {
   id: string;
-  name: string;
   email: string;
-  pictureUrl?: string;
-  displayname?: string;
+  username: string;
+  displayName: string | null;
+  imageUrl: string | null;
 };
 
 type UserStore = {
@@ -39,18 +39,25 @@ export const useUserStore = create<UserStore>((set, get) => {
     },
     fetchProfile: async () => {
       try {
-        const res = await api.get("/auth/profile", {
-          withCredentials: true,
-        });
+        const res = await userApi.getProfile();
 
-        const user = res.data.user;
-        console.log("user : ", user);
+        const profile = res.data?.user.user;
+
         const current = get().user;
-        if (current?.id !== user?.id) {
-          set({ user });
-          channel.postMessage({ type: "SET_USER", user });
+        const isSameUser = current?.id === profile.id;
+        if (!profile) {
+          console.log("login user not success");
+          return;
+        }
+
+        set({ user: profile });
+
+        if (!isSameUser) {
+          set({ user: profile });
+          channel.postMessage({ type: "SET_USER", user: profile });
         }
       } catch {
+        console.error("Failed to fetch user profile:");
         set({ user: null });
         channel.postMessage({ type: "SET_USER", user: null });
       }

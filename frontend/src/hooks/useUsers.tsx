@@ -1,5 +1,5 @@
 import { userApi } from "@/Api/user.api";
-import { useUserStore } from "@/GlobalContext/userStore";
+import { useUserStore } from "@/globalContext/userStore";
 import { useEffect } from "react";
 
 const useUsers = () => {
@@ -22,6 +22,7 @@ const useUsers = () => {
     const response = await userApi.login({ email, password });
     try {
       if (response.data.success) {
+        console.log(response.data);
         return response.data;
       } else {
         return { success: false, message: "Unexpected error occurred" };

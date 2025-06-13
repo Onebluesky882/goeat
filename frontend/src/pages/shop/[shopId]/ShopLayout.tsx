@@ -1,28 +1,16 @@
-import useShop from "@/hooks/useShop";
 import { Outlet } from "react-router-dom";
-import MenuManagement from "./menu/MenuManagement";
+import MenuManagement from "../../../components/shops/menu/MenuManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { shopAPI } from "@/Api/shop.api";
+import useShop from "@/hooks/useShop";
 
 const ShopLayout = () => {
-  const { selectShop, setShopById } = useShop();
   const pathName = window.location.pathname;
   const shopId = pathName.split("/shops/")[1];
-  useEffect(() => {
-    const fetchShop = async () => {
-      try {
-        const res = await shopAPI.getById(shopId);
-        const shop = res.data;
-        setShopById(shop);
-      } catch (error) {
-        console.error("Error fetching shop:");
-      }
-    };
-    fetchShop();
-  }, []);
-  console.log("shopId ", shopId);
-  console.log("selectShop: ", selectShop?.name);
+
+  const { setShopById } = useShop();
+
   return (
     <div>
       <Outlet />
@@ -31,7 +19,7 @@ const ShopLayout = () => {
           <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-10 px-4">
             <div className="max-w-4xl mx-auto">
               <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8 text-center">
-                {`ร้านอาหาร : ${selectShop?.name}` && "need login!"}
+                {/* {`ร้านอาหาร : ${selectShop?.name}` && "need login!"} */}
               </h1>
 
               <div className="bg-white rounded-2xl shadow-lg p-6 animate-fade-in">
@@ -44,10 +32,16 @@ const ShopLayout = () => {
                       🍽 Add Menu
                     </TabsTrigger>
                     <TabsTrigger
-                      value="live"
+                      value="shop-menu"
                       className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
                     >
-                      📺 Live
+                      ShopMenu
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="promotions"
+                      className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                    >
+                      🧾 promotions
                     </TabsTrigger>
                     <TabsTrigger
                       value="orders"
@@ -68,14 +62,14 @@ const ShopLayout = () => {
                       ⚙️ Settings
                     </TabsTrigger>
                   </TabsList>
-
                   <TabsContent value="menu">
                     <MenuManagement />
                   </TabsContent>
-                  <TabsContent value="live">
-                    <p className="text-gray-700">
-                      🔴 Currently live stream placeholder
-                    </p>
+                  <TabsContent value="shop-menu">
+                    <p className="text-gray-700">about shop menu</p>
+                  </TabsContent>{" "}
+                  <TabsContent value="promotions">
+                    <p className="text-gray-700">promotions</p>
                   </TabsContent>
                   <TabsContent value="orders">
                     <p className="text-gray-700">

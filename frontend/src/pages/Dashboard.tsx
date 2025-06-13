@@ -6,20 +6,20 @@ import useShop from "@/hooks/useShop";
 import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
-  const { setAllShops, shops, selectShop, setShopById } = useShop();
+  const { setAllShops, shops, setShopById, selectShop } = useShop();
   useEffect(() => {
     setAllShops();
   }, []);
 
   const navigate = useNavigate();
-  const handleShopId = (id: string) => {
+
+  const handleShopId = async (id: string) => {
     const shop = shops.find((shop) => shop.id === id);
     if (!shop) return;
-    setShopById(shop.id);
-    navigate(`/shops/${id}`);
-  };
 
-  const shopLists = shops;
+    navigate(`/shops/${shop.id}`);
+  };
+  console.log("shops :", shops);
 
   return (
     <>
@@ -36,26 +36,27 @@ const Dashboard = () => {
             </h1>
 
             {/* Analytics Section */}
-            <section className="bg-white/80  rounded-2xl shadow-md p-6 animate-fade-in">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
-                <div>
+            <section className=" bg-white/80 flex rounded-2xl shadow-md p-6 animate-fade-in">
+              <div className="flex  w-full flex-col md:flex-row md:items-baseline  gap-8 ">
+                <div className="md:mt-2">
                   <QuickActionOpenShop />
                 </div>
-                <div>
-                  <h2 className="text-xl md:text-2xl font-semibold font-playfair mb-1">
+                <div className="w-[70%]">
+                  <h2 className="text-xl text-center md:text-2xl font-semibold font-playfair ">
                     ร้านอาหารของคุณ
                   </h2>
-
-                  {shopLists.map((shop) => (
-                    <ShopCard
-                      key={shop.id}
-                      shop={{
-                        id: shop.id,
-                        name: shop.name,
-                      }}
-                      navigator={() => handleShopId(shop.id)}
-                    />
-                  ))}
+                  <div className="flex">
+                    {shops.map((shop) => (
+                      <ShopCard
+                        key={shop.id}
+                        shop={{
+                          id: shop.id,
+                          name: shop.name,
+                        }}
+                        navigator={() => handleShopId(shop.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>

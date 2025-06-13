@@ -25,6 +25,8 @@ export class UsersService {
         id: users.id,
         email: users.email,
         username: users.username,
+        imageUrl: users.linePictureUrl,
+        displayName: users.lineDisplayName,
       })
       .from(users)
       .where(eq(users.id, userId))

@@ -9,7 +9,7 @@ import MenuManagement from "../components/shops/menu/MenuManagement";
 import CreateCategory from "@/pages/shop/[shopId]/CreateCategory";
 import CreateNewShop from "@/pages/shop/CreateShop";
 import Dashboard from "@/pages/Dashboard";
-import ShopLayout from "@/components/shops/ShopLayout";
+import ShopLayout from "@/pages/shop/[shopId]/ShopLayout";
 
 export const ShopRoute = (
   <>

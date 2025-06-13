@@ -26,7 +26,6 @@ const CreateShop = () => {
 
       const shopId = newShop.data[0];
 
-      await setShopById(shopId);
       navigate(`/shops/${shopId.id}`);
     }
   };

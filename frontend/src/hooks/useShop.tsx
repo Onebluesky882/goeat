@@ -1,6 +1,6 @@
 import { shopAPI } from "@/Api/shop.api";
 import type { NewShopFormField } from "@/schema/newShopForm";
-import { useShopStore, type Shop } from "@/GlobalContext/shopStore";
+import { useShopStore } from "@/globalContext/shopStore";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
@@ -26,18 +26,26 @@ const useShop = () => {
 
   const setAllShops = async () => {
     const res = await shopAPI.getAll();
-    setShops(res.data.data);
+    const shops = res.data.data;
+    setShops(shops);
   };
 
   const setShopById = async (id: string) => {
-    const res = await shopAPI.getById(id);
-    const shopId = res.data.data;
-    setSelectedShop(shopId);
+    try {
+      const res = await shopAPI.getById(id);
+      const shop = res.data;
+
+      setSelectedShop(shop);
+      return shop;
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(`❌ Failed to fetch shop: ${error.message}`);
+      return null;
+    }
   };
 
   const shops = useShopStore((state) => state.shops);
   const selectShop = useShopStore((state) => state.selectedShop);
-  const clearSelectedShop = useShopStore(() => null);
 
   return {
     setAllShops,
@@ -45,7 +53,6 @@ const useShop = () => {
     createShop,
     shops,
     selectShop,
-    clearSelectedShop,
   };
 };
 export default useShop;

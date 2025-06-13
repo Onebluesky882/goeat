@@ -11,7 +11,6 @@ import { toast } from "sonner";
 // todo problem not pare password
 
 const Login = () => {
-  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const { login, fetchProfile } = useUsers();
   const navigate = useNavigate();

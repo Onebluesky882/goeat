@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ValidateService } from '../validate/validate.service';
+
 @Injectable()
 export class ShopAccessGuard implements CanActivate {
   constructor(private validateService: ValidateService) {}
@@ -13,17 +14,19 @@ export class ShopAccessGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const user = request.user as { id: string };
+    const shopId =
+      request.params.id || request.params.shopId || request.body?.shopId;
 
-    if (!user || !user.id) {
+    console.log('👮 ShopAccessGuard hit');
+    console.log('👤 User:', user);
+    console.log('🏪 Shop ID:', shopId);
+
+    if (!user || !user.id || !shopId) {
       throw new ForbiddenException('Missing user or shopId');
     }
-
-    const shopId = request.params.shopId || request.body?.shopId;
-    if (!shopId) {
-      return true;
-    }
-
-    await this.validateService.validateShop(shopId, user.id, ['staff']);
+    // todo add role later
+    //    const allowedRoles = this.getAllowedRoles(user.role);
+    // await this.validateService.validateShop(shopId, user.id,allowedRoles);
 
     return true;
   }

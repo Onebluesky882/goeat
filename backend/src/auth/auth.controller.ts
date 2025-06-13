@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/users/user.dto';
 import { Request, Response } from 'express';
+import { AuthRequest } from 'src/types/auth';
 
 @Controller('auth')
 export class AuthController {
@@ -137,17 +138,10 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
-  async getProfile(@Req() req) {
-    const user = req.user;
+  async getProfile(@Req() req: AuthRequest) {
     return {
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        display: user.lineDisplayName,
-        imageUrl: user.linePictureUrl,
-      },
+      user: req.user,
     };
   }
 
