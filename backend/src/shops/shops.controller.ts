@@ -10,13 +10,12 @@ import {
   Delete,
 } from '@nestjs/common';
 
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthRequest } from 'src/types/auth';
 import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 import { AuthGuard } from '@nestjs/passport';
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
@@ -31,16 +30,16 @@ export class ShopsController {
   @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
+
     return this.ShopsService.create(body, userId);
   }
 
   @Get(':id')
-  getById(@Param('id') id: string) {
-    console.log('🛬 Request received. ID:', id);
+  getById(@Param('id') id: string, @Req() req: AuthRequest) {
+    console.log('req.user :', req.user);
     return this.ShopsService.getById(id);
   }
   // update
-  @UseGuards(ShopAccessGuard)
   @Patch(':id')
   @Roles('manager', 'owner')
   update(@Param('id') id: string, @Body() body: UpdateShopDto) {
@@ -48,7 +47,6 @@ export class ShopsController {
   }
 
   // delete
-  @UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string) {

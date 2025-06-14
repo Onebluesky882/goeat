@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { TablesService } from './tables.service';
 import { TableDto } from './table.dto';
@@ -28,7 +27,7 @@ export class TablesController {
 export class OrderTableController {
   constructor(private readonly tablesService: TablesService) {}
 
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   //create
   @Post()
   @Roles('manager', 'owner')
@@ -42,14 +41,14 @@ export class OrderTableController {
     return this.tablesService.create(body, shopId, userId);
   }
   //getAll
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Get()
   @Roles('manager', 'owner', 'staff', 'customer')
   getAll(@Query('shopId') shopId: string) {
     return this.tablesService.getAll(shopId);
   }
   // get by id
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Get(':id')
   @Roles('manager', 'owner', 'staff', 'customer')
   getById(@Param('id') id: string, @Query('shopId') shopId: string) {
@@ -57,7 +56,7 @@ export class OrderTableController {
   }
 
   // update
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Patch(':id')
   @Roles('manager', 'owner')
   update(
@@ -69,7 +68,7 @@ export class OrderTableController {
   }
 
   // delete
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string, @Query('shopId') shopId: string) {

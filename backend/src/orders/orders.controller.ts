@@ -16,14 +16,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from 'src/types/auth';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 @UseGuards(AuthGuard('jwt'))
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards(ShopAccessGuard)
+  //@UseGuards(ShopAccessGuard)
   @Post()
   @Roles('manager', 'staff', 'owner', 'customer')
   create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
@@ -38,14 +37,14 @@ export class OrdersController {
     );
   }
   //getAll
-  @UseGuards(ShopAccessGuard)
+  //@UseGuards(ShopAccessGuard)
   @Get()
   @Roles('customer', 'manager', 'owner')
   getAll(@Query('shopId') shopId: string) {
     return this.ordersService.getAll(shopId);
   }
   // get by id
-  @UseGuards(ShopAccessGuard)
+  //@UseGuards(ShopAccessGuard)
   @Roles()
   @Get(':id')
   getById(@Param('id') id: string, @Query('shopId') shopId: string) {
@@ -53,7 +52,7 @@ export class OrdersController {
   }
 
   // update
-  @UseGuards(ShopAccessGuard)
+  //@UseGuards(ShopAccessGuard)
   @Patch(':id')
   @Roles('manager', 'staff', 'owner')
   update(
@@ -65,7 +64,7 @@ export class OrdersController {
   }
 
   // delete
-  @UseGuards(ShopAccessGuard)
+  //@UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string, @Query('shopId') shopId: string) {

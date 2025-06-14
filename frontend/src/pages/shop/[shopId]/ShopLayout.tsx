@@ -2,15 +2,18 @@ import { Outlet } from "react-router-dom";
 import MenuManagement from "../../../components/shops/menu/MenuManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
-import { shopAPI } from "@/Api/shop.api";
 import useShop from "@/hooks/useShop";
 
 const ShopLayout = () => {
   const pathName = window.location.pathname;
   const shopId = pathName.split("/shops/")[1];
 
-  const { setShopById } = useShop();
+  const { selectShop, setShopById } = useShop();
 
+  useEffect(() => {
+    setShopById(shopId);
+  }, []);
+  console.log("selectShop :", selectShop);
   return (
     <div>
       <Outlet />

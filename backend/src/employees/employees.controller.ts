@@ -14,7 +14,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { EmployeesDto } from './employees.dto';
 import { EmployeesService } from './employees.service';
@@ -23,7 +22,7 @@ import { shops } from 'src/database';
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   //create
   @UseGuards(AuthGuard('jwt'))
   @Post()

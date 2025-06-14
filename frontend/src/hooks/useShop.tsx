@@ -32,9 +32,11 @@ const useShop = () => {
 
   const setShopById = async (id: string) => {
     try {
+      console.log("shopId :", id);
       const res = await shopAPI.getById(id);
       const shop = res.data;
 
+      console.log("res :", shop);
       setSelectedShop(shop);
       return shop;
     } catch (err) {

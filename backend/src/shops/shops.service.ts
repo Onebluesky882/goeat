@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { shops } from 'src/database';
@@ -89,7 +90,13 @@ export class ShopsService {
         })
         .from(shops)
         .where(and(eq(shops.id, id)));
+      console.log('🟡 Requested ID:', id);
       console.log('📦 DB result:', result);
+      console.log('Type of id:', typeof id, 'Value:', id);
+
+      if (!result.length) {
+        throw new NotFoundException(`Shop with ID ${id} not found`);
+      }
       return {
         data: result[0],
         success: true,

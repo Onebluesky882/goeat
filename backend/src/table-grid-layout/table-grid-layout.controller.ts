@@ -15,14 +15,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { TableGridLayoutService } from './table-grid-layout.service';
 import { InsertTableGridLayout } from './table-grid-layout.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('table-grid-layout')
 export class TableGridLayoutController {
   constructor(private readonly tableGridLayout: TableGridLayoutService) {}
 
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Post()
   @Roles('manager', 'owner')
   async create(
@@ -32,14 +31,14 @@ export class TableGridLayoutController {
     return this.tableGridLayout.create(body, shopId);
   }
   //getAll
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Get()
   @Roles('manager', 'owner')
   async getAll(@Query('shopId') shopId: string) {
     return this.tableGridLayout.getAll(shopId);
   }
   // get by id
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Get(':id')
   @Roles('manager', 'owner')
   async getById(@Param('id') id: string, @Query('shopId') shopId: string) {
@@ -47,7 +46,7 @@ export class TableGridLayoutController {
   }
 
   // update
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Patch(':id')
   @Roles('manager', 'owner')
   async update(
@@ -59,7 +58,7 @@ export class TableGridLayoutController {
   }
 
   // delete
-  @UseGuards(ShopAccessGuard)
+  // @UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   async delete(@Param('id') id: string, @Query('shopId') shopId: string) {

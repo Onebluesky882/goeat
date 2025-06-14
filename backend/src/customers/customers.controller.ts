@@ -14,7 +14,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthRequest } from 'src/types/auth';
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { CustomerService } from './customers.service';
 import { CustomerDto } from './customers.dto';
