@@ -19,7 +19,7 @@ const CreateCategory = () => {
     handleSubmit,
     reset,
 
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors },
   } = useForm<CategoryField>({
     resolver: zodResolver(schema),
     defaultValues: emptyValue,

@@ -7,100 +7,52 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit, Plus, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
+
+export type Menu = {
+  name: string;
+  price: number;
+  available: boolean;
+};
 
 // Sample menu data
-const MenuItems = [
-  {
-    id: "1",
-    name: "Tom Yum Goong",
-    price: 120,
-    category: "soups",
-    isPromotion: false,
-  },
-  {
-    id: "2",
-    name: "Green Curry",
-    price: 110,
-    category: "curries",
-    isPromotion: false,
-  },
-  {
-    id: "3",
-    name: "Pad Thai",
-    price: 90,
-    category: "noodles",
-    isPromotion: false,
-  },
-  {
-    id: "4",
-    name: "Mango Sticky Rice",
-    price: 80,
-    category: "desserts",
-    isPromotion: false,
-  },
-  {
-    id: "5",
-    name: "Thai Iced Tea",
-    price: 40,
-    category: "beverages",
-    isPromotion: false,
-  },
-  {
-    id: "6",
-    name: "Spring Rolls",
-    price: 70,
-    category: "appetizers",
-    isPromotion: false,
-  },
-];
+const defaultMenuItem = {
+  name: "food",
+  price: 1,
+};
 
-const initialPromotions = [
+const defaultMenu = [
   {
-    id: "101",
-    name: "Lunch Special: Pad Thai + Iced Tea",
-    price: 120,
-    regularPrice: 130,
-    description: "Available weekdays 11 AM - 2 PM",
-    isPromotion: true,
-  },
-  {
-    id: "102",
-    name: "Family Set: 4 Main Dishes + 2 Soups",
-    price: 499,
-    regularPrice: 580,
-    description: "Perfect for family gathering of 4-6 people",
-    isPromotion: true,
-  },
-];
-
-const MenuManagement = () => {
-  const [menuItems, setMenuItems] = useState(MenuItems);
-  const [promotions, setPromotions] = useState(initialPromotions);
-  const [editingItemId, setEditingItemId] = useState<string | null>(null);
-  const [editingPromoId, setEditingPromoId] = useState<string | null>(null);
-
-  const [tempItem, setTempItem] = useState({
-    name: "",
-    price: 0,
-    category: "main",
-    isPromotion: false,
-  });
-
-  const [tempPromo, setTempPromo] = useState({
     name: "",
     price: 0,
     regularPrice: 0,
     description: "",
-    isPromotion: true,
-  });
+    available: true,
+  },
+];
+
+const MenuManagement = () => {
+  const [menuItems, setMenuItems] = useState<Menu[]>(defaultMenu);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [editingPromoId, setEditingPromoId] = useState<string | null>(null);
+
+  const [tempItem, setTempItem] = useState(defaultMenuItem);
+
+  const [tempPromo, setTempPromo] = useState(defaultMenu);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
 
   const handleEditItem = (item: any) => {
     setEditingItemId(item.id);
     setTempItem({
       name: item.name,
       price: item.price,
-      category: item.category,
-      isPromotion: item.isPromotion,
     });
   };
 
@@ -110,18 +62,17 @@ const MenuManagement = () => {
       return;
     }
 
-    setMenuItems(
-      menuItems.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              name: tempItem.name,
-              price: tempItem.price,
-              category: tempItem.category,
-            }
-          : item
-      )
-    );
+    // setMenuItems(
+    //   menuItems.map((item) =>
+    //     item.id === id
+    //       ? {
+    //           ...item,
+    //           name: tempItem.name,
+    //           price: tempItem.price,
+    //         }
+    //       : item
+    //   )
+    // );
 
     setEditingItemId(null);
     toast.success("Menu item updated successfully");
@@ -137,91 +88,20 @@ const MenuManagement = () => {
       id: `item_${Date.now()}`,
       name: tempItem.name,
       price: tempItem.price,
-      category: tempItem.category,
-      isPromotion: false,
     };
 
-    setMenuItems([...menuItems, newItem]);
-    setTempItem({ name: "", price: 0, category: "main", isPromotion: false });
+    setTempItem({ name: "", price: 0 });
     toast.success("Menu item added successfully");
   };
 
-  const handleDeleteItem = (id: string) => {
-    setMenuItems(menuItems.filter((item) => item.id !== id));
-    toast.success("Menu item deleted");
+  // const handleDeleteItem = (id: string) => {
+  //   setMenuItems(menuItems.filter((item) => item.id !== id));
+  //   toast.success("Menu item deleted");
+  // };
+
+  const submit = () => {
+    console.log(" :");
   };
-
-  const handleEditPromo = (promo: any) => {
-    setEditingPromoId(promo.id);
-    setTempPromo({
-      name: promo.name,
-      price: promo.price,
-      regularPrice: promo.regularPrice,
-      description: promo.description,
-      isPromotion: true,
-    });
-  };
-
-  const handleSavePromo = (id: string) => {
-    if (!tempPromo.name.trim() || tempPromo.price <= 0) {
-      toast.error("Please enter valid name and price");
-      return;
-    }
-
-    setPromotions(
-      promotions.map((promo) =>
-        promo.id === id
-          ? {
-              ...promo,
-              name: tempPromo.name,
-              price: tempPromo.price,
-              regularPrice: tempPromo.regularPrice,
-              description: tempPromo.description,
-            }
-          : promo
-      )
-    );
-
-    setEditingPromoId(null);
-    toast.success("Promotion updated successfully");
-  };
-
-  const handleAddPromo = () => {
-    if (
-      !tempPromo.name.trim() ||
-      tempPromo.price <= 0 ||
-      tempPromo.regularPrice <= tempPromo.price
-    ) {
-      toast.error("Please enter valid promotion details");
-      return;
-    }
-
-    const newPromo = {
-      id: `promo_${Date.now()}`,
-      name: tempPromo.name,
-      price: tempPromo.price,
-      regularPrice: tempPromo.regularPrice,
-      description: tempPromo.description,
-      isPromotion: true,
-    };
-
-    setPromotions([...promotions, newPromo]);
-    setTempPromo({
-      name: "",
-      price: 0,
-      regularPrice: 0,
-      description: "",
-      isPromotion: true,
-    });
-    toast.success("Promotion added successfully");
-  };
-
-  const handleDeletePromo = (id: string) => {
-    setPromotions(promotions.filter((promo) => promo.id !== id));
-    toast.success("Promotion deleted");
-  };
-
-  useForm();
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-2">
@@ -234,7 +114,7 @@ const MenuManagement = () => {
       <Tabs defaultValue="menu" className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="menu">Regular Menu</TabsTrigger>
-          <TabsTrigger value="desserts"> Dessert</TabsTrigger>
+          <TabsTrigger value="desserts">Dessert</TabsTrigger>
           <TabsTrigger value="drinks"> Drink</TabsTrigger>
           <TabsTrigger value="promotions">Special Promotions</TabsTrigger>
         </TabsList>
@@ -247,47 +127,43 @@ const MenuManagement = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="col-span-2">
-                  <Label htmlFor="item-name">Item Name</Label>
-                  <Input
-                    id="item-name"
-                    value={tempItem.name}
-                    onChange={(e) =>
-                      setTempItem({ ...tempItem, name: e.target.value })
-                    }
-                    placeholder="e.g., Pad Thai"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="item-price">Price (฿)</Label>
-                  <Input
-                    id="item-price"
-                    type="number"
-                    value={tempItem.price || ""}
-                    onChange={(e) =>
-                      setTempItem({
-                        ...tempItem,
-                        price: Number(e.target.value),
-                      })
-                    }
-                    placeholder="99"
-                  />
-                </div>
-                <div className="flex items-end">
-                  <Button
-                    onClick={handleAddItem}
-                    className="w-full bg-orange-600 hover:bg-orange-700"
-                  >
-                    <Plus className="mr-2 h-4 w-4" /> Add Item
-                  </Button>
-                </div>
+                <form onSubmit={handleSubmit(submit)}>
+                  <div className="col-span-2">
+                    <Label htmlFor="item-name">Item Name</Label>
+                    <Input type="name" {...register("name")} />
+                  </div>
+                  <div>
+                    <Label htmlFor="item-price">Price (฿)</Label>
+                    <Input
+                      {...register("price")}
+                      id="name"
+                      type="number"
+                      value={tempItem.price || ""}
+                      onChange={(e) =>
+                        setTempItem({
+                          ...tempItem,
+                          price: Number(e.target.value),
+                        })
+                      }
+                      placeholder="99"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <Button
+                      onClick={handleAddItem}
+                      className="w-full bg-orange-600 hover:bg-orange-700"
+                    >
+                      <Plus className="mr-2 h-4 w-4" /> Add Item
+                    </Button>
+                  </div>
+                </form>
               </div>
             </CardContent>
           </Card>
 
           {/* Menu items list */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {menuItems.map((item) => (
+            {/* {menuItems.map((item) => (
               <Card key={item.id} className="border border-gray-200">
                 <CardContent className="p-4">
                   {editingItemId === item.id ? (
@@ -360,7 +236,7 @@ const MenuManagement = () => {
                   )}
                 </CardContent>
               </Card>
-            ))}
+            ))} */}
           </div>
         </TabsContent>
 
@@ -370,7 +246,7 @@ const MenuManagement = () => {
             <CardHeader>
               <CardTitle>Create New Promotion</CardTitle>
             </CardHeader>
-            <CardContent>
+            {/* <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="promo-name">Promotion Name</Label>
@@ -438,12 +314,12 @@ const MenuManagement = () => {
                   </Button>
                 </div>
               </div>
-            </CardContent>
+            </CardContent> */}
           </Card>
 
           {/* Promotions list */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {promotions.map((promo) => (
+            {/* {promotions.map((promo) => (
               <Card
                 key={promo.id}
                 className="border border-orange-100 bg-orange-50"
@@ -570,7 +446,7 @@ const MenuManagement = () => {
                   )}
                 </CardContent>
               </Card>
-            ))}
+            ))} */}
           </div>
         </TabsContent>
       </Tabs>

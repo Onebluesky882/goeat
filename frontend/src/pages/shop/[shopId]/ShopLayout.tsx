@@ -3,6 +3,7 @@ import MenuManagement from "../../../components/shops/menu/MenuManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import useShop from "@/hooks/useShop";
+import Menu from "./menu/MenuManagement";
 
 const ShopLayout = () => {
   const pathName = window.location.pathname;
@@ -71,7 +72,7 @@ const ShopLayout = () => {
                     <MenuManagement />
                   </TabsContent>
                   <TabsContent value="shop-menu">
-                    <p className="text-gray-700">about shop menu</p>
+                    <MenuManagement />
                   </TabsContent>{" "}
                   <TabsContent value="promotions">
                     <p className="text-gray-700">promotions</p>
