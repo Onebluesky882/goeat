@@ -32,11 +32,8 @@ const useShop = () => {
 
   const setShopById = async (param: string) => {
     try {
-      console.log("shopId :", param);
       const res = await shopAPI.getById(param);
       const shop = res.data.data;
-
-      console.log("res :", shop);
       setSelectedShop(shop);
       return shop;
     } catch (err) {
@@ -47,14 +44,14 @@ const useShop = () => {
   };
 
   const shops = useShopStore((state) => state.shops);
-  const selectShop = useShopStore((state) => state.selectedShop);
+  const selectedShop = useShopStore((state) => state.selectedShop);
 
   return {
     setAllShops,
     setShopById,
     createShop,
     shops,
-    selectShop,
+    selectedShop,
   };
 };
 export default useShop;

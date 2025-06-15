@@ -19,11 +19,11 @@ export class MenusService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async create(dto: MenuDto, shopId: string, userId) {
+  async create(dto: MenuDto, userId: string) {
     try {
       const newMenu = await this.db
         .insert(menus)
-        .values({ ...dto, shopId: shopId, createdBy: userId });
+        .values({ ...dto, createdBy: userId, available: true });
       return {
         success: true,
         data: newMenu,
@@ -41,6 +41,38 @@ export class MenusService {
         {
           success: false,
           message: 'An error occurred while creating the menu.',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  async getMenuAvailable(shopId: string) {
+    try {
+      const result = await this.db
+        .select({
+          name: menus.name,
+          price: menus.price,
+          categoryId: menus.categoryId,
+          available: menus.available,
+          createdBy: menus.createdBy,
+          description: menus.description,
+          pageId: menus.pageId,
+          imageId: menus.imageId,
+          shopId: menus.shopId,
+        })
+        .from(menus)
+        .where(and(eq(menus.shopId, shopId), eq(menus.available, true)));
+
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      this.logger?.error?.('Failed to fetch available menus:', error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'failed fetch menu',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -66,11 +98,10 @@ export class MenusService {
 
       return {
         success: true,
-        message: 'Fetched all menus successfully',
         data: result,
       };
     } catch (error) {
-      this.logger.error(error);
+      this.logger?.error?.('Failed to fetch available menus:', error);
       throw new HttpException(
         {
           success: false,

@@ -4,7 +4,7 @@ import { menus } from '../database';
 export type InsertMenu = InferInsertModel<typeof menus>;
 export type SelectMenu = InferSelectModel<typeof menus>;
 
-export class UpdateMenuDto {
+export class MenuDto {
   name: string;
   price: string;
 }

@@ -5,13 +5,5 @@ export type InsertMenus = InferInsertModel<typeof menus>;
 
 export type MenuDto = Pick<
   InsertMenus,
-  | 'shopId'
-  | 'name'
-  | 'price'
-  | 'categoryId'
-  | 'available'
-  | 'createdBy'
-  | 'description'
-  | 'pageId'
-  | 'imageId'
+  'shopId' | 'name' | 'price' | 'available' | 'createdBy'
 >;

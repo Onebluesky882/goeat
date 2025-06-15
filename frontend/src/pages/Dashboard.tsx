@@ -6,7 +6,7 @@ import useShop from "@/hooks/useShop";
 import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
-  const { setAllShops, shops, setShopById, selectShop } = useShop();
+  const { setAllShops, shops } = useShop();
   useEffect(() => {
     setAllShops();
   }, []);

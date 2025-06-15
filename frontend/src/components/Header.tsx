@@ -17,12 +17,27 @@ import {
 } from "../components/ui/dropdown-menu";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import useUsers from "@/hooks/useUsers";
+import useShop from "@/hooks/useShop";
 import { useEffect } from "react";
-
+const pathName = window.location.pathname;
 const Header = () => {
   const navigate = useNavigate();
   const { profile, logoutUser } = useUsers();
-  console.log("profile :", profile);
+
+  const { setShopById, selectedShop } = useShop();
+
+  useEffect(() => {
+    const getShopParam = () => {
+      const match = pathName.match(/\/shops\/([0-9a-fA-F-]{36})/);
+      const shopId = match ? match[1] : null;
+
+      if (shopId) {
+        setShopById(shopId);
+      }
+    };
+    getShopParam();
+  }, [pathName]);
+
   const handleOnclick = () => {
     navigate("/login");
   };

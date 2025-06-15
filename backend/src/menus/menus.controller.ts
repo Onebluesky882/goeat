@@ -15,6 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from '../types/auth';
 import { MenuDto } from './menus.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 @UseGuards(AuthGuard('jwt'))
 @Controller('menus')
 export class MenusController {
@@ -23,13 +24,11 @@ export class MenusController {
   //create
   // @UseGuards(ShopAccessGuard)
   @Post()
-  @Roles('manager', 'owner')
-  create(
-    @Body() body: MenuDto,
-    @Query('shopId') shopId: string,
-    @Req() req: AuthRequest,
-  ) {
-    return this.menusService.create(body, shopId, req.user.id);
+  // @Roles('manager', 'owner')
+  create(@Body() body: MenuDto, @Req() req: AuthRequest) {
+    const userId = req.user.id;
+
+    return this.menusService.create(body, userId);
   }
   //getAll
   // @UseGuards(ShopAccessGuard)

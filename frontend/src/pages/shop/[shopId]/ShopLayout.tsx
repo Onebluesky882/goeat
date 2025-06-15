@@ -1,21 +1,13 @@
 import { Outlet } from "react-router-dom";
-import MenuManagement from "../../../components/shops/menu/MenuManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import useShop from "@/hooks/useShop";
-import Menu from "./menu/MenuManagement";
+import MenuManagement from "./menu/MenuManagement";
 
 const ShopLayout = () => {
-  const pathName = window.location.pathname;
-  const paramId = pathName.split("/shops/")[1];
-  console.log("pathname :", paramId);
-  const { selectShop, setShopById } = useShop();
+  const { selectedShop } = useShop();
 
-  useEffect(() => {
-    setShopById(paramId);
-  }, []);
-
-  const shopName = selectShop?.name;
+  const shopName = selectedShop?.name;
 
   return (
     <div>
@@ -25,7 +17,7 @@ const ShopLayout = () => {
           <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-10 px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-md md:text-2xl font-bold text-primary  text-center">
-                {selectShop ? `Shop : ${shopName}` : "need login!"}
+                {selectedShop ? `Shop : ${shopName}` : "need login!"}
               </h2>
 
               <div className="bg-white rounded-2xl shadow-lg p-6 animate-fade-in">
@@ -72,7 +64,7 @@ const ShopLayout = () => {
                     <MenuManagement />
                   </TabsContent>
                   <TabsContent value="shop-menu">
-                    <MenuManagement />
+                    <p>shop menu</p>
                   </TabsContent>{" "}
                   <TabsContent value="promotions">
                     <p className="text-gray-700">promotions</p>
