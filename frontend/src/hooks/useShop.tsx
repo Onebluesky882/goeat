@@ -30,11 +30,11 @@ const useShop = () => {
     setShops(shops);
   };
 
-  const setShopById = async (id: string) => {
+  const setShopById = async (param: string) => {
     try {
-      console.log("shopId :", id);
-      const res = await shopAPI.getById(id);
-      const shop = res.data;
+      console.log("shopId :", param);
+      const res = await shopAPI.getById(param);
+      const shop = res.data.data;
 
       console.log("res :", shop);
       setSelectedShop(shop);

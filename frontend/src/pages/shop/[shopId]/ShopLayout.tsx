@@ -6,14 +6,16 @@ import useShop from "@/hooks/useShop";
 
 const ShopLayout = () => {
   const pathName = window.location.pathname;
-  const shopId = pathName.split("/shops/")[1];
-
+  const paramId = pathName.split("/shops/")[1];
+  console.log("pathname :", paramId);
   const { selectShop, setShopById } = useShop();
 
   useEffect(() => {
-    setShopById(shopId);
+    setShopById(paramId);
   }, []);
-  console.log("selectShop :", selectShop);
+
+  const shopName = selectShop?.name;
+
   return (
     <div>
       <Outlet />
@@ -21,9 +23,9 @@ const ShopLayout = () => {
         <div>
           <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-10 px-4">
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8 text-center">
-                {/* {`ร้านอาหาร : ${selectShop?.name}` && "need login!"} */}
-              </h1>
+              <h2 className="text-md md:text-2xl font-bold text-primary  text-center">
+                {selectShop ? `Shop : ${shopName}` : "need login!"}
+              </h2>
 
               <div className="bg-white rounded-2xl shadow-lg p-6 animate-fade-in">
                 <Tabs defaultValue="menu" className="w-full">

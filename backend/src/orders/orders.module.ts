@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { OrdersController } from './orders.controller';
-import { ShopsService } from 'src/shops/shops.service';
 import { DatabaseModule } from 'src/database/database.module';
 import { ValidateModule } from 'src/common/validate/validate.module';
 import { OrdersService } from './orders.service';

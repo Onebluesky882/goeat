@@ -41,7 +41,7 @@ export const useUserStore = create<UserStore>((set, get) => {
       try {
         const res = await userApi.getProfile();
 
-        const profile = res.data?.user.user;
+        const profile = res.data?.user;
 
         const current = get().user;
         const isSameUser = current?.id === profile.id;

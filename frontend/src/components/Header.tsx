@@ -17,6 +17,7 @@ import {
 } from "../components/ui/dropdown-menu";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import useUsers from "@/hooks/useUsers";
+import { useEffect } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -52,7 +53,9 @@ const Header = () => {
         </div>
         <div className="col-span-1    justify-end flex">
           <div className="flex items-center space-x-4"></div>{" "}
-          {profile ? (
+          {profile === null ? (
+            <span className="text-sm text-gray-500">Loading...</span>
+          ) : profile ? (
             <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">
                 <span className="text-start text-[12px] font-medium text-gray-500">

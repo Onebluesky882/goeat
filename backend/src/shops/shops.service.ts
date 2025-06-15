@@ -49,7 +49,7 @@ export class ShopsService {
     }
   }
 
-  async getAll() {
+  async getAll(userId: string) {
     try {
       const result = await this.db
         .select({
@@ -60,7 +60,8 @@ export class ShopsService {
           updatedAt: shops.updatedAt,
           active: shops.active,
         })
-        .from(shops);
+        .from(shops)
+        .where(eq(shops.ownerId, userId));
       return {
         success: true,
         data: result,
