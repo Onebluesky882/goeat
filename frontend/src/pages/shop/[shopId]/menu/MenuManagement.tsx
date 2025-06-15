@@ -64,24 +64,34 @@ const MenuManagement = () => {
   } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
 
   const handleInsert = async () => {
+    const shopId = selectedShop?.id;
     setLoading(true);
     try {
-      if (selectedShop) {
-        const shopId = selectedShop.id;
-        Promise.all(
-          addItems.map((item) =>
-            transformKeysToSnakeCase(
-              menuApi.create({ ...item, shopId: shopId })
-            )
-          )
-        );
-      }
+      const results = await Promise.allSettled(
+        addItems.map((item) =>
+          menuApi.create({
+            ...transformKeysToSnakeCase(item),
+            shopId,
+          })
+        )
+      );
 
-      toast.success("All List Menu has been saved");
-      setAddItems([]);
-      setLoading(false);
+      const rejected = results.filter((res) => res.status === "rejected");
+
+      if (rejected.length > 0) {
+        rejected.forEach((error, idx) => {
+          console.error(`Item ${idx + 1} failed:`, error);
+        });
+
+        toast.error(`${rejected.length} menu item(s) failed to save.`);
+      } else {
+        toast.success("All menu items saved successfully.");
+      }
     } catch (error) {
-      toast.error("Failed to save menus");
+      toast.error(<div className="text-red-500">Failed to save menus </div>);
+    } finally {
+      setLoading(false);
+      setAddItems([]);
     }
   };
 

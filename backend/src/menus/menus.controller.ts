@@ -34,9 +34,9 @@ export class MenusController {
   // @UseGuards(ShopAccessGuard)
   @Get()
   @Roles('manager', 'owner', 'customer', 'guest', 'staff')
-  getAll(@Req() req: AuthRequest) {
+  getAll(@Query('shopId') shopId: string, @Req() req: AuthRequest) {
     const userId = req.user.id;
-    return this.menusService.getAll(userId);
+    return this.menusService.getAll(shopId);
   }
   // get by id
   // @UseGuards(ShopAccessGuard)

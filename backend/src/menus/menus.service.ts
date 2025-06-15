@@ -23,16 +23,22 @@ export class MenusService {
     try {
       const newMenu = await this.db
         .insert(menus)
-        .values({ ...dto, createdBy: userId, available: true });
+        .values({ ...dto, createdBy: userId, available: true })
+        .returning();
       return {
         success: true,
         data: newMenu,
       };
     } catch (error) {
       this.logger.error('Failed to create menu', error.stack);
+
+      // 23505 = unique_violation in Postgres
       if (error.code === '23505') {
         throw new HttpException(
-          { success: false, message: 'menu already exists.' },
+          {
+            success: false,
+            message: 'A menu with this name already exists in the shop.',
+          },
           HttpStatus.CONFLICT,
         );
       }
