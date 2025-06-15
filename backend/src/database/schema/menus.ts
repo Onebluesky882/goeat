@@ -19,7 +19,7 @@ export const menus = pgTable('menus', {
     .default(sql`gen_random_uuid()`),
   // FK to shops.id
   createdBy: uuid('created_by').references(() => users.id),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   description: text('description'),
   categoryId: uuid('category_id').references(() => categories.id),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),

@@ -55,7 +55,7 @@ const MenuManagement = () => {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [tempItem, setTempItem] = useState({ name: "", price: 0 });
   const { selectedShop } = useShop();
-
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -64,6 +64,7 @@ const MenuManagement = () => {
   } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
 
   const handleInsert = async () => {
+    setLoading(true);
     try {
       if (selectedShop) {
         const shopId = selectedShop.id;
@@ -77,6 +78,8 @@ const MenuManagement = () => {
       }
 
       toast.success("All List Menu has been saved");
+      setAddItems([]);
+      setLoading(false);
     } catch (error) {
       toast.error("Failed to save menus");
     }
@@ -141,14 +144,21 @@ const MenuManagement = () => {
             </div>
 
             {/* Save All Button */}
-            <div className="mt-6 text-center">
-              <button
-                onClick={handleInsert}
-                className="px-6 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition-colors"
-              >
-                Save All Menu
-              </button>
-            </div>
+            {addItems.length > 0 && (
+              <div className="mt-6 text-center">
+                <button
+                  disabled={loading}
+                  onClick={handleInsert}
+                  className={`${
+                    loading
+                      ? "bg-blue-600/30  px-6 py-2   text-white rounded-full shadow   transition-colors"
+                      : "px-6 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition-colors"
+                  }`}
+                >
+                  Save All Menu
+                </button>
+              </div>
+            )}
           </div>
         )}
         <TabsContent value="menu">
