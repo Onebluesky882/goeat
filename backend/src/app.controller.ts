@@ -5,7 +5,7 @@ import { Response } from 'express';
 export class AppController {
   @Get()
   getRoot(@Req() res: Response) {
-    return { message: 'hello' };
+    return { message: 'Welcome MenuX' };
   }
 
   @Get('protected')

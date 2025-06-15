@@ -85,8 +85,6 @@ export class AuthService {
         id: String(user?.data?.id),
         email: String(user?.data?.email),
         username: String(user?.data?.username),
-        linePictureUrl: String(user?.data?.linePictureUrl),
-        lineDisplayName: String(user?.data?.lineDisplayName),
       });
 
       await this.db
@@ -106,6 +104,7 @@ export class AuthService {
       throw error;
     }
   }
+
   // ===== REFRESH TOKEN =====
   async refreshToken(refreshToken: string) {
     try {
@@ -254,8 +253,6 @@ export class AuthService {
     id: string;
     email: string;
     username?: string;
-    lineDisplayName?: string;
-    linePictureUrl?: string;
   }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {

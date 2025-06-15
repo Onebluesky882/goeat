@@ -81,7 +81,6 @@ export class ShopsService {
     try {
       const result = await this.db
         .select({
-          id: shops.id,
           name: shops.name,
           ownerId: shops.ownerId,
           address: shops.address,

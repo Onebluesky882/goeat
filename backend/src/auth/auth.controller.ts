@@ -91,6 +91,7 @@ export class AuthController {
       throw error;
     }
   }
+
   // ===== REFRESH TOKEN =====
   @Post('refresh')
   @HttpCode(HttpStatus.OK)

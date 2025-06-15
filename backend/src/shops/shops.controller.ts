@@ -15,7 +15,7 @@ import { AuthRequest } from 'src/types/auth';
 import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 import { AuthGuard } from '@nestjs/passport';
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
@@ -27,10 +27,11 @@ export class ShopsController {
   }
 
   @Post()
-  @Roles('owner')
+  // @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
+    console.log('req.user =', req.user);
     const userId = req.user.id;
-
+    console.log('userId :', userId);
     return this.ShopsService.create(body, userId);
   }
 

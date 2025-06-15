@@ -22,9 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(payload: any) {
-    const user = await this.userService.getProfile(payload.id);
+    console.log('payload :', payload);
     return {
-      user,
+      id: payload.id,
+      email: payload.email,
+      username: payload.username,
     };
   }
 }
