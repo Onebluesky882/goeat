@@ -18,7 +18,7 @@ import { OrderTableService } from './order-table.service';
 import { OrderTableDto } from './order-table.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
 @UseGuards(AuthGuard('jwt'))
-@Controller('shops')
+@Controller('order-table')
 export class OrderTableController {
   constructor(private readonly orderTableService: OrderTableService) {}
   // @UseGuards(ShopAccessGuard)

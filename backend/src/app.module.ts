@@ -4,7 +4,6 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
-import { ShopsModule } from './shops/shops.module';
 import { TablesModule } from './tables/tables.module';
 import { ImagesModule } from './images/images.module';
 import { PagesModule } from './pages/pages.module';
@@ -18,18 +17,16 @@ import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.mod
 import { ValidateModule } from './common/validate/validate.module';
 import { MenusModule } from './menus/menus.module';
 import { EmployersModule } from './employers/employers.module';
-import { OrderItemsController } from './order-items/order-items.controller';
-import { OrderItemsService } from './order-items/order-items.service';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { LineUsersModule } from './line_users/line_users.module';
+import { ShopsModule } from './shops/shops.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     DatabaseModule,
     AuthModule,
     UsersModule,
-    ShopsModule,
     TablesModule,
     ImagesModule,
     PagesModule,
@@ -47,9 +44,9 @@ import { LineUsersModule } from './line_users/line_users.module';
     OrderItemsModule,
     GatewaysModule,
     LineUsersModule,
+    ShopsModule,
   ],
-  controllers: [AppController, OrderItemsController],
-  providers: [OrderItemsService],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

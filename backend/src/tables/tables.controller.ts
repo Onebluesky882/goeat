@@ -20,11 +20,6 @@ import { AuthRequest } from 'src/types/auth';
 @UseGuards(AuthGuard('jwt'))
 @Controller('tables')
 export class TablesController {
-  constructor() {}
-}
-
-@Controller('shops')
-export class OrderTableController {
   constructor(private readonly tablesService: TablesService) {}
 
   // @UseGuards(ShopAccessGuard)
