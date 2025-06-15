@@ -90,9 +90,6 @@ export class ShopsService {
         })
         .from(shops)
         .where(and(eq(shops.id, id)));
-      console.log('🟡 Requested ID:', id);
-      console.log('📦 DB result:', result);
-      console.log('Type of id:', typeof id, 'Value:', id);
 
       if (!result.length) {
         throw new NotFoundException(`Shop with ID ${id} not found`);

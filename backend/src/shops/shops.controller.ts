@@ -35,7 +35,6 @@ export class ShopsController {
   }
   @Get(':id')
   getById(@Param('id') id: string, @Req() req: AuthRequest) {
-    console.log('id  param :', id);
     return this.ShopsService.getById(id);
   }
   // update
