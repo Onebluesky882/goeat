@@ -21,6 +21,7 @@ import { OrderItemsModule } from './order-items/order-items.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { LineUsersModule } from './line_users/line_users.module';
 import { ShopsModule } from './shops/shops.module';
+import { R2Module } from './r2/r2.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -45,6 +46,7 @@ import { ShopsModule } from './shops/shops.module';
     GatewaysModule,
     LineUsersModule,
     ShopsModule,
+    R2Module,
   ],
   controllers: [AppController],
 })

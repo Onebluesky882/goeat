@@ -13,7 +13,7 @@ import {
 
 import { AuthGuard } from '@nestjs/passport';
 
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 import { ImagesService } from './images.service';
 import { ImageAccessGuard } from 'src/common/guards/image-access.guard';
 import { ImageDto } from './images.dto';

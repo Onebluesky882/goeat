@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { TablesService } from './tables.service';
 import { TableDto } from './table.dto';
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('tables')

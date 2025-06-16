@@ -12,7 +12,7 @@ import {
 
 import { AuthGuard } from '@nestjs/passport';
 
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { OrderItemsService } from './order-items.service';
 import { OrderDtoItems } from './order-items.dto';

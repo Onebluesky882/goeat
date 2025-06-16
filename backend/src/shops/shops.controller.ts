@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 import { AuthGuard } from '@nestjs/passport';

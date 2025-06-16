@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/users/user.dto';
 import { Request, Response } from 'express';
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 
 @Controller('auth')
 export class AuthController {

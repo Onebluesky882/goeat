@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 import { AuthGuard } from '@nestjs/passport';
 import { PagesService } from './pages.service';
 import { Roles } from 'src/common/decorators/roles.decorator';

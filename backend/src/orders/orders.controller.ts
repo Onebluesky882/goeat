@@ -13,7 +13,7 @@ import {
 
 import { AuthGuard } from '@nestjs/passport';
 
-import { AuthRequest } from 'src/types/auth';
+import { AuthRequest } from 'types/auth';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';

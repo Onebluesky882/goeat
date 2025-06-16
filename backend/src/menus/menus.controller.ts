@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { MenusService } from './menus.service';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthRequest } from '../types/auth';
+import { AuthRequest } from '../../types/auth';
 import { MenuDto } from './menus.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
