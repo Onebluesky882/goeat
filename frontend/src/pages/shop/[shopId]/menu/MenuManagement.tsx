@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,8 @@ import { menuApi } from "@/Api/menu.api";
 import { promise } from "zod";
 import useShop from "@/hooks/useShop";
 import { transformKeysToSnakeCase } from "../../../../utils/string";
+import UploadImage from "@/components/uploadImage";
+import { cn } from "@/lib/utils";
 export type Menu = {
   name: string;
   price: number;
@@ -56,6 +58,8 @@ const MenuManagement = () => {
   const [tempItem, setTempItem] = useState({ name: "", price: 0 });
   const { selectedShop } = useShop();
   const [loading, setLoading] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [isShop, setIsShop] = useState(false);
   const {
     register,
     handleSubmit,
@@ -63,6 +67,16 @@ const MenuManagement = () => {
     formState: { errors },
   } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
 
+  console.log("selectedShop", selectedShop);
+  console.log("isshop", isShop);
+
+  useEffect(() => {
+    if (selectedShop !== null) {
+      setIsShop(true);
+    } else {
+      setIsShop(false);
+    }
+  }, [selectedShop]);
   const handleInsert = async () => {
     const shopId = selectedShop?.id;
     setLoading(true);
@@ -145,10 +159,19 @@ const MenuManagement = () => {
                   <p className="text-sm text-gray-500">{menu.price} ฿</p>
 
                   {/* อัปโหลดรูป */}
-                  <button className="mt-4 flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors">
+                  <button
+                    onClick={() => setUploadingIndex(index)}
+                    className="mt-4 flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+                  >
                     <FaCloudArrowUp size={18} />
                     <span className="text-sm font-medium">อัปโหลดรูป</span>
                   </button>
+
+                  <UploadImage
+                    onImagesSelected={(file) => console.log("menu file", file)}
+                    trigger={uploadingIndex === index}
+                    onDialogClosed={() => setUploadingIndex(null)} // Reset trigger
+                  />
                 </div>
               ))}
             </div>
@@ -177,6 +200,9 @@ const MenuManagement = () => {
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-gray-800">
                 Add New Menu Item
+                {!isShop && (
+                  <p className="text-red-400  mr-6 text-[12px]">please login</p>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -217,8 +243,17 @@ const MenuManagement = () => {
                   )}
                 </div>
 
-                <div className="flex items-end">
-                  <Button type="submit" className="w-full">
+                <div className="flex  items-center justify-center flex-col  ">
+                  <Button
+                    disabled={!isShop}
+                    type="submit"
+                    color="blue"
+                    className={cn(
+                      "bg-blue-600 text-white hover:bg-blue-700",
+                      !isShop &&
+                        "bg-blue-300 cursor-not-allowed hover:bg-blue-300"
+                    )}
+                  >
                     Add Menu
                   </Button>
                 </div>
@@ -228,6 +263,7 @@ const MenuManagement = () => {
 
           {/* Menu List */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            // todo get menu from db
             {menuItems.map((item) => (
               <Card
                 key={item.id}
@@ -306,218 +342,12 @@ const MenuManagement = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="promotions">
-          {/* Add new promotion form */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Create New Promotion</CardTitle>
-            </CardHeader>
-            {/* <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="promo-name">Promotion Name</Label>
-                  <Input
-                    id="promo-name"
-                    value={tempPromo.name}
-                    onChange={(e) =>
-                      setTempPromo({ ...tempPromo, name: e.target.value })
-                    }
-                    placeholder="e.g., Lunch Special: Pad Thai + Drink"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label htmlFor="promo-price">Special Price (฿)</Label>
-                    <Input
-                      id="promo-price"
-                      type="number"
-                      value={tempPromo.price || ""}
-                      onChange={(e) =>
-                        setTempPromo({
-                          ...tempPromo,
-                          price: Number(e.target.value),
-                        })
-                      }
-                      placeholder="149"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="regular-price">Regular Price (฿)</Label>
-                    <Input
-                      id="regular-price"
-                      type="number"
-                      value={tempPromo.regularPrice || ""}
-                      onChange={(e) =>
-                        setTempPromo({
-                          ...tempPromo,
-                          regularPrice: Number(e.target.value),
-                        })
-                      }
-                      placeholder="180"
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <Label htmlFor="promo-description">Description</Label>
-                  <Input
-                    id="promo-description"
-                    value={tempPromo.description}
-                    onChange={(e) =>
-                      setTempPromo({
-                        ...tempPromo,
-                        description: e.target.value,
-                      })
-                    }
-                    placeholder="Available weekdays from 11 AM to 2 PM"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <Button
-                    onClick={handleAddPromo}
-                    className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700"
-                  >
-                    <Plus className="mr-2 h-4 w-4" /> Add Promotion
-                  </Button>
-                </div>
-              </div>
-            </CardContent> */}
-          </Card>
-
-          {/* Promotions list */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* {promotions.map((promo) => (
-              <Card
-                key={promo.id}
-                className="border border-orange-100 bg-orange-50"
-              >
-                <CardContent className="p-4">
-                  {editingPromoId === promo.id ? (
-                    <div className="space-y-3">
-                      <Label htmlFor={`edit-promo-name-${promo.id}`}>
-                        Name
-                      </Label>
-                      <Input
-                        id={`edit-promo-name-${promo.id}`}
-                        value={tempPromo.name}
-                        onChange={(e) =>
-                          setTempPromo({ ...tempPromo, name: e.target.value })
-                        }
-                      />
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <Label htmlFor={`edit-promo-price-${promo.id}`}>
-                            Special Price (฿)
-                          </Label>
-                          <Input
-                            id={`edit-promo-price-${promo.id}`}
-                            type="number"
-                            value={tempPromo.price || ""}
-                            onChange={(e) =>
-                              setTempPromo({
-                                ...tempPromo,
-                                price: Number(e.target.value),
-                              })
-                            }
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor={`edit-regular-price-${promo.id}`}>
-                            Regular Price (฿)
-                          </Label>
-                          <Input
-                            id={`edit-regular-price-${promo.id}`}
-                            type="number"
-                            value={tempPromo.regularPrice || ""}
-                            onChange={(e) =>
-                              setTempPromo({
-                                ...tempPromo,
-                                regularPrice: Number(e.target.value),
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-
-                      <Label htmlFor={`edit-promo-description-${promo.id}`}>
-                        Description
-                      </Label>
-                      <Input
-                        id={`edit-promo-description-${promo.id}`}
-                        value={tempPromo.description}
-                        onChange={(e) =>
-                          setTempPromo({
-                            ...tempPromo,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-
-                      <div className="flex justify-end space-x-2 mt-4">
-                        <Button
-                          variant="outline"
-                          onClick={() => setEditingPromoId(null)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button onClick={() => handleSavePromo(promo.id)}>
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="inline-block px-2 py-1 bg-orange-200 text-orange-800 text-xs font-medium rounded-md mb-2">
-                            Special Offer
-                          </div>
-                          <h3 className="text-lg font-medium">{promo.name}</h3>
-                          <div className="mt-1 flex items-baseline">
-                            <span className="text-orange-600 font-medium">
-                              {promo.price} ฿
-                            </span>
-                            <span className="ml-2 text-gray-500 line-through text-sm">
-                              {promo.regularPrice} ฿
-                            </span>
-                            <span className="ml-2 text-green-600 text-sm">
-                              Save {promo.regularPrice - promo.price} ฿
-                            </span>
-                          </div>
-                          {promo.description && (
-                            <p className="text-sm text-gray-600 mt-2">
-                              {promo.description}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex space-x-1">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            onClick={() => handleEditPromo(promo)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            onClick={() => handleDeletePromo(promo.id)}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            ))} */}
-          </div>
-        </TabsContent>
+        <PromotionTab />
       </Tabs>
     </div>
   );
 };
-
+const PromotionTab = () => {
+  return <div>promotion</div>;
+};
 export default MenuManagement;

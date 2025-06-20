@@ -1,5 +1,5 @@
 import { userApi } from "@/Api/user.api";
-import { useUserStore } from "@/globalContext/userStore";
+import { useUserStore } from "@/stores/userStore";
 import { useEffect } from "react";
 
 const useUsers = () => {

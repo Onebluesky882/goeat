@@ -24,7 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { profile, logoutUser } = useUsers();
 
-  const { setShopById, selectedShop } = useShop();
+  const { setShopById } = useShop();
 
   useEffect(() => {
     const getShopParam = () => {
@@ -68,9 +68,7 @@ const Header = () => {
         </div>
         <div className="col-span-1    justify-end flex">
           <div className="flex items-center space-x-4"></div>{" "}
-          {profile === null ? (
-            <span className="text-sm text-gray-500">Loading...</span>
-          ) : profile ? (
+          {profile !== null ? (
             <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">
                 <span className="text-start text-[12px] font-medium text-gray-500">

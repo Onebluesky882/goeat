@@ -24,7 +24,6 @@ import {
   Building2,
   Smartphone,
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 interface PaymentInfo {
   qrCodeImage?: string;
@@ -38,7 +37,6 @@ interface PaymentInfo {
 }
 
 export const PaymentTab = () => {
-  const { toast } = useToast();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     paymentType: "both",
     bankName: "Bangkok Bank",

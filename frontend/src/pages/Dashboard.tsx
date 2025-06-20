@@ -4,22 +4,20 @@ import QuickActionOpenShop, {
 import { useEffect } from "react";
 import useShop from "@/hooks/useShop";
 import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
-import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const { setAllShops, shops } = useShop();
+
   useEffect(() => {
     setAllShops();
   }, []);
 
-  const navigate = useNavigate();
-
+  console.log("shops", shops);
   const handleShopId = async (id: string) => {
     const shop = shops.find((shop) => shop.id === id);
     if (!shop) return;
 
-    navigate(`/shops/${shop.id}`);
+    window.location.pathname = `/shops/${shop.id}`;
   };
-  console.log("shops :", shops);
 
   return (
     <>
@@ -43,8 +41,11 @@ const Dashboard = () => {
                 </div>
                 <div className="w-[70%]">
                   <h2 className="text-xl text-center md:text-2xl font-semibold font-playfair ">
-                    ร้านอาหารของคุณ
+                    {shops.length
+                      ? "ร้านอาหารของคุณ"
+                      : "เริ่มต้นสร้างร้านอาหารองคุณ"}
                   </h2>
+
                   <div className="flex">
                     {shops.map((shop) => (
                       <ShopCard

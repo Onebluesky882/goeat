@@ -8,7 +8,7 @@ import {
 import { Button } from "../../ui/button";
 import { BarChart3, Plus, Store, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/globalContext/userStore";
+import { useUserStore } from "@/stores/userStore";
 
 const QuickOpenShop = () => {
   const navigate = useNavigate();

@@ -1,7 +1,5 @@
 import { menuApi } from "@/Api/menu.api";
-import useShop from "./useShop";
 import { useState } from "react";
-import { menus } from "../../../backend/src/database/schema/menus";
 
 export type Menu = {};
 const useMenu = () => {

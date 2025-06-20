@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  PutObjectAclCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -38,6 +34,7 @@ export class R2Service {
       ContentType: file.mimetype,
     });
     await this.s3.send(command);
+    console.log('Got file:', file.originalname, file.size, file.mimetype);
     return `https://${this.bucket}.${this.configService.get('R2_ENDPOINT')}/${file.originalname}`;
   }
 }

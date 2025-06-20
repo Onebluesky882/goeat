@@ -1,7 +1,7 @@
 import {
   Controller,
   Post,
-  UploadedFiles,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { R2Service } from './r2.service';
@@ -12,10 +12,10 @@ export class R2Controller {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFiles() files: Express.Multer.File[]) {
-    const results = await Promise.all(
-      files.map((file) => this.r2Service.uploadFile(file)),
-    );
-    return results;
+  async upload(@UploadedFile() file: Express.Multer.File) {
+    console.log('got file', file);
+    const result = await this.r2Service.uploadFile(file);
+    console.log('result :', result);
+    return result;
   }
 }
