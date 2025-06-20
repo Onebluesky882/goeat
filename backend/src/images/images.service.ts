@@ -19,18 +19,26 @@ export class ImagesService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly access: ValidateService,
   ) {}
 
-  async create(dto: ImageDto, userId: string) {
+  async saveImageToDb(
+    dto: ImageDto,
+    file: Express.Multer.File,
+    uploadedUrl: string,
+    userId: string,
+  ) {
     try {
       const inserted = await this.db
         .insert(images)
-        .values({ ...dto, userId })
+        .values({
+          ...dto,
+          imageName: file.originalname,
+          imageUrl: uploadedUrl,
+          userId,
+        })
         .returning();
       return {
         success: true,
-        message: 'create Image successfully',
         data: inserted,
       };
     } catch (error) {

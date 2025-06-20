@@ -1,17 +1,16 @@
 import { create } from "zustand";
-
-export type FileImage = {
-  file: File;
-  previewUrl: string;
+interface ImageItem {
+  previewUrl: string; // blob url
+  status: "idle" | "uploading" | "uploaded" | "error";
   uploadedUrl?: string;
-  status: "pending" | "uploading" | "uploaded" | "error";
-};
+}
 
-type ImagesState = {
-  images: FileImage[];
-  addImage: (image: FileImage) => void;
-  uploadImage: (index: number, data: Partial<FileImage>) => void;
-};
+interface ImagesState {
+  images: ImageItem[];
+  addImage: (img: ImageItem) => void;
+  uploadImage: (index: number, data: Partial<ImageItem>) => void;
+  resetImages: () => void;
+}
 
 const useImagesStore = create<ImagesState>((set) => ({
   images: [],
@@ -25,6 +24,7 @@ const useImagesStore = create<ImagesState>((set) => ({
       updated[index] = { ...updated[index], ...data };
       return { images: updated };
     }),
+  resetImages: () => set({ images: [] }),
 }));
 
 export default useImagesStore;

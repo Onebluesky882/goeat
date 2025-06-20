@@ -15,7 +15,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from '../../types/auth';
 import { MenuDto } from './menus.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { ShopAccessGuard } from 'src/common/guards/shop-access.guard';
 @UseGuards(AuthGuard('jwt'))
 @Controller('menus')
 export class MenusController {

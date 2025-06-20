@@ -43,7 +43,7 @@ const Dashboard = () => {
                   <h2 className="text-xl text-center md:text-2xl font-semibold font-playfair ">
                     {shops.length
                       ? "ร้านอาหารของคุณ"
-                      : "เริ่มต้นสร้างร้านอาหารองคุณ"}
+                      : "เริ่มต้นสร้างร้านอาหารของคุณ"}
                   </h2>
 
                   <div className="flex">

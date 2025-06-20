@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AiTwotoneCloseCircle } from "react-icons/ai";
+
 type UploadImageProps = {
   onImagesSelected: (files: FileList) => void;
   trigger: boolean;

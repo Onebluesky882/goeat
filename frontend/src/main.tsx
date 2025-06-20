@@ -15,6 +15,7 @@ import { ShopRoute } from "./route/Shop.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import TodoList from "./feature/todo.tsx";
+import UploadFile from "./pages/UploadFile.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="feedback" element={<FeedbackForm />} />
           <Route path="feature" element={<Feature />} />
+          <Route path="upload" element={<UploadFile />} />
           {ShopRoute}
           {/* <ShopRoute /> */}
           {/* Uncaught Error: [Shop] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment> */}

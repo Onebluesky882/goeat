@@ -16,7 +16,7 @@ export class R2Service {
       return;
     }
     this.s3 = new S3Client({
-      region: 'auth',
+      region: 'auto',
       endpoint: configService.get('R2_ENDPOINT'),
       credentials: {
         accessKeyId: configService.get('R2_ACCESS_KEY_ID')!,
@@ -35,6 +35,9 @@ export class R2Service {
     });
     await this.s3.send(command);
     console.log('Got file:', file.originalname, file.size, file.mimetype);
-    return `https://${this.bucket}.${this.configService.get('R2_ENDPOINT')}/${file.originalname}`;
+    const endpoint = this.configService
+      .get('R2_ENDPOINT')!
+      .replace(/^https?:\/\//, '');
+    return `https://${this.bucket}.${endpoint}/${file.originalname}`;
   }
 }

@@ -8,17 +8,16 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
-import { LuImagePlus } from "react-icons/lu";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { Edit, Trash } from "lucide-react";
-import clsx from "clsx";
 import { menuApi } from "@/Api/menu.api";
-import { promise } from "zod";
 import useShop from "@/hooks/useShop";
 import { transformKeysToSnakeCase } from "../../../../utils/string";
 import UploadImage from "@/components/uploadImage";
 import { cn } from "@/lib/utils";
+import useImages from "@/hooks/useImage";
+
 export type Menu = {
   name: string;
   price: number;
@@ -60,15 +59,13 @@ const MenuManagement = () => {
   const [loading, setLoading] = useState(false);
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [isShop, setIsShop] = useState(false);
+  const { addImage, upload } = useImages();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
-
-  console.log("selectedShop", selectedShop);
-  console.log("isshop", isShop);
 
   useEffect(() => {
     if (selectedShop !== null) {
@@ -168,9 +165,17 @@ const MenuManagement = () => {
                   </button>
 
                   <UploadImage
-                    onImagesSelected={(file) => console.log("menu file", file)}
+                    onImagesSelected={(files) => {
+                      Array.from(files).forEach((file) => {
+                        const url = URL.createObjectURL(file);
+                        addImage({
+                          previewUrl: url,
+                          status: "idle",
+                        });
+                      });
+                    }}
                     trigger={uploadingIndex === index}
-                    onDialogClosed={() => setUploadingIndex(null)} // Reset trigger
+                    onDialogClosed={() => setUploadingIndex(null)}
                   />
                 </div>
               ))}
